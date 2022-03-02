@@ -23,7 +23,11 @@ func NewFiber() *fiber.App {
 func HookFiber(lc fx.Lifecycle, app *fiber.App, config config.AppConfig) {
 	lc.Append(fx.Hook{
 		OnStart: func(context.Context) error {
-			go app.Listen(fmt.Sprintf(":%d", config.Port))
+			go func() {
+				if err := app.Listen(fmt.Sprintf(":%d", config.Port)); err != nil {
+					panic(err)
+				}
+			}()
 			return nil
 		},
 		OnStop: func(context.Context) error {
