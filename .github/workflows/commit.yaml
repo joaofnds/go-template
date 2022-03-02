@@ -1,0 +1,29 @@
+name: commit
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "CHANGELOG.md"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "^1.17"
+
+      - name: unit tests
+        run: go test ./...
+
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: joaofnds/semantic-release-action@v1.0.0
+        with:
+          plugins: "@semantic-release/changelog @semantic-release/git"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
