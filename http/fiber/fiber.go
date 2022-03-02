@@ -1,4 +1,4 @@
-package controllers
+package fiber
 
 import (
 	"context"
@@ -12,8 +12,7 @@ import (
 var (
 	Module = fx.Options(
 		fx.Provide(NewFiber),
-		fx.Invoke(RegisterFiber),
-		fx.Invoke(RootHandler),
+		fx.Invoke(HookFiber),
 	)
 )
 
@@ -21,7 +20,7 @@ func NewFiber() *fiber.App {
 	return fiber.New()
 }
 
-func RegisterFiber(lc fx.Lifecycle, app *fiber.App, config config.AppConfig) {
+func HookFiber(lc fx.Lifecycle, app *fiber.App, config config.AppConfig) {
 	lc.Append(fx.Hook{
 		OnStart: func(context.Context) error {
 			go app.Listen(fmt.Sprintf(":%d", config.Port))
