@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/joaofnds/go-template/compare/v1.0.0...v1.1.0) (2022-03-06)
+
+
+### Features
+
+* add logger ([ec6f513](https://github.com/joaofnds/go-template/commit/ec6f51376ba21c0c96f53135e889262843e7cfc7))
+
 # 1.0.0 (2022-03-02)
 
 
