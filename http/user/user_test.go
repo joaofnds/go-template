@@ -28,7 +28,8 @@ var _ = Describe("/users", Ordered, func() {
 		app = fxtest.New(
 			GinkgoT(),
 			fx.NopLogger,
-			fx.Provide(test.NewAppTestConfig),
+			config.Module,
+			fx.Decorate(test.RandomAppConfigPort),
 			fiber.Module,
 			user.Module,
 			http_user.Providers,

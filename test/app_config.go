@@ -5,9 +5,7 @@ import (
 	"web/config"
 )
 
-func NewAppTestConfig() config.AppConfig {
-	return config.AppConfig{
-		Env:  "test",
-		Port: 10_000 + rand.Intn(5000),
-	}
+func RandomAppConfigPort(config config.AppConfig) config.AppConfig {
+	config.Port = 10_000 + rand.Intn(5000)
+	return config
 }
