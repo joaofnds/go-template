@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/joaofnds/go-template/compare/v1.1.0...v1.2.0) (2022-03-06)
+
+
+### Features
+
+* add mongo module ([7e3eb3f](https://github.com/joaofnds/go-template/commit/7e3eb3ffbbf3910ee031ba6c17d08bcf688f49a2))
+
 # [1.1.0](https://github.com/joaofnds/go-template/compare/v1.0.0...v1.1.0) (2022-03-06)
 
 
