@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/joaofnds/go-template/compare/v1.2.0...v1.3.0) (2022-03-11)
+
+
+### Bug Fixes
+
+* ensure mongo indexes ([57a6b11](https://github.com/joaofnds/go-template/commit/57a6b117c950d1540356e332c7ee3bba933e2643))
+
+
+### Features
+
+* **user:** add user repository ([007b366](https://github.com/joaofnds/go-template/commit/007b3663bc61e0a861ae85ffdbd81b68ca4c5a9e))
+
 # [1.2.0](https://github.com/joaofnds/go-template/compare/v1.1.0...v1.2.0) (2022-03-06)
 
 
