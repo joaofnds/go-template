@@ -18,7 +18,6 @@ func NewUserService(repo *UserRepository, logger *zap.Logger) *UserService {
 func (service *UserService) CreateUser(name string) (User, error) {
 	user := User{name}
 	err := service.repo.CreateUser(context.Background(), user)
-
 	if err != nil {
 		service.logger.Error("failed to create user", zap.Error(err))
 	}
@@ -40,15 +39,13 @@ func (service *UserService) List() ([]User, error) {
 	return service.repo.All(context.Background())
 }
 
-func (service *UserService) FindByName(name string) (User, bool) {
+func (service *UserService) FindByName(name string) (User, error) {
 	user, err := service.repo.FindByName(context.Background(), name)
-
 	if err != nil {
 		service.logger.Error("failed to find user by name", zap.Error(err))
-		return user, false
 	}
 
-	return user, true
+	return user, err
 }
 
 func (service *UserService) Remove(user User) error {

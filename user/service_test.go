@@ -50,9 +50,8 @@ var _ = Describe("user service", func() {
 		user, err := userService.CreateUser("joao")
 		Expect(err).To(BeNil())
 
-		found, ok := userService.FindByName(user.Name)
-
-		Expect(ok).To(BeTrue())
+		found, err := userService.FindByName(user.Name)
+		Expect(err).To(BeNil())
 		Expect(found).To(Equal(user))
 	})
 
@@ -66,6 +65,9 @@ var _ = Describe("user service", func() {
 		user, err := userService.CreateUser("joao")
 		Expect(err).To(BeNil())
 		userService.Remove(user)
-		Expect(userService.List()).NotTo(ContainElement(user))
+
+		users, err := userService.List()
+		Expect(err).To(BeNil())
+		Expect(users).NotTo(ContainElement(user))
 	})
 })
