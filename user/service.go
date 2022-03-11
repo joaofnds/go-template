@@ -1,52 +1,62 @@
 package user
 
+import (
+	"context"
+
+	"go.uber.org/zap"
+)
+
 type UserService struct {
-	users []User
+	repo   *UserRepository
+	logger *zap.Logger
 }
 
-func NewUserService() *UserService {
-	return &UserService{}
+func NewUserService(repo *UserRepository, logger *zap.Logger) *UserService {
+	return &UserService{repo, logger}
 }
 
-func (service *UserService) CreateUser(name string) User {
+func (service *UserService) CreateUser(name string) (User, error) {
 	user := User{name}
-	service.users = append(service.users, user)
-	return user
+	err := service.repo.CreateUser(context.Background(), user)
+
+	if err != nil {
+		service.logger.Error("failed to create user", zap.Error(err))
+	}
+
+	return user, err
 }
 
-func (service *UserService) DeleteAll() {
-	service.users = service.users[:0]
+func (service *UserService) DeleteAll() error {
+	err := service.repo.DeleteAll(context.Background())
+
+	if err != nil {
+		service.logger.Error("failed to delete all", zap.Error(err))
+	}
+
+	return err
 }
 
-func (service *UserService) List() []User {
-	return service.users
+func (service *UserService) List() ([]User, error) {
+	return service.repo.All(context.Background())
 }
 
 func (service *UserService) FindByName(name string) (User, bool) {
-	for _, u := range service.users {
-		if u.Name == name {
-			return u, true
-		}
+	user, err := service.repo.FindByName(context.Background(), name)
+
+	if err != nil {
+		service.logger.Error("failed to find user by name", zap.Error(err))
+		return user, false
 	}
 
-	return User{}, false
+	return user, true
 }
 
-func (service *UserService) Remove(user User) bool {
-	index := -1
+func (service *UserService) Remove(user User) error {
+	err := service.repo.Delete(context.Background(), user)
 
-	for i, u := range service.users {
-		if u == user {
-			index = i
-			break
-		}
+	if err != nil {
+		service.logger.Error("failed to remove user", zap.Error(err), zap.String("name", user.Name))
 	}
 
-	if index == -1 {
-		return false
-	}
-
-	service.users = append(service.users[:index], service.users[index+1:]...)
-
-	return true
+	return err
 }

@@ -4,6 +4,7 @@ import (
 	"web/config"
 	"web/http"
 	"web/logger"
+	"web/mongo"
 	"web/user"
 
 	"go.uber.org/fx"
@@ -15,5 +16,6 @@ func main() {
 		config.Module,
 		http.Module,
 		user.Module,
+		mongo.Module,
 	).Run()
 }

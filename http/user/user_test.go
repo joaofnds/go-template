@@ -6,8 +6,10 @@ import (
 	"io/ioutil"
 	"net/http"
 	"web/config"
+	"web/mongo"
 	"web/http/fiber"
 	http_user "web/http/user"
+	"web/logger"
 	"web/test"
 	"web/user"
 
@@ -27,10 +29,11 @@ var _ = Describe("/users", Ordered, func() {
 
 		app = fxtest.New(
 			GinkgoT(),
-			fx.NopLogger,
+			logger.Module,
 			config.Module,
 			fx.Decorate(test.RandomAppConfigPort),
 			fiber.Module,
+			mongo.Module,
 			user.Module,
 			http_user.Providers,
 			fx.Populate(&userService),
@@ -49,7 +52,6 @@ var _ = Describe("/users", Ordered, func() {
 	})
 
 	Context("GET", func() {
-
 		It("concats all user's names", func() {
 			userService.CreateUser("joao")
 			userService.CreateUser("fernandes")
