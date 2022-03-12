@@ -5,11 +5,12 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"testing"
 	"web/config"
-	"web/mongo"
 	"web/http/fiber"
 	http_user "web/http/user"
 	"web/logger"
+	"web/mongo"
 	"web/test"
 	"web/user"
 
@@ -18,6 +19,11 @@ import (
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
 )
+
+func TestUser(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "User HTTP Suite")
+}
 
 var _ = Describe("/users", Ordered, func() {
 	var app *fxtest.App

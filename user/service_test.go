@@ -1,6 +1,7 @@
 package user_test
 
 import (
+	"testing"
 	"web/config"
 	"web/logger"
 	"web/mongo"
@@ -12,6 +13,11 @@ import (
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
 )
+
+func TestUser(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "User Service Test")
+}
 
 var _ = Describe("user service", func() {
 	var app *fxtest.App

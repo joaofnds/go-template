@@ -2,6 +2,7 @@ package health_test
 
 import (
 	"net/http"
+	"testing"
 	"web/config"
 	"web/http/fiber"
 	"web/http/health"
@@ -11,6 +12,11 @@ import (
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
 )
+
+func TestHealth(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "/health suite")
+}
 
 var _ = Describe("/", func() {
 	var app *fxtest.App
@@ -30,7 +36,7 @@ var _ = Describe("/", func() {
 		app.RequireStop()
 	})
 
-	It("says hello world", func() {
+	It("returns status OK", func() {
 		res, _ := http.Get("http://localhost:3000/health")
 		Expect(res.StatusCode).To(Equal(http.StatusOK))
 	})
