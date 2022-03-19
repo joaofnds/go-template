@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/joaofnds/go-template/compare/v1.3.0...v1.4.0) (2022-03-19)
+
+
+### Features
+
+* add kv store ([8c775c4](https://github.com/joaofnds/go-template/commit/8c775c484679257654f741ca290ca269bf6c65a0))
+
 # [1.3.0](https://github.com/joaofnds/go-template/compare/v1.2.0...v1.3.0) (2022-03-11)
 
 
