@@ -23,7 +23,7 @@ type AppConfig struct {
 func LoadConfig() error {
 	configFile, ok := os.LookupEnv(configPath)
 	if !ok {
-		log.Fatalf("could not lookup env '%s'", configPath)
+		log.Fatalf("could not lookup env %q", configPath)
 	}
 
 	viper.SetConfigFile(configFile)
