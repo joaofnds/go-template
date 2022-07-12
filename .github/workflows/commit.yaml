@@ -34,7 +34,7 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: joaofnds/semantic-release-action@v1.0.0
+      - uses: joaofnds/semantic-release-action@v1.0.1
         with:
           plugins: "@semantic-release/changelog @semantic-release/git"
         env:
