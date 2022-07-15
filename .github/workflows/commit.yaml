@@ -7,6 +7,15 @@ on:
       - "CHANGELOG.md"
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+        with:
+          go-version: "^1.17"
+      - uses: golangci/golangci-lint-action@v3
+
   test:
     runs-on: ubuntu-latest
     services:
@@ -31,7 +40,7 @@ jobs:
           CONFIG_PATH: "/home/runner/work/go-template/go-template/config/config.yaml"
 
   release:
-    needs: test
+    needs: [lint, test]
     runs-on: ubuntu-latest
     steps:
       - uses: joaofnds/semantic-release-action@v1.0.1
