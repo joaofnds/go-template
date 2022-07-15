@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/joaofnds/go-template/compare/v1.4.1...v1.5.0) (2022-07-15)
+
+
+### Features
+
+* use fx modules ([628582b](https://github.com/joaofnds/go-template/commit/628582b44d3be29d54c1a3c210b99e30a279290f))
+
 ## [1.4.1](https://github.com/joaofnds/go-template/compare/v1.4.0...v1.4.1) (2022-07-15)
 
 
