@@ -1,3 +1,11 @@
+## [1.4.1](https://github.com/joaofnds/go-template/compare/v1.4.0...v1.4.1) (2022-07-15)
+
+
+### Bug Fixes
+
+* errcheck ([6038908](https://github.com/joaofnds/go-template/commit/603890859cc80404454297070c4f5dfcd4c141b3))
+* lint errcheck ([692098b](https://github.com/joaofnds/go-template/commit/692098bbce90040476d251fac27b56a46bbb200c))
+
 # [1.4.0](https://github.com/joaofnds/go-template/compare/v1.3.0...v1.4.0) (2022-03-19)
 
 
