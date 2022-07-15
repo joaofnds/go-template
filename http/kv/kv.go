@@ -32,8 +32,7 @@ func GetListener(app *fiber.App, kvStore *kv.KeyValStore) {
 			return fiber.NewError(http.StatusInternalServerError, err.Error())
 		}
 
-		c.Status(http.StatusOK).Send([]byte(val))
-		return nil
+		return c.Status(http.StatusOK).Send([]byte(val))
 	})
 }
 
@@ -71,7 +70,6 @@ func DelListener(app *fiber.App, kvStore *kv.KeyValStore) {
 			return fiber.NewError(http.StatusInternalServerError, "failed to delete key")
 		}
 
-		c.SendStatus(http.StatusOK)
-		return nil
+		return c.SendStatus(http.StatusOK)
 	})
 }

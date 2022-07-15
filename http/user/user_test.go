@@ -12,6 +12,7 @@ import (
 	"web/logger"
 	"web/mongo"
 	"web/test"
+	. "web/test/matchers"
 	"web/user"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -54,20 +55,18 @@ var _ = Describe("/users", Ordered, func() {
 	})
 
 	BeforeEach(func() {
-		userService.DeleteAll()
+		Must(userService.DeleteAll())
 	})
 
 	Context("GET", func() {
 		It("concats all user's names", func() {
-			userService.CreateUser("joao")
-			userService.CreateUser("fernandes")
+			Must2(userService.CreateUser("joao"))
+			Must2(userService.CreateUser("fernandes"))
 
-			res, err := http.Get(url)
-			Expect(err).To(BeNil())
+			res := Must2(http.Get(url))
 			Expect(res.StatusCode).To(Equal(http.StatusOK))
 
-			b, err := ioutil.ReadAll(res.Body)
-			Expect(err).To(BeNil())
+			b := Must2(ioutil.ReadAll(res.Body))
 
 			Expect(string(b)).To(Equal("joaofernandes"))
 		})
@@ -76,15 +75,15 @@ var _ = Describe("/users", Ordered, func() {
 	Context("POST", func() {
 		It("adds the user", func() {
 			body := bytes.NewBufferString(`{"name": "joao"}`)
-			res, _ := http.Post(url, "application/json", body)
+			res := Must2(http.Post(url, "application/json", body))
 			Expect(res.StatusCode).To(Equal(http.StatusCreated))
 
 			body = bytes.NewBufferString(`{"name": "vitor"}`)
-			res, _ = http.Post(url, "application/json", body)
+			res = Must2(http.Post(url, "application/json", body))
 			Expect(res.StatusCode).To(Equal(http.StatusCreated))
 
 			res, _ = http.Get(url)
-			b, _ := ioutil.ReadAll(res.Body)
+			b := Must2(ioutil.ReadAll(res.Body))
 
 			Expect(string(b)).To(Equal("joaovitor"))
 		})

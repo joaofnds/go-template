@@ -50,8 +50,7 @@ func HookConnection(lc fx.Lifecycle, client *mongo.Client, logger *zap.Logger) {
 			return nil
 		},
 		OnStop: func(ctx context.Context) error {
-			client.Disconnect(ctx)
-			return nil
+			return client.Disconnect(ctx)
 		},
 	})
 }

@@ -24,7 +24,7 @@ func UserListHandler(app *fiber.App, userService *user.UserService) {
 
 		users, err := userService.List()
 		if err != nil {
-			c.SendStatus(http.StatusInternalServerError)
+			return c.SendStatus(http.StatusInternalServerError)
 		}
 
 		for _, u := range users {

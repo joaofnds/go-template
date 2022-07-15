@@ -12,6 +12,7 @@ import (
 	"web/kv"
 	"web/logger"
 	"web/test"
+	. "web/test/matchers"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -52,41 +53,41 @@ var _ = Describe("/kv", Ordered, func() {
 
 	Context("GET", func() {
 		It("returns the value under the key", func() {
-			http.Post(url+"/foo/bar", "", strings.NewReader(""))
-			res, _ := http.Get(url + "/foo")
+			Must2(http.Post(url+"/foo/bar", "", strings.NewReader("")))
+			res := Must2(http.Get(url + "/foo"))
 
-			b, _ := io.ReadAll(res.Body)
+			b := Must2(io.ReadAll(res.Body))
 			Expect(string(b)).To(Equal("bar"))
 		})
 	})
 
 	Context("POST", func() {
 		It("responds with status created", func() {
-			res, _ := http.Post(url+"/foo/bar", "", strings.NewReader(""))
+			res := Must2(http.Post(url+"/foo/bar", "", strings.NewReader("")))
 			Expect(res.StatusCode).To(Equal(http.StatusCreated))
 		})
 
 		It("sets the value to the key", func() {
-			http.Post(url+"/foo/bar", "", strings.NewReader(""))
+			Must2(http.Post(url+"/foo/bar", "", strings.NewReader("")))
 
-			res, _ := http.Get(url + "/foo")
-			b, _ := io.ReadAll(res.Body)
+			res := Must2(http.Get(url + "/foo"))
+			b := Must2(io.ReadAll(res.Body))
 			Expect(string(b)).To(Equal("bar"))
 		})
 	})
 
 	Context("DELETE", func() {
 		It("adds the user", func() {
-			res, _ := http.Post(url+"/foo/bar", "", strings.NewReader(""))
+			res := Must2(http.Post(url+"/foo/bar", "", strings.NewReader("")))
 			Expect(res.StatusCode).To(Equal(http.StatusCreated))
 
-			res, _ = http.Get(url)
+			res = Must2(http.Get(url))
 			Expect(res.StatusCode).To(Equal(http.StatusNotFound))
 
-			req, _ := http.NewRequest(http.MethodDelete, url+"/foo/bar", strings.NewReader(""))
-			http.DefaultClient.Do(req)
+			req := Must2(http.NewRequest(http.MethodDelete, url+"/foo/bar", strings.NewReader("")))
+			Must2(http.DefaultClient.Do(req))
 
-			res, _ = http.Get(url)
+			res = Must2(http.Get(url))
 			Expect(res.StatusCode).To(Equal(http.StatusNotFound))
 		})
 	})

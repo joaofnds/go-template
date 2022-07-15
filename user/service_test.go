@@ -6,6 +6,7 @@ import (
 	"web/logger"
 	"web/mongo"
 	"web/test"
+	. "web/test/matchers"
 	"web/user"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -35,7 +36,7 @@ var _ = Describe("user service", func() {
 			fx.Populate(&userService),
 		)
 		app.RequireStart()
-		userService.DeleteAll()
+		Must(userService.DeleteAll())
 	})
 
 	AfterEach(func() {
@@ -44,36 +45,31 @@ var _ = Describe("user service", func() {
 
 	Describe("DeleteAll", func() {
 		It("removes all users", func() {
-			userService.CreateUser("joao")
+			Must2(userService.CreateUser("joao"))
 			Expect(userService.List()).NotTo(BeEmpty())
 
-			userService.DeleteAll()
+			Must(userService.DeleteAll())
 			Expect(userService.List()).To(BeEmpty())
 		})
 	})
 
 	It("created users can be found by name", func() {
-		user, err := userService.CreateUser("joao")
-		Expect(err).To(BeNil())
+		user := Must2(userService.CreateUser("joao"))
 
-		found, err := userService.FindByName(user.Name)
-		Expect(err).To(BeNil())
+		found := Must2(userService.FindByName(user.Name))
 		Expect(found).To(Equal(user))
 	})
 
 	It("created users appear on users listing", func() {
-		user, err := userService.CreateUser("joao")
-		Expect(err).To(BeNil())
+		user := Must2(userService.CreateUser("joao"))
 		Expect(userService.List()).To(ContainElement(user))
 	})
 
 	It("removed users do not appear on users listing", func() {
-		user, err := userService.CreateUser("joao")
-		Expect(err).To(BeNil())
-		userService.Remove(user)
+		user := Must2(userService.CreateUser("joao"))
+		Must(userService.Remove(user))
 
-		users, err := userService.List()
-		Expect(err).To(BeNil())
+		users := Must2(userService.List())
 		Expect(users).NotTo(ContainElement(user))
 	})
 })

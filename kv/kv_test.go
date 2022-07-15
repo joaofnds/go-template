@@ -3,6 +3,7 @@ package kv_test
 import (
 	"testing"
 	"web/kv"
+	. "web/test/matchers"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -34,18 +35,16 @@ var _ = Describe("kv service", func() {
 	})
 
 	It("can retrieve values", func() {
-		err := store.Set("foo", "bar")
-		Expect(err).To(BeNil())
+		Must(store.Set("foo", "bar"))
 
-		val, err := store.Get("foo")
-		Expect(err).To(BeNil())
+		val := Must2(store.Get("foo"))
 
 		Expect(val).To(Equal("bar"))
 	})
 
 	It("cannot get values deleted", func() {
-		store.Set("foo", "bar")
-		store.Del("foo")
+		Must(store.Set("foo", "bar"))
+		Must(store.Del("foo"))
 
 		_, err := store.Get("foo")
 		Expect(err).To(Equal(kv.ErrNotFound))
