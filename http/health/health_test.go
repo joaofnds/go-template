@@ -6,6 +6,7 @@ import (
 	"web/config"
 	"web/http/fiber"
 	"web/http/health"
+	. "web/test/matchers"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -37,7 +38,7 @@ var _ = Describe("/", func() {
 	})
 
 	It("returns status OK", func() {
-		res, _ := http.Get("http://localhost:3000/health")
+		res := Must2(http.Get("http://localhost:3000/health"))
 		Expect(res.StatusCode).To(Equal(http.StatusOK))
 	})
 })
