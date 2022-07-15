@@ -5,7 +5,7 @@ import (
 	"go.uber.org/zap"
 )
 
-var Module = fx.Options(fx.Provide(NewLogger), fx.Provide(NewSugarLogger))
+var Module = fx.Module("logger", fx.Provide(NewLogger), fx.Provide(NewSugarLogger))
 
 func NewLogger() (*zap.Logger, error) {
 	return zap.NewProduction()
