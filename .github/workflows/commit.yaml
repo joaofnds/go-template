@@ -7,7 +7,7 @@ on:
       - "CHANGELOG.md"
 
 jobs:
-  lint:
+  lint-go:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -15,6 +15,12 @@ jobs:
         with:
           go-version: "^1.18"
       - uses: golangci/golangci-lint-action@v3
+
+  lint-dockerfile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: hadolint/hadolint-action@v2.0.0
 
   test:
     runs-on: ubuntu-latest
@@ -40,7 +46,7 @@ jobs:
           CONFIG_PATH: "/home/runner/work/go-template/go-template/config/config.yaml"
 
   release:
-    needs: [lint, test]
+    needs: [lint-go, lint-dockerfile, test]
     runs-on: ubuntu-latest
     steps:
       - uses: joaofnds/semantic-release-action@v1.0.1
