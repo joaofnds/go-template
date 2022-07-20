@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/joaofnds/go-template/compare/v1.5.0...v1.5.1) (2022-07-20)
+
+
+### Bug Fixes
+
+* **Dockerfile:** use COPY instead of ADD ([3649ab5](https://github.com/joaofnds/go-template/commit/3649ab51c6d4a5149d10bb4f406d5874f10fc97a))
+
 # [1.5.0](https://github.com/joaofnds/go-template/compare/v1.4.1...v1.5.0) (2022-07-15)
 
 
