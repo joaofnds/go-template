@@ -3,7 +3,7 @@ package user_test
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"testing"
 	"web/config"
@@ -66,7 +66,7 @@ var _ = Describe("/users", Ordered, func() {
 			res := Must2(http.Get(url))
 			Expect(res.StatusCode).To(Equal(http.StatusOK))
 
-			b := Must2(ioutil.ReadAll(res.Body))
+			b := Must2(io.ReadAll(res.Body))
 
 			Expect(string(b)).To(Equal("joaofernandes"))
 		})
@@ -83,7 +83,7 @@ var _ = Describe("/users", Ordered, func() {
 			Expect(res.StatusCode).To(Equal(http.StatusCreated))
 
 			res, _ = http.Get(url)
-			b := Must2(ioutil.ReadAll(res.Body))
+			b := Must2(io.ReadAll(res.Body))
 
 			Expect(string(b)).To(Equal("joaovitor"))
 		})
