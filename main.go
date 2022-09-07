@@ -5,6 +5,7 @@ import (
 	"web/http"
 	"web/kv"
 	"web/logger"
+	"web/metrics"
 	"web/mongo"
 	"web/user"
 
@@ -14,6 +15,7 @@ import (
 func main() {
 	fx.New(
 		logger.Module,
+		metrics.Module,
 		config.Module,
 		http.Module,
 		user.Module,

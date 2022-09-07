@@ -2,25 +2,25 @@ package user
 
 import (
 	"context"
-
-	"go.uber.org/zap"
 )
 
 type UserService struct {
-	repo   *UserRepository
-	logger *zap.Logger
+	repo            *UserRepository
+	instrumentation Instrumentation
 }
 
-func NewUserService(repo *UserRepository, logger *zap.Logger) *UserService {
-	return &UserService{repo, logger}
+func NewUserService(repo *UserRepository, instrumentation Instrumentation) *UserService {
+	return &UserService{repo, instrumentation}
 }
 
 func (service *UserService) CreateUser(name string) (User, error) {
 	user := User{name}
+
 	err := service.repo.CreateUser(context.Background(), user)
 	if err != nil {
-		service.logger.Error("failed to create user", zap.Error(err))
+		service.instrumentation.FailedToCreateUser(err)
 	}
+	service.instrumentation.UserCreated()
 
 	return user, err
 }
@@ -29,7 +29,7 @@ func (service *UserService) DeleteAll() error {
 	err := service.repo.DeleteAll(context.Background())
 
 	if err != nil {
-		service.logger.Error("failed to delete all", zap.Error(err))
+		service.instrumentation.FailedToDeleteAll(err)
 	}
 
 	return err
@@ -42,7 +42,7 @@ func (service *UserService) List() ([]User, error) {
 func (service *UserService) FindByName(name string) (User, error) {
 	user, err := service.repo.FindByName(context.Background(), name)
 	if err != nil {
-		service.logger.Error("failed to find user by name", zap.Error(err))
+		service.instrumentation.FailedToFindByName(err)
 	}
 
 	return user, err
@@ -52,7 +52,7 @@ func (service *UserService) Remove(user User) error {
 	err := service.repo.Delete(context.Background(), user)
 
 	if err != nil {
-		service.logger.Error("failed to remove user", zap.Error(err), zap.String("name", user.Name))
+		service.instrumentation.FailedToRemoveUser(err, user)
 	}
 
 	return err

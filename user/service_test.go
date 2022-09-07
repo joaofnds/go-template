@@ -31,6 +31,7 @@ var _ = Describe("user service", func() {
 			logger.Module,
 			config.Module,
 			fx.Decorate(test.RandomAppConfigPort),
+			fx.Decorate(test.NewNopUserInstrumentation),
 			mongo.Module,
 			user.Module,
 			fx.Populate(&userService),
