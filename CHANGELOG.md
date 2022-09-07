@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/joaofnds/go-template/compare/v1.5.1...v1.6.0) (2022-09-07)
+
+
+### Features
+
+* add instrumentation ([78aa994](https://github.com/joaofnds/go-template/commit/78aa99477df6e11be734be9883cb10e400bdc445))
+
 ## [1.5.1](https://github.com/joaofnds/go-template/compare/v1.5.0...v1.5.1) (2022-07-20)
 
 
