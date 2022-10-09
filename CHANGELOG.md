@@ -1,3 +1,11 @@
+# [1.7.0](https://github.com/joaofnds/go-template/compare/v1.6.0...v1.7.0) (2022-10-09)
+
+
+### Features
+
+* add metrics server address config ([bdc30d4](https://github.com/joaofnds/go-template/commit/bdc30d411dfffe886ab791d6db8105c2462af76e))
+* add nop logger ([4070e39](https://github.com/joaofnds/go-template/commit/4070e390f313cb2b1a16093a461ddcfd5f0e4a14))
+
 # [1.6.0](https://github.com/joaofnds/go-template/compare/v1.5.1...v1.6.0) (2022-09-07)
 
 
