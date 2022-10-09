@@ -15,8 +15,8 @@ import (
 func main() {
 	fx.New(
 		logger.Module,
-		metrics.Module,
 		config.Module,
+		metrics.Module,
 		http.Module,
 		user.Module,
 		mongo.Module,

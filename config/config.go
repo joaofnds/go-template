@@ -10,14 +10,13 @@ import (
 
 const configPath = "CONFIG_PATH"
 
-var (
-	Module = fx.Options(fx.Invoke(LoadConfig), fx.Provide(NewAppConfig))
-)
+var Module = fx.Options(fx.Invoke(LoadConfig), fx.Provide(NewAppConfig))
 
 type AppConfig struct {
-	Env      string `mapstructure:"env"`
-	Port     int    `mapstructure:"port"`
-	MongoURI string `mapstructure:"mongo_uri"`
+	Env         string `mapstructure:"env"`
+	Port        int    `mapstructure:"port"`
+	MongoURI    string `mapstructure:"mongo_uri"`
+	MetricsAddr string `mapstructure:"metrics_addr"`
 }
 
 func LoadConfig() error {
