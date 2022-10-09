@@ -6,16 +6,16 @@ import (
 	"go.uber.org/fx"
 )
 
-var Module = fx.Decorate(NewNopUserInstrumentation())
-
-type NopUserInstrumentation struct{}
+var NopUserInstrumentation = fx.Decorate(NewNopUserInstrumentation)
 
 func NewNopUserInstrumentation() user.Instrumentation {
-	return NopUserInstrumentation{}
+	return nopUserInstrumentation{}
 }
 
-func (i NopUserInstrumentation) FailedToCreateUser(_ error)              {}
-func (i NopUserInstrumentation) FailedToDeleteAll(_ error)               {}
-func (i NopUserInstrumentation) FailedToFindByName(_ error)              {}
-func (i NopUserInstrumentation) FailedToRemoveUser(_ error, _ user.User) {}
-func (l NopUserInstrumentation) UserCreated()                            {}
+type nopUserInstrumentation struct{}
+
+func (i nopUserInstrumentation) FailedToCreateUser(_ error)              {}
+func (i nopUserInstrumentation) FailedToDeleteAll(_ error)               {}
+func (i nopUserInstrumentation) FailedToFindByName(_ error)              {}
+func (i nopUserInstrumentation) FailedToRemoveUser(_ error, _ user.User) {}
+func (l nopUserInstrumentation) UserCreated()                            {}
