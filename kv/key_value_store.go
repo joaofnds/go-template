@@ -7,9 +7,7 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-var (
-	ErrNotFound = errors.New("not found")
-)
+var ErrNotFound = errors.New("not found")
 
 type KeyValStore struct {
 	client *redis.Client
