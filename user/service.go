@@ -4,12 +4,28 @@ import (
 	"context"
 )
 
+type Instrumentation interface {
+	FailedToCreateUser(error)
+	FailedToDeleteAll(error)
+	FailedToFindByName(error)
+	FailedToRemoveUser(error, User)
+	UserCreated()
+}
+
+type Repository interface {
+	CreateUser(context.Context, User) error
+	All(context.Context) ([]User, error)
+	FindByName(context.Context, string) (User, error)
+	Delete(context.Context, User) error
+	DeleteAll(context.Context) error
+}
+
 type UserService struct {
-	repo            *UserRepository
+	repo            Repository
 	instrumentation Instrumentation
 }
 
-func NewUserService(repo *UserRepository, instrumentation Instrumentation) *UserService {
+func NewUserService(repo Repository, instrumentation Instrumentation) *UserService {
 	return &UserService{repo, instrumentation}
 }
 

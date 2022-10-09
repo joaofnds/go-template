@@ -6,14 +6,6 @@ import (
 	"go.uber.org/zap"
 )
 
-type Instrumentation interface {
-	FailedToCreateUser(error)
-	FailedToDeleteAll(error)
-	FailedToFindByName(error)
-	FailedToRemoveUser(error, User)
-	UserCreated()
-}
-
 type PromHabitInstrumentation struct {
 	logger            *zap.Logger
 	usersCreated      prometheus.Counter
