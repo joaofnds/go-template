@@ -3,6 +3,7 @@ package kv_test
 import (
 	"testing"
 	"web/kv"
+	"web/test"
 	. "web/test/matchers"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -23,7 +24,7 @@ var _ = Describe("kv service", func() {
 	BeforeEach(func() {
 		app = fxtest.New(
 			GinkgoT(),
-			fx.NopLogger,
+			test.NopLogger,
 			kv.Module,
 			fx.Populate(&store),
 		)

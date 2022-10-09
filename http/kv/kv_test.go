@@ -10,7 +10,6 @@ import (
 	"web/http/fiber"
 	http_kv "web/http/kv"
 	"web/kv"
-	"web/logger"
 	"web/test"
 	. "web/test/matchers"
 
@@ -34,8 +33,7 @@ var _ = Describe("/kv", Ordered, func() {
 
 		app = fxtest.New(
 			GinkgoT(),
-			fx.NopLogger,
-			logger.Module,
+			test.NopLogger,
 			config.Module,
 			fx.Decorate(test.RandomAppConfigPort),
 			fiber.Module,

@@ -3,7 +3,6 @@ package user_test
 import (
 	"testing"
 	"web/config"
-	"web/logger"
 	"web/mongo"
 	"web/test"
 	. "web/test/matchers"
@@ -27,8 +26,7 @@ var _ = Describe("user service", func() {
 	BeforeEach(func() {
 		app = fxtest.New(
 			GinkgoT(),
-			fx.NopLogger,
-			logger.Module,
+			test.NopLogger,
 			config.Module,
 			fx.Decorate(test.RandomAppConfigPort),
 			fx.Decorate(test.NewNopUserInstrumentation),

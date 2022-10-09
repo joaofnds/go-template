@@ -6,11 +6,11 @@ import (
 	"web/config"
 	"web/http/fiber"
 	"web/http/health"
+	"web/test"
 	. "web/test/matchers"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
 )
 
@@ -25,7 +25,7 @@ var _ = Describe("/", func() {
 	BeforeEach(func() {
 		app = fxtest.New(
 			GinkgoT(),
-			fx.NopLogger,
+			test.NopLogger,
 			config.Module,
 			fiber.Module,
 			health.Providers,
