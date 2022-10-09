@@ -9,7 +9,6 @@ import (
 	"web/config"
 	"web/http/fiber"
 	http_user "web/http/user"
-	"web/logger"
 	"web/mongo"
 	"web/test"
 	. "web/test/matchers"
@@ -36,15 +35,14 @@ var _ = Describe("/users", Ordered, func() {
 
 		app = fxtest.New(
 			GinkgoT(),
-			logger.Module,
+			test.NopLogger,
+			test.RandomAppConfigPort,
 			config.Module,
-			fx.Decorate(test.RandomAppConfigPort),
 			fiber.Module,
 			mongo.Module,
 			user.Module,
 			http_user.Providers,
-			fx.Populate(&userService),
-			fx.Populate(&appConfig),
+			fx.Populate(&appConfig, &userService),
 		).RequireStart()
 
 		url = fmt.Sprintf("http://localhost:%d/users", appConfig.Port)

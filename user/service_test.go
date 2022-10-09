@@ -27,8 +27,8 @@ var _ = Describe("user service", func() {
 		app = fxtest.New(
 			GinkgoT(),
 			test.NopLogger,
+			test.RandomAppConfigPort,
 			config.Module,
-			fx.Decorate(test.RandomAppConfigPort),
 			fx.Decorate(test.NewNopUserInstrumentation),
 			mongo.Module,
 			user.Module,

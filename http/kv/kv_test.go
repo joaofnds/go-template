@@ -34,8 +34,8 @@ var _ = Describe("/kv", Ordered, func() {
 		app = fxtest.New(
 			GinkgoT(),
 			test.NopLogger,
+			test.RandomAppConfigPort,
 			config.Module,
-			fx.Decorate(test.RandomAppConfigPort),
 			fiber.Module,
 			kv.Module,
 			http_kv.Providers,
