@@ -6,16 +6,32 @@ import (
 	"web/config"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/limiter"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"go.uber.org/fx"
 )
 
 var Module = fx.Options(
+	fx.Provide(NewPromHTTPInstrumentation),
 	fx.Provide(NewFiber),
 	fx.Invoke(HookFiber),
 )
 
-func NewFiber() *fiber.App {
-	return fiber.New()
+type HTTPInstrumentation interface {
+	Middleware(*fiber.Ctx) error
+}
+
+func NewFiber(instrumentation HTTPInstrumentation) *fiber.App {
+	app := fiber.New()
+	app.Use(recover.New())
+	app.Use(limiter.New(limiter.Config{
+		Max:               30,
+		LimiterMiddleware: limiter.SlidingWindow{},
+	}))
+	app.Use(instrumentation.Middleware)
+	app.Use(cors.New())
+	return app
 }
 
 func HookFiber(lc fx.Lifecycle, app *fiber.App, config config.AppConfig) {
