@@ -11,7 +11,7 @@ type MongoRepository struct {
 	collection *mongo.Collection
 }
 
-func NewMongoRepository(client *mongo.Client) Repository {
+func NewMongoRepository(client *mongo.Client) *MongoRepository {
 	return &MongoRepository{client.Database("template").Collection("users")}
 }
 

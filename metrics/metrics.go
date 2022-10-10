@@ -10,7 +10,8 @@ import (
 	"go.uber.org/zap"
 )
 
-var Module = fx.Options(
+var Module = fx.Module(
+	"metrics",
 	fx.Provide(NewMetricsServer),
 	fx.Invoke(HookMetricsHandler),
 )

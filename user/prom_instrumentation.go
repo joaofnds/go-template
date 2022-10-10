@@ -12,7 +12,7 @@ type PromHabitInstrumentation struct {
 	usersCreateFailed prometheus.Counter
 }
 
-func NewPromHabitInstrumentation(logger *zap.Logger) Instrumentation {
+func NewPromHabitInstrumentation(logger *zap.Logger) *PromHabitInstrumentation {
 	return &PromHabitInstrumentation{
 		logger:            logger,
 		usersCreated:      promauto.NewCounter(prometheus.CounterOpts{Name: "users_created"}),

@@ -7,7 +7,12 @@ import (
 	"go.uber.org/fx"
 )
 
-var Module = fx.Options(fx.Invoke(HookRedis), fx.Provide(NewClient), fx.Provide(NewKV))
+var Module = fx.Module(
+	"kv",
+	fx.Invoke(HookRedis),
+	fx.Provide(NewClient),
+	fx.Provide(NewKV),
+)
 
 func NewClient() *redis.Client {
 	return redis.NewClient(&redis.Options{})
@@ -16,8 +21,7 @@ func NewClient() *redis.Client {
 func HookRedis(lifecycle fx.Lifecycle, redis *redis.Client) {
 	lifecycle.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
-			status := redis.Ping(ctx)
-			return status.Err()
+			return redis.Ping(ctx).Err()
 		},
 	})
 }

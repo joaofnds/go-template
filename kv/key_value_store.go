@@ -22,12 +22,12 @@ func (store *KeyValStore) Set(key, value string) error {
 }
 
 func (store *KeyValStore) Get(key string) (string, error) {
-	s := store.client.Get(context.Background(), key)
-	if s.Err() != nil {
+	cmd := store.client.Get(context.Background(), key)
+	if cmd.Err() != nil {
 		return "", ErrNotFound
 	}
 
-	return s.Val(), nil
+	return cmd.Val(), nil
 }
 
 func (store *KeyValStore) Del(key string) error {
