@@ -1,3 +1,11 @@
+# [1.8.0](https://github.com/joaofnds/go-template/compare/v1.7.2...v1.8.0) (2022-10-10)
+
+
+### Features
+
+* add instrumentation, recover and limiter middleware's ([dda4169](https://github.com/joaofnds/go-template/commit/dda416925a6e0bea4c3f4029b57283446ca72490))
+* add proper health check with redis and mongo ping ([0625abf](https://github.com/joaofnds/go-template/commit/0625abf1f413bf51ef6219ced70ae0106cd3305b))
+
 ## [1.7.2](https://github.com/joaofnds/go-template/compare/v1.7.1...v1.7.2) (2022-10-09)
 
 ## [1.7.1](https://github.com/joaofnds/go-template/compare/v1.7.0...v1.7.1) (2022-10-09)
