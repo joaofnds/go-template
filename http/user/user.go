@@ -7,11 +7,7 @@ import (
 
 var Providers = fx.Options(
 	fx.Provide(NewUserController),
-	fx.Invoke(UserHandler),
+	fx.Invoke(func(app *fiber.App, controller *UserController) {
+		controller.Register(app)
+	}),
 )
-
-func UserHandler(app *fiber.App, controller *UserController) {
-	app.Get("/users", controller.List)
-	app.Post("/users", controller.Create)
-	app.Delete("/users/:name", controller.Delete)
-}

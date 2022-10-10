@@ -8,12 +8,18 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+func NewKVController(store *kv.KeyValStore) *KVController {
+	return &KVController{store}
+}
+
 type KVController struct {
 	store *kv.KeyValStore
 }
 
-func NewKVController(store *kv.KeyValStore) *KVController {
-	return &KVController{store}
+func (c *KVController) Register(app *fiber.App) {
+	app.Get("/kv/:key", c.Get)
+	app.Post("/kv/:key/:val", c.Set)
+	app.Delete("/kv/:key", c.Delete)
 }
 
 func (c *KVController) Get(ctx *fiber.Ctx) error {

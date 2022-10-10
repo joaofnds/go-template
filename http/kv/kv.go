@@ -7,11 +7,7 @@ import (
 
 var Providers = fx.Options(
 	fx.Provide(NewKVController),
-	fx.Invoke(KVHandler),
+	fx.Invoke(func(app *fiber.App, controller *KVController) {
+		controller.Register(app)
+	}),
 )
-
-func KVHandler(app *fiber.App, controller *KVController) {
-	app.Get("/kv/:key", controller.Get)
-	app.Post("/kv/:key/:val", controller.Set)
-	app.Delete("/kv/:key", controller.Delete)
-}

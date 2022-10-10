@@ -7,9 +7,7 @@ import (
 	"go.uber.org/fx"
 )
 
-var (
-	Providers = fx.Invoke(HealthHandler)
-)
+var Providers = fx.Invoke(HealthHandler)
 
 func HealthHandler(app *fiber.App) {
 	app.Get("/health", func(c *fiber.Ctx) error {

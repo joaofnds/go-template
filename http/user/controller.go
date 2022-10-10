@@ -9,13 +9,19 @@ import (
 	"go.uber.org/zap"
 )
 
+func NewUserController(service *user.UserService, logger *zap.Logger) *UserController {
+	return &UserController{service, logger}
+}
+
 type UserController struct {
 	service *user.UserService
 	logger  *zap.Logger
 }
 
-func NewUserController(service *user.UserService, logger *zap.Logger) *UserController {
-	return &UserController{service, logger}
+func (c *UserController) Register(app *fiber.App) {
+	app.Get("/users", c.List)
+	app.Post("/users", c.Create)
+	app.Delete("/users/:name", c.Delete)
 }
 
 func (c *UserController) List(ctx *fiber.Ctx) error {

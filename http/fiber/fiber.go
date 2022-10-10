@@ -9,11 +9,9 @@ import (
 	"go.uber.org/fx"
 )
 
-var (
-	Module = fx.Options(
-		fx.Provide(NewFiber),
-		fx.Invoke(HookFiber),
-	)
+var Module = fx.Options(
+	fx.Provide(NewFiber),
+	fx.Invoke(HookFiber),
 )
 
 func NewFiber() *fiber.App {
