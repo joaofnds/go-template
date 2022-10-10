@@ -1,16 +1,24 @@
 package health_test
 
 import (
+	"web/config"
+	"web/health"
+	"web/http/fiber"
+	httpHealth "web/http/health"
+	"web/kv"
+	"web/mongo"
+	"web/test"
+	testHealth "web/test/health"
+	. "web/test/matchers"
+
+	"fmt"
+	"io"
 	"net/http"
 	"testing"
-	"web/config"
-	"web/http/fiber"
-	"web/http/health"
-	"web/test"
-	. "web/test/matchers"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
 )
 
@@ -19,26 +27,86 @@ func TestHealth(t *testing.T) {
 	RunSpecs(t, "/health suite")
 }
 
-var _ = Describe("/", func() {
+var _ = Describe("/health", func() {
 	var app *fxtest.App
+	var url string
 
-	BeforeEach(func() {
-		app = fxtest.New(
-			GinkgoT(),
-			test.NopLogger,
-			config.Module,
-			fiber.Module,
-			health.Providers,
-		)
-		app.RequireStart()
+	Context("healthy", func() {
+		BeforeEach(func() {
+			var cfg config.AppConfig
+			app = fxtest.New(
+				GinkgoT(),
+				test.NopLogger,
+				test.RandomAppConfigPort,
+				config.Module,
+				fiber.Module,
+				health.Module,
+				httpHealth.Providers,
+				mongo.Module,
+				kv.Module,
+				fx.Populate(&cfg),
+			)
+			url = fmt.Sprintf("http://localhost:%d/health", cfg.Port)
+			app.RequireStart()
+		})
+
+		AfterEach(func() { app.RequireStop() })
+
+		It("returns status OK", func() {
+			res := Must2(http.Get(url))
+			Expect(res.StatusCode).To(Equal(http.StatusOK))
+		})
+
+		It("checks mongo connection", func() {
+			res := Must2(http.Get(url))
+			b := Must2(io.ReadAll(res.Body))
+			Expect(b).To(ContainSubstring(`"mongo":{"status":"up"}`))
+		})
+
+		It("checks redis connection", func() {
+			res := Must2(http.Get(url))
+			b := Must2(io.ReadAll(res.Body))
+			Expect(b).To(ContainSubstring(`"redis":{"status":"up"}`))
+		})
 	})
 
-	AfterEach(func() {
-		app.RequireStop()
-	})
+	Context("unhealthy", func() {
+		BeforeEach(func() {
+			var cfg config.AppConfig
+			app = fxtest.New(
+				GinkgoT(),
+				test.NopLogger,
+				test.RandomAppConfigPort,
+				config.Module,
+				mongo.Module,
+				kv.Module,
+				health.Module,
+				testHealth.UnhealthyHealthService,
+				fiber.Module,
+				httpHealth.Providers,
+				fx.Populate(&cfg),
+			)
+			url = fmt.Sprintf("http://localhost:%d/health", cfg.Port)
+			app.RequireStart()
+		})
 
-	It("returns status OK", func() {
-		res := Must2(http.Get("http://localhost:3000/health"))
-		Expect(res.StatusCode).To(Equal(http.StatusOK))
+		AfterEach(func() { app.RequireStop() })
+
+		It("returns status OK", func() {
+			res := Must2(http.Get(url))
+			Expect(res.StatusCode).To(Equal(http.StatusServiceUnavailable))
+		})
+
+		It("checks mongo connection", func() {
+			res := Must2(http.Get(url))
+			b := Must2(io.ReadAll(res.Body))
+			Expect(b).To(ContainSubstring(`"mongo":{"status":"down"}`))
+		})
+
+		It("checks redis connection", func() {
+			res := Must2(http.Get(url))
+			b := Must2(io.ReadAll(res.Body))
+			Expect(b).To(ContainSubstring(`"redis":{"status":"down"}`))
+		})
 	})
 })
