@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/joaofnds/go-template/compare/v1.8.0...v1.9.0) (2022-10-11)
+
+
+### Features
+
+* configure fx to use zap ([78be78b](https://github.com/joaofnds/go-template/commit/78be78bcf4a186b6dc9ab8615376191ab00ff1dc))
+
 # [1.8.0](https://github.com/joaofnds/go-template/compare/v1.7.2...v1.8.0) (2022-10-10)
 
 
