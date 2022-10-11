@@ -23,7 +23,9 @@ type HTTPInstrumentation interface {
 }
 
 func NewFiber(instrumentation HTTPInstrumentation) *fiber.App {
-	app := fiber.New()
+	app := fiber.New(fiber.Config{
+		DisableStartupMessage: true,
+	})
 	app.Use(recover.New())
 	app.Use(limiter.New(limiter.Config{
 		Max:               30,
