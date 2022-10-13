@@ -4,9 +4,7 @@ import "go.uber.org/fx"
 
 var Module = fx.Options(
 	fx.Provide(NewHealthService),
-	fx.Provide(func(healthService *HealthService) HealthChecker {
-		return healthService
-	}),
+	fx.Provide(func(service *Service) Checker { return service }),
 )
 
 const (
@@ -14,13 +12,13 @@ const (
 	StatusDown = "down"
 )
 
-type HealthCheck struct {
+type Check struct {
 	Mongo Status `json:"mongo"`
 	Redis Status `json:"redis"`
 }
 
-func (hc HealthCheck) AllUp() bool {
-	return hc.Mongo.IsUp() && hc.Redis.IsUp()
+func (c Check) AllUp() bool {
+	return c.Mongo.IsUp() && c.Redis.IsUp()
 }
 
 type Status struct {

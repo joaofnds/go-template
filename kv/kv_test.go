@@ -19,7 +19,7 @@ func TestUser(t *testing.T) {
 
 var _ = Describe("kv service", func() {
 	var app *fxtest.App
-	var store *kv.KeyValStore
+	var store *kv.Store
 
 	BeforeEach(func() {
 		app = fxtest.New(

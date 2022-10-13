@@ -9,20 +9,20 @@ import (
 
 var ErrNotFound = errors.New("not found")
 
-type KeyValStore struct {
+type Store struct {
 	client *redis.Client
 }
 
-func NewKV(client *redis.Client) *KeyValStore {
-	return &KeyValStore{client}
+func NewKV(client *redis.Client) *Store {
+	return &Store{client}
 }
 
-func (store *KeyValStore) Set(key, value string) error {
-	return store.client.Set(context.Background(), key, value, 0).Err()
+func (s *Store) Set(key, value string) error {
+	return s.client.Set(context.Background(), key, value, 0).Err()
 }
 
-func (store *KeyValStore) Get(key string) (string, error) {
-	cmd := store.client.Get(context.Background(), key)
+func (s *Store) Get(key string) (string, error) {
+	cmd := s.client.Get(context.Background(), key)
 	if cmd.Err() != nil {
 		return "", ErrNotFound
 	}
@@ -30,6 +30,6 @@ func (store *KeyValStore) Get(key string) (string, error) {
 	return cmd.Val(), nil
 }
 
-func (store *KeyValStore) Del(key string) error {
-	return store.client.Del(context.Background(), key).Err()
+func (s *Store) Del(key string) error {
+	return s.client.Del(context.Background(), key).Err()
 }

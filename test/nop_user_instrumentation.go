@@ -18,4 +18,4 @@ func (i nopUserInstrumentation) FailedToCreateUser(_ error)              {}
 func (i nopUserInstrumentation) FailedToDeleteAll(_ error)               {}
 func (i nopUserInstrumentation) FailedToFindByName(_ error)              {}
 func (i nopUserInstrumentation) FailedToRemoveUser(_ error, _ user.User) {}
-func (l nopUserInstrumentation) UserCreated()                            {}
+func (i nopUserInstrumentation) UserCreated()                            {}

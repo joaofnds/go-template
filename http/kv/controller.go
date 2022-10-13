@@ -8,21 +8,21 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func NewKVController(store *kv.KeyValStore) *KVController {
-	return &KVController{store}
+func NewController(store *kv.Store) *Controller {
+	return &Controller{store}
 }
 
-type KVController struct {
-	store *kv.KeyValStore
+type Controller struct {
+	store *kv.Store
 }
 
-func (c *KVController) Register(app *fiber.App) {
+func (c *Controller) Register(app *fiber.App) {
 	app.Get("/kv/:key", c.Get)
 	app.Post("/kv/:key/:val", c.Set)
 	app.Delete("/kv/:key", c.Delete)
 }
 
-func (c *KVController) Get(ctx *fiber.Ctx) error {
+func (c *Controller) Get(ctx *fiber.Ctx) error {
 	key := ctx.Params("key")
 	if key == "" {
 		return fiber.NewError(http.StatusBadRequest, "missing key")
@@ -39,7 +39,7 @@ func (c *KVController) Get(ctx *fiber.Ctx) error {
 	return ctx.Status(http.StatusOK).Send([]byte(val))
 }
 
-func (c *KVController) Set(ctx *fiber.Ctx) error {
+func (c *Controller) Set(ctx *fiber.Ctx) error {
 	key := ctx.Params("key")
 	if key == "" {
 		return fiber.NewError(http.StatusBadRequest, "missing key")
@@ -58,7 +58,7 @@ func (c *KVController) Set(ctx *fiber.Ctx) error {
 	return ctx.SendStatus(http.StatusCreated)
 }
 
-func (c *KVController) Delete(ctx *fiber.Ctx) error {
+func (c *Controller) Delete(ctx *fiber.Ctx) error {
 	key := ctx.Params("key")
 	if key == "" {
 		return fiber.NewError(http.StatusBadRequest, "missing key")

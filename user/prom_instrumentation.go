@@ -6,38 +6,38 @@ import (
 	"go.uber.org/zap"
 )
 
-type PromHabitInstrumentation struct {
+type PromInstrumentation struct {
 	logger            *zap.Logger
 	usersCreated      prometheus.Counter
 	usersCreateFailed prometheus.Counter
 }
 
-func NewPromHabitInstrumentation(logger *zap.Logger) *PromHabitInstrumentation {
-	return &PromHabitInstrumentation{
+func NewPromInstrumentation(logger *zap.Logger) *PromInstrumentation {
+	return &PromInstrumentation{
 		logger:            logger,
 		usersCreated:      promauto.NewCounter(prometheus.CounterOpts{Name: "users_created"}),
 		usersCreateFailed: promauto.NewCounter(prometheus.CounterOpts{Name: "users_create_fail"}),
 	}
 }
 
-func (i *PromHabitInstrumentation) FailedToCreateUser(err error) {
+func (i *PromInstrumentation) FailedToCreateUser(err error) {
 	i.logger.Error("failed to create user", zap.Error(err))
 	i.usersCreateFailed.Inc()
 }
 
-func (i *PromHabitInstrumentation) FailedToDeleteAll(err error) {
+func (i *PromInstrumentation) FailedToDeleteAll(err error) {
 	i.logger.Error("failed to delete all", zap.Error(err))
 }
 
-func (i *PromHabitInstrumentation) FailedToFindByName(err error) {
+func (i *PromInstrumentation) FailedToFindByName(err error) {
 	i.logger.Error("failed to find user by name", zap.Error(err))
 }
 
-func (i *PromHabitInstrumentation) FailedToRemoveUser(err error, user User) {
+func (i *PromInstrumentation) FailedToRemoveUser(err error, user User) {
 	i.logger.Error("failed to remove user", zap.Error(err), zap.String("name", user.Name))
 }
 
-func (l *PromHabitInstrumentation) UserCreated() {
+func (l *PromInstrumentation) UserCreated() {
 	l.logger.Info("user created")
 	l.usersCreated.Inc()
 }

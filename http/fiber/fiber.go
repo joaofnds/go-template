@@ -18,11 +18,11 @@ var Module = fx.Options(
 	fx.Invoke(HookFiber),
 )
 
-type HTTPInstrumentation interface {
+type Instrumentation interface {
 	Middleware(*fiber.Ctx) error
 }
 
-func NewFiber(instrumentation HTTPInstrumentation) *fiber.App {
+func NewFiber(instrumentation Instrumentation) *fiber.App {
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 	})

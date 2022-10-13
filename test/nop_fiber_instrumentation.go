@@ -7,13 +7,11 @@ import (
 	"go.uber.org/fx"
 )
 
-var NopHTTPInstrumentation = fx.Decorate(newNopHTTPInstrumentation)
+var NopHTTPInstrumentation = fx.Decorate(newNopFiberInstrumentation)
 
 type nopHTTPInstrumentation struct{}
 
-type PromHabitInstrumentation struct{}
-
-func newNopHTTPInstrumentation() webFiber.HTTPInstrumentation {
+func newNopFiberInstrumentation() webFiber.Instrumentation {
 	return &nopHTTPInstrumentation{}
 }
 

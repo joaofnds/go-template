@@ -9,22 +9,22 @@ import (
 	"go.uber.org/zap"
 )
 
-func NewUserController(service *user.UserService, logger *zap.Logger) *UserController {
-	return &UserController{service, logger}
+func NewController(service *user.Service, logger *zap.Logger) *Controller {
+	return &Controller{service, logger}
 }
 
-type UserController struct {
-	service *user.UserService
+type Controller struct {
+	service *user.Service
 	logger  *zap.Logger
 }
 
-func (c *UserController) Register(app *fiber.App) {
+func (c *Controller) Register(app *fiber.App) {
 	app.Get("/users", c.List)
 	app.Post("/users", c.Create)
 	app.Delete("/users/:name", c.Delete)
 }
 
-func (c *UserController) List(ctx *fiber.Ctx) error {
+func (c *Controller) List(ctx *fiber.Ctx) error {
 	var out strings.Builder
 
 	users, err := c.service.List()
@@ -39,7 +39,7 @@ func (c *UserController) List(ctx *fiber.Ctx) error {
 	return ctx.SendString(out.String())
 }
 
-func (c *UserController) Create(ctx *fiber.Ctx) error {
+func (c *Controller) Create(ctx *fiber.Ctx) error {
 	var user user.User
 	err := ctx.BodyParser(&user)
 	if err != nil {
@@ -58,7 +58,7 @@ func (c *UserController) Create(ctx *fiber.Ctx) error {
 	return ctx.SendStatus(http.StatusCreated)
 }
 
-func (c *UserController) Delete(ctx *fiber.Ctx) error {
+func (c *Controller) Delete(ctx *fiber.Ctx) error {
 	name := ctx.Params("name")
 	err := c.service.Remove(user.User{Name: name})
 	if err != nil {

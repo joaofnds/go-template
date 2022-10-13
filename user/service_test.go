@@ -21,7 +21,7 @@ func TestUser(t *testing.T) {
 
 var _ = Describe("user service", func() {
 	var app *fxtest.App
-	var userService *user.UserService
+	var userService *user.Service
 
 	BeforeEach(func() {
 		app = fxtest.New(

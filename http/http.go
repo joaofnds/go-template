@@ -9,11 +9,9 @@ import (
 	"go.uber.org/fx"
 )
 
-var (
-	Module = fx.Options(
-		fiber.Module,
-		user.Providers,
-		health.Providers,
-		kv.Providers,
-	)
+var Module = fx.Options(
+	fiber.Module,
+	user.Providers,
+	health.Providers,
+	kv.Providers,
 )

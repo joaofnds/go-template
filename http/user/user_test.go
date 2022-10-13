@@ -8,7 +8,7 @@ import (
 	"testing"
 	"web/config"
 	"web/http/fiber"
-	http_user "web/http/user"
+	httpuser "web/http/user"
 	"web/mongo"
 	"web/test"
 	. "web/test/matchers"
@@ -27,7 +27,7 @@ func TestUser(t *testing.T) {
 
 var _ = Describe("/users", Ordered, func() {
 	var app *fxtest.App
-	var userService *user.UserService
+	var userService *user.Service
 	var url string
 
 	BeforeAll(func() {
@@ -41,7 +41,7 @@ var _ = Describe("/users", Ordered, func() {
 			fiber.Module,
 			mongo.Module,
 			user.Module,
-			http_user.Providers,
+			httpuser.Providers,
 			fx.Populate(&appConfig, &userService),
 		).RequireStart()
 

@@ -8,7 +8,7 @@ import (
 	"testing"
 	"web/config"
 	"web/http/fiber"
-	http_kv "web/http/kv"
+	httpkv "web/http/kv"
 	"web/kv"
 	"web/test"
 	. "web/test/matchers"
@@ -19,9 +19,9 @@ import (
 	"go.uber.org/fx/fxtest"
 )
 
-func TestUser(t *testing.T) {
+func TestHTTPKV(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "User HTTP Suite")
+	RunSpecs(t, "KV HTTP Suite")
 }
 
 var _ = Describe("/kv", Ordered, func() {
@@ -38,7 +38,7 @@ var _ = Describe("/kv", Ordered, func() {
 			config.Module,
 			fiber.Module,
 			kv.Module,
-			http_kv.Providers,
+			httpkv.Providers,
 			fx.Populate(&appConfig),
 		).RequireStart()
 

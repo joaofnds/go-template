@@ -6,8 +6,8 @@ import (
 )
 
 var Providers = fx.Options(
-	fx.Provide(NewKVController),
-	fx.Invoke(func(app *fiber.App, controller *KVController) {
+	fx.Provide(NewController),
+	fx.Invoke(func(app *fiber.App, controller *Controller) {
 		controller.Register(app)
 	}),
 )

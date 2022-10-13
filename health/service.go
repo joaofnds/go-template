@@ -7,35 +7,35 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type HealthChecker interface {
-	CheckHealth(ctx context.Context) HealthCheck
+type Checker interface {
+	CheckHealth(ctx context.Context) Check
 }
 
-type HealthService struct {
+type Service struct {
 	mongoClient *mongo.Client
 	redisClient *redis.Client
 }
 
-func NewHealthService(mongoClient *mongo.Client, redisClient *redis.Client) *HealthService {
-	return &HealthService{mongoClient, redisClient}
+func NewHealthService(mongoClient *mongo.Client, redisClient *redis.Client) *Service {
+	return &Service{mongoClient, redisClient}
 }
 
-func (c *HealthService) CheckHealth(ctx context.Context) HealthCheck {
-	return HealthCheck{
-		Mongo: c.MongoHealth(ctx),
-		Redis: c.RedisHealth(ctx),
+func (s *Service) CheckHealth(ctx context.Context) Check {
+	return Check{
+		Mongo: s.MongoHealth(ctx),
+		Redis: s.RedisHealth(ctx),
 	}
 }
 
-func (c *HealthService) MongoHealth(ctx context.Context) Status {
-	if err := c.mongoClient.Ping(ctx, nil); err != nil {
+func (s *Service) MongoHealth(ctx context.Context) Status {
+	if err := s.mongoClient.Ping(ctx, nil); err != nil {
 		return Status{Status: StatusDown}
 	}
 	return Status{Status: StatusUp}
 }
 
-func (c *HealthService) RedisHealth(ctx context.Context) Status {
-	if cmd := c.redisClient.Ping(ctx); cmd.Err() != nil {
+func (s *Service) RedisHealth(ctx context.Context) Status {
+	if cmd := s.redisClient.Ping(ctx); cmd.Err() != nil {
 		return Status{Status: StatusDown}
 	}
 	return Status{Status: StatusUp}
