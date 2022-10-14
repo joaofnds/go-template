@@ -6,7 +6,6 @@ import (
 
 	"web/config"
 	"web/http/fiber"
-	. "web/http/req"
 	"web/test"
 	. "web/test/matchers"
 
@@ -44,20 +43,20 @@ var _ = Describe("fiber", func() {
 	})
 
 	It("recovers from panic", func() {
-		req := Must2(Get(url+"/panic", nil))
-		Expect(req.StatusCode).To(Equal(http.StatusInternalServerError))
+		res := Must2(http.Get(url + "/panic"))
+		Expect(res.StatusCode).To(Equal(http.StatusInternalServerError))
 
-		req = Must2(Get(url+"/somethingelse", nil))
-		Expect(req.StatusCode).To(Equal(http.StatusNotFound))
+		res = Must2(http.Get(url + "/somethingelse"))
+		Expect(res.StatusCode).To(Equal(http.StatusNotFound))
 	})
 
 	It("limits requests", func() {
 		for i := 0; i < 30; i++ {
-			req := Must2(Get(url+"/somethingelse", nil))
-			Expect(req.StatusCode).To(Equal(http.StatusNotFound))
+			res := Must2(http.Get(url + "/somethingelse"))
+			Expect(res.StatusCode).To(Equal(http.StatusNotFound))
 		}
 
-		req := Must2(Get(url+"/somethingelse", nil))
-		Expect(req.StatusCode).To(Equal(http.StatusTooManyRequests))
+		res := Must2(http.Get(url + "/somethingelse"))
+		Expect(res.StatusCode).To(Equal(http.StatusTooManyRequests))
 	})
 })
