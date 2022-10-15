@@ -26,7 +26,7 @@ var _ = Describe("/", Ordered, func() {
 	var url string
 
 	BeforeAll(func() {
-		var cfg config.AppConfig
+		var cfg metrics.Config
 		fxtest.New(
 			GinkgoT(),
 			test.NopLogger,
@@ -34,7 +34,7 @@ var _ = Describe("/", Ordered, func() {
 			metrics.Module,
 			fx.Populate(&cfg),
 		).RequireStart()
-		url = fmt.Sprintf("http://%s/metrics", cfg.MetricsAddr)
+		url = fmt.Sprintf("http://%s/metrics", cfg.Addr)
 	})
 
 	It("returns status OK", func() {

@@ -3,7 +3,6 @@ package metrics
 import (
 	"context"
 	"net/http"
-	"web/config"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/fx"
@@ -18,9 +17,9 @@ var Module = fx.Module(
 
 type Server = http.Server
 
-func NewServer(c config.AppConfig) *Server {
+func NewServer(c Config) *Server {
 	http.Handle("/metrics", promhttp.Handler())
-	return &http.Server{Addr: c.MetricsAddr}
+	return &http.Server{Addr: c.Addr}
 }
 
 func HookMetricsHandler(lc fx.Lifecycle, server *Server, logger *zap.Logger) {

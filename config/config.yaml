@@ -2,4 +2,5 @@ env: development
 port: 3000
 mongo:
   uri: mongodb://localhost:27017
-metrics_addr: localhost:9091
+metrics:
+  addr: localhost:9091
