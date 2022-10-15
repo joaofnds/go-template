@@ -3,18 +3,17 @@ package user
 import (
 	"net/http"
 	"strings"
-	"web/user"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"
 )
 
-func NewController(service *user.Service, logger *zap.Logger) *Controller {
+func NewController(service *Service, logger *zap.Logger) *Controller {
 	return &Controller{service, logger}
 }
 
 type Controller struct {
-	service *user.Service
+	service *Service
 	logger  *zap.Logger
 }
 
@@ -40,7 +39,7 @@ func (c *Controller) List(ctx *fiber.Ctx) error {
 }
 
 func (c *Controller) Create(ctx *fiber.Ctx) error {
-	var user user.User
+	var user User
 	err := ctx.BodyParser(&user)
 	if err != nil {
 		c.logger.Error("failed to parse body", zap.Error(err))
@@ -60,7 +59,7 @@ func (c *Controller) Create(ctx *fiber.Ctx) error {
 
 func (c *Controller) Delete(ctx *fiber.Ctx) error {
 	name := ctx.Params("name")
-	err := c.service.Remove(user.User{Name: name})
+	err := c.service.Remove(User{Name: name})
 	if err != nil {
 		c.logger.Error("failed to remove user", zap.String("name", name))
 	}

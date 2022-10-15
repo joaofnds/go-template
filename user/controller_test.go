@@ -5,25 +5,19 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"testing"
 	"web/config"
-	"web/http/fiber"
-	httpuser "web/http/user"
+	webfiber "web/http/fiber"
 	"web/mongo"
 	"web/test"
 	. "web/test/matchers"
 	"web/user"
 
+	"github.com/gofiber/fiber/v2"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
 )
-
-func TestUser(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "User HTTP Suite")
-}
 
 var _ = Describe("/users", Ordered, func() {
 	var app *fxtest.App
@@ -38,10 +32,12 @@ var _ = Describe("/users", Ordered, func() {
 			test.NopLogger,
 			test.RandomAppConfigPort,
 			config.Module,
-			fiber.Module,
+			webfiber.Module,
 			mongo.Module,
 			user.Module,
-			httpuser.Providers,
+			fx.Invoke(func(app *fiber.App, controller *user.Controller) {
+				controller.Register(app)
+			}),
 			fx.Populate(&appConfig, &userService),
 		).RequireStart()
 
