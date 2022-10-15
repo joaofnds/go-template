@@ -3,7 +3,7 @@ package http
 import (
 	"web/health"
 	webfiber "web/http/fiber"
-	"web/http/kv"
+	"web/kv"
 	"web/user"
 
 	"github.com/gofiber/fiber/v2"
@@ -12,13 +12,14 @@ import (
 
 var Module = fx.Options(
 	webfiber.Module,
-	kv.Providers,
 	fx.Invoke(func(
 		app *fiber.App,
 		healthController *health.Controller,
 		userController *user.Controller,
+		kvController *kv.Controller,
 	) {
 		healthController.Register(app)
 		userController.Register(app)
+		kvController.Register(app)
 	}),
 )

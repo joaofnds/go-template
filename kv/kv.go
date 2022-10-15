@@ -12,6 +12,7 @@ var Module = fx.Module(
 	fx.Invoke(HookRedis),
 	fx.Provide(NewClient),
 	fx.Provide(NewKV),
+	fx.Provide(NewController),
 )
 
 func NewClient() *redis.Client {

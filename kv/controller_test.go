@@ -5,24 +5,18 @@ import (
 	"io"
 	"net/http"
 	"strings"
-	"testing"
 	"web/config"
-	"web/http/fiber"
-	httpkv "web/http/kv"
+	webfiber "web/http/fiber"
 	"web/kv"
 	"web/test"
 	. "web/test/matchers"
 
+	"github.com/gofiber/fiber/v2"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
 )
-
-func TestHTTPKV(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "KV HTTP Suite")
-}
 
 var _ = Describe("/kv", Ordered, func() {
 	var app *fxtest.App
@@ -36,9 +30,11 @@ var _ = Describe("/kv", Ordered, func() {
 			test.NopLogger,
 			test.RandomAppConfigPort,
 			config.Module,
-			fiber.Module,
+			webfiber.Module,
 			kv.Module,
-			httpkv.Providers,
+			fx.Invoke(func(app *fiber.App, controller *kv.Controller) {
+				controller.Register(app)
+			}),
 			fx.Populate(&appConfig),
 		).RequireStart()
 
