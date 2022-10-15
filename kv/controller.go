@@ -7,12 +7,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func NewController(store *Store) *Controller {
+func NewController(store Store) *Controller {
 	return &Controller{store}
 }
 
 type Controller struct {
-	store *Store
+	store Store
 }
 
 func (c *Controller) Register(app *fiber.App) {

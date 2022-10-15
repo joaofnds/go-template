@@ -9,19 +9,19 @@ import (
 
 var ErrNotFound = errors.New("not found")
 
-type Store struct {
+type RedisStore struct {
 	client *redis.Client
 }
 
-func NewKV(client *redis.Client) *Store {
-	return &Store{client}
+func NewRedisStore(client *redis.Client) *RedisStore {
+	return &RedisStore{client}
 }
 
-func (s *Store) Set(key, value string) error {
+func (s *RedisStore) Set(key, value string) error {
 	return s.client.Set(context.Background(), key, value, 0).Err()
 }
 
-func (s *Store) Get(key string) (string, error) {
+func (s *RedisStore) Get(key string) (string, error) {
 	cmd := s.client.Get(context.Background(), key)
 	if cmd.Err() != nil {
 		return "", ErrNotFound
@@ -30,6 +30,6 @@ func (s *Store) Get(key string) (string, error) {
 	return cmd.Val(), nil
 }
 
-func (s *Store) Del(key string) error {
+func (s *RedisStore) Del(key string) error {
 	return s.client.Del(context.Background(), key).Err()
 }

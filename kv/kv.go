@@ -1,28 +1,16 @@
 package kv
 
-import (
-	"context"
-
-	"github.com/go-redis/redis/v8"
-	"go.uber.org/fx"
-)
+import "go.uber.org/fx"
 
 var Module = fx.Module(
 	"kv",
-	fx.Invoke(HookRedis),
-	fx.Provide(NewClient),
-	fx.Provide(NewKV),
+	fx.Provide(NewRedisStore),
+	fx.Provide(func(redisStore *RedisStore) Store { return redisStore }),
 	fx.Provide(NewController),
 )
 
-func NewClient() *redis.Client {
-	return redis.NewClient(&redis.Options{})
-}
-
-func HookRedis(lifecycle fx.Lifecycle, redis *redis.Client) {
-	lifecycle.Append(fx.Hook{
-		OnStart: func(ctx context.Context) error {
-			return redis.Ping(ctx).Err()
-		},
-	})
+type Store interface {
+	Get(string) (string, error)
+	Set(string, string) error
+	Del(string) error
 }

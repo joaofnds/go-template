@@ -8,6 +8,7 @@ import (
 	"web/logger"
 	"web/metrics"
 	"web/mongo"
+	"web/redis"
 	"web/user"
 
 	"go.uber.org/fx"
@@ -21,6 +22,7 @@ func main() {
 		health.Module,
 		http.Module,
 		user.Module,
+		redis.Module,
 		mongo.Module,
 		kv.Module,
 	).Run()

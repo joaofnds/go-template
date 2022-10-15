@@ -6,6 +6,7 @@ import (
 	webhttp "web/http"
 	"web/kv"
 	"web/mongo"
+	"web/redis"
 	"web/test"
 	testhealth "web/test/health"
 	. "web/test/matchers"
@@ -39,6 +40,7 @@ var _ = Describe("/health", func() {
 				test.NopLogger,
 				test.RandomAppConfigPort,
 				test.NopHTTPInstrumentation,
+				redis.Module,
 				config.Module,
 				webhttp.FiberModule,
 				health.Module,

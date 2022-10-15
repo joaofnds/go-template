@@ -3,6 +3,7 @@ package kv_test
 import (
 	"testing"
 	"web/kv"
+	"web/redis"
 	"web/test"
 	. "web/test/matchers"
 
@@ -17,14 +18,15 @@ func TestUser(t *testing.T) {
 	RunSpecs(t, "KV Test")
 }
 
-var _ = Describe("kv service", func() {
+var _ = Describe("kv store", func() {
 	var app *fxtest.App
-	var store *kv.Store
+	var store *kv.RedisStore
 
 	BeforeEach(func() {
 		app = fxtest.New(
 			GinkgoT(),
 			test.NopLogger,
+			redis.Module,
 			kv.Module,
 			fx.Populate(&store),
 		)

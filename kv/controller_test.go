@@ -8,6 +8,7 @@ import (
 	"web/config"
 	webhttp "web/http"
 	"web/kv"
+	"web/redis"
 	"web/test"
 	. "web/test/matchers"
 
@@ -30,6 +31,7 @@ var _ = Describe("/kv", Ordered, func() {
 			test.NopLogger,
 			test.RandomAppConfigPort,
 			config.Module,
+			redis.Module,
 			webhttp.FiberModule,
 			kv.Module,
 			fx.Invoke(func(app *fiber.App, controller *kv.Controller) {
