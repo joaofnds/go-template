@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/joaofnds/go-template/compare/v1.9.3...v1.10.0) (2022-10-15)
+
+
+### Features
+
+* add http config ([84b798c](https://github.com/joaofnds/go-template/commit/84b798ceb73bfe459244feef67841aefd641edc1))
+
 ## [1.9.3](https://github.com/joaofnds/go-template/compare/v1.9.2...v1.9.3) (2022-10-15)
 
 ## [1.9.2](https://github.com/joaofnds/go-template/compare/v1.9.1...v1.9.2) (2022-10-14)
