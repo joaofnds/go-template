@@ -1,14 +1,12 @@
 package config
 
 import (
-	"log"
+	"errors"
 	"os"
 
 	"github.com/spf13/viper"
 	"go.uber.org/fx"
 )
-
-const configPath = "CONFIG_PATH"
 
 var Module = fx.Options(fx.Invoke(LoadConfig), fx.Provide(NewAppConfig))
 
@@ -20,9 +18,9 @@ type AppConfig struct {
 }
 
 func LoadConfig() error {
-	configFile, ok := os.LookupEnv(configPath)
-	if !ok {
-		log.Fatalf("could not lookup env %q", configPath)
+	configFile := os.Getenv("CONFIG_PATH")
+	if configFile == "" {
+		return errors.New("CONFIG_PATH env not set")
 	}
 
 	viper.SetConfigFile(configFile)
@@ -31,10 +29,5 @@ func LoadConfig() error {
 
 func NewAppConfig() (AppConfig, error) {
 	var config AppConfig
-
-	if err := viper.UnmarshalExact(&config); err != nil {
-		return config, err
-	}
-
-	return config, nil
+	return config, viper.UnmarshalExact(&config)
 }
