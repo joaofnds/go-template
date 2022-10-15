@@ -3,6 +3,7 @@ package health
 import "go.uber.org/fx"
 
 var Module = fx.Options(
+	fx.Provide(NewHealthController),
 	fx.Provide(NewHealthService),
 	fx.Provide(func(service *Service) Checker { return service }),
 )

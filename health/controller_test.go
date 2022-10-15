@@ -3,12 +3,11 @@ package health_test
 import (
 	"web/config"
 	"web/health"
-	"web/http/fiber"
-	httpHealth "web/http/health"
+	webfiber "web/http/fiber"
 	"web/kv"
 	"web/mongo"
 	"web/test"
-	testHealth "web/test/health"
+	testhealth "web/test/health"
 	. "web/test/matchers"
 
 	"fmt"
@@ -16,6 +15,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/gofiber/fiber/v2"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"go.uber.org/fx"
@@ -40,11 +40,13 @@ var _ = Describe("/health", func() {
 				test.RandomAppConfigPort,
 				test.NopHTTPInstrumentation,
 				config.Module,
-				fiber.Module,
+				webfiber.Module,
 				health.Module,
-				httpHealth.Providers,
 				mongo.Module,
 				kv.Module,
+				fx.Invoke(func(app *fiber.App, controller *health.Controller) {
+					controller.Register(app)
+				}),
 				fx.Populate(&cfg),
 			)
 			url = fmt.Sprintf("http://localhost:%d/health", cfg.Port)
@@ -79,13 +81,15 @@ var _ = Describe("/health", func() {
 				test.NopLogger,
 				test.RandomAppConfigPort,
 				test.NopHTTPInstrumentation,
-				testHealth.UnhealthyHealthService,
+				testhealth.UnhealthyHealthService,
 				config.Module,
 				mongo.Module,
 				kv.Module,
 				health.Module,
-				fiber.Module,
-				httpHealth.Providers,
+				webfiber.Module,
+				fx.Invoke(func(app *fiber.App, controller *health.Controller) {
+					controller.Register(app)
+				}),
 				fx.Populate(&cfg),
 			)
 			url = fmt.Sprintf("http://localhost:%d/health", cfg.Port)
