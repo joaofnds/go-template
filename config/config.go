@@ -3,18 +3,23 @@ package config
 import (
 	"errors"
 	"os"
+	"web/mongo"
 
 	"github.com/spf13/viper"
 	"go.uber.org/fx"
 )
 
-var Module = fx.Options(fx.Invoke(LoadConfig), fx.Provide(NewAppConfig))
+var Module = fx.Options(
+	fx.Invoke(LoadConfig),
+	fx.Provide(NewAppConfig),
+	fx.Provide(func(config AppConfig) mongo.Config { return config.Mongo }),
+)
 
 type AppConfig struct {
-	Env         string `mapstructure:"env"`
-	Port        int    `mapstructure:"port"`
-	MongoURI    string `mapstructure:"mongo_uri"`
-	MetricsAddr string `mapstructure:"metrics_addr"`
+	Env         string       `mapstructure:"env"`
+	Port        int          `mapstructure:"port"`
+	Mongo       mongo.Config `mapstructure:"mongo"`
+	MetricsAddr string       `mapstructure:"metrics_addr"`
 }
 
 func LoadConfig() error {

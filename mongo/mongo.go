@@ -2,7 +2,6 @@ package mongo
 
 import (
 	"context"
-	"web/config"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -13,8 +12,8 @@ import (
 
 var Module = fx.Module("mongo", fx.Provide(NewClient), fx.Invoke(HookConnection))
 
-func NewClient(config config.AppConfig, logger *zap.Logger) (*mongo.Client, error) {
-	clientOptions := options.Client().ApplyURI(config.MongoURI)
+func NewClient(config Config, logger *zap.Logger) (*mongo.Client, error) {
+	clientOptions := options.Client().ApplyURI(config.URI)
 	client, err := mongo.NewClient(clientOptions)
 	if err != nil {
 		logger.Error("failed to connect to mongo", zap.Error(err))
