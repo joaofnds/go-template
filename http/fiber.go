@@ -1,9 +1,8 @@
-package fiber
+package http
 
 import (
 	"context"
 	"fmt"
-	"web/config"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -12,23 +11,26 @@ import (
 	"go.uber.org/fx"
 )
 
-var Module = fx.Options(
-	fx.Provide(NewPromHTTPInstrumentation),
+var FiberModule = fx.Module(
+	"fiber",
 	fx.Provide(NewFiber),
 	fx.Invoke(HookFiber),
+	fx.Provide(NewPromHTTPInstrumentation),
+	fx.Provide(func(instr *PromInstrumentation) Instrumentation { return instr }),
 )
 
 type Instrumentation interface {
 	Middleware(*fiber.Ctx) error
 }
 
-func NewFiber(instrumentation Instrumentation) *fiber.App {
+func NewFiber(config Config, instrumentation Instrumentation) *fiber.App {
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 	})
 	app.Use(recover.New())
 	app.Use(limiter.New(limiter.Config{
-		Max:               30,
+		Max:               config.Limiter.Requests,
+		Expiration:        config.Limiter.Expiration,
 		LimiterMiddleware: limiter.SlidingWindow{},
 	}))
 	app.Use(instrumentation.Middleware)
@@ -36,7 +38,7 @@ func NewFiber(instrumentation Instrumentation) *fiber.App {
 	return app
 }
 
-func HookFiber(lc fx.Lifecycle, app *fiber.App, config config.AppConfig) {
+func HookFiber(lc fx.Lifecycle, app *fiber.App, config Config) {
 	lc.Append(fx.Hook{
 		OnStart: func(context.Context) error {
 			go func() {

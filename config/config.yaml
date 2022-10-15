@@ -1,5 +1,9 @@
 env: development
-port: 3000
+http:
+  port: 3000
+  limiter:
+    requests: 120
+    expiration: 1m
 mongo:
   uri: mongodb://localhost:27017
 metrics:

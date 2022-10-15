@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/http"
 	"web/config"
-	webfiber "web/http/fiber"
+	webhttp "web/http"
 	"web/mongo"
 	"web/test"
 	. "web/test/matchers"
@@ -25,23 +25,23 @@ var _ = Describe("/users", Ordered, func() {
 	var url string
 
 	BeforeAll(func() {
-		var appConfig config.AppConfig
+		var httpConfig webhttp.Config
 
 		app = fxtest.New(
 			GinkgoT(),
 			test.NopLogger,
 			test.RandomAppConfigPort,
 			config.Module,
-			webfiber.Module,
+			webhttp.FiberModule,
 			mongo.Module,
 			user.Module,
 			fx.Invoke(func(app *fiber.App, controller *user.Controller) {
 				controller.Register(app)
 			}),
-			fx.Populate(&appConfig, &userService),
+			fx.Populate(&httpConfig, &userService),
 		).RequireStart()
 
-		url = fmt.Sprintf("http://localhost:%d/users", appConfig.Port)
+		url = fmt.Sprintf("http://localhost:%d/users", httpConfig.Port)
 	})
 
 	AfterAll(func() {

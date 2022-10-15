@@ -1,7 +1,7 @@
 package test
 
 import (
-	webFiber "web/http/fiber"
+	"web/http"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/fx"
@@ -11,7 +11,7 @@ var NopHTTPInstrumentation = fx.Decorate(newNopFiberInstrumentation)
 
 type nopHTTPInstrumentation struct{}
 
-func newNopFiberInstrumentation() webFiber.Instrumentation {
+func newNopFiberInstrumentation() http.Instrumentation {
 	return &nopHTTPInstrumentation{}
 }
 

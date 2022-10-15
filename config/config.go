@@ -3,6 +3,7 @@ package config
 import (
 	"errors"
 	"os"
+	"web/http"
 	"web/metrics"
 	"web/mongo"
 
@@ -13,13 +14,14 @@ import (
 var Module = fx.Options(
 	fx.Invoke(LoadConfig),
 	fx.Provide(NewAppConfig),
+	fx.Provide(func(config AppConfig) http.Config { return config.HTTP }),
 	fx.Provide(func(config AppConfig) mongo.Config { return config.Mongo }),
 	fx.Provide(func(config AppConfig) metrics.Config { return config.Metrics }),
 )
 
 type AppConfig struct {
 	Env     string         `mapstructure:"env"`
-	Port    int            `mapstructure:"port"`
+	HTTP    http.Config    `mapstructure:"http"`
 	Mongo   mongo.Config   `mapstructure:"mongo"`
 	Metrics metrics.Config `mapstructure:"metrics"`
 }

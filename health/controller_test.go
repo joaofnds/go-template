@@ -3,7 +3,7 @@ package health_test
 import (
 	"web/config"
 	"web/health"
-	webfiber "web/http/fiber"
+	webhttp "web/http"
 	"web/kv"
 	"web/mongo"
 	"web/test"
@@ -33,14 +33,14 @@ var _ = Describe("/health", func() {
 
 	Context("healthy", func() {
 		BeforeEach(func() {
-			var cfg config.AppConfig
+			var cfg webhttp.Config
 			app = fxtest.New(
 				GinkgoT(),
 				test.NopLogger,
 				test.RandomAppConfigPort,
 				test.NopHTTPInstrumentation,
 				config.Module,
-				webfiber.Module,
+				webhttp.FiberModule,
 				health.Module,
 				mongo.Module,
 				kv.Module,
@@ -75,7 +75,7 @@ var _ = Describe("/health", func() {
 
 	Context("unhealthy", func() {
 		BeforeEach(func() {
-			var cfg config.AppConfig
+			var cfg webhttp.Config
 			app = fxtest.New(
 				GinkgoT(),
 				test.NopLogger,
@@ -86,7 +86,7 @@ var _ = Describe("/health", func() {
 				mongo.Module,
 				kv.Module,
 				health.Module,
-				webfiber.Module,
+				webhttp.FiberModule,
 				fx.Invoke(func(app *fiber.App, controller *health.Controller) {
 					controller.Register(app)
 				}),

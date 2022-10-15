@@ -1,4 +1,4 @@
-package fiber
+package http
 
 import (
 	"strconv"
@@ -8,7 +8,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
 
-var (
+const (
+	lblIP     = "ip"
 	lblMethod = "method"
 	lblPath   = "path"
 	lblStatus = "status"
@@ -20,11 +21,11 @@ type PromInstrumentation struct {
 
 type PromHabitInstrumentation struct{}
 
-func NewPromHTTPInstrumentation() Instrumentation {
+func NewPromHTTPInstrumentation() *PromInstrumentation {
 	return &PromInstrumentation{
 		req: promauto.NewCounterVec(
 			prometheus.CounterOpts{Name: "web_request"},
-			[]string{lblMethod, lblPath, lblStatus},
+			[]string{lblIP, lblMethod, lblPath, lblStatus},
 		),
 	}
 }
@@ -35,10 +36,12 @@ func (i *PromInstrumentation) Middleware(ctx *fiber.Ctx) error {
 }
 
 func (i *PromInstrumentation) LogReq(ctx *fiber.Ctx) {
-	labels := prometheus.Labels{}
-	labels[lblMethod] = string(ctx.Route().Method)
-	labels[lblPath] = string(ctx.Route().Path)
-	labels[lblStatus] = strconv.Itoa(ctx.Response().StatusCode())
+	labels := prometheus.Labels{
+		lblIP:     ctx.IP(),
+		lblMethod: ctx.Route().Method,
+		lblPath:   ctx.Route().Path,
+		lblStatus: strconv.Itoa(ctx.Response().StatusCode()),
+	}
 
 	i.req.With(labels).Inc()
 }
