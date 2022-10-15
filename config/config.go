@@ -1,11 +1,11 @@
 package config
 
 import (
+	"app/http"
+	"app/metrics"
+	"app/mongo"
 	"errors"
 	"os"
-	"web/http"
-	"web/metrics"
-	"web/mongo"
 
 	"github.com/spf13/viper"
 	"go.uber.org/fx"

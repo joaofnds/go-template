@@ -1,15 +1,15 @@
 package health_test
 
 import (
-	"web/config"
-	"web/health"
-	webhttp "web/http"
-	"web/kv"
-	"web/mongo"
-	"web/redis"
-	"web/test"
-	testhealth "web/test/health"
-	. "web/test/matchers"
+	"app/config"
+	"app/health"
+	apphttp "app/http"
+	"app/kv"
+	"app/mongo"
+	"app/redis"
+	"app/test"
+	testhealth "app/test/health"
+	. "app/test/matchers"
 
 	"fmt"
 	"io"
@@ -34,7 +34,7 @@ var _ = Describe("/health", func() {
 
 	Context("healthy", func() {
 		BeforeEach(func() {
-			var cfg webhttp.Config
+			var cfg apphttp.Config
 			app = fxtest.New(
 				GinkgoT(),
 				test.NopLogger,
@@ -42,7 +42,7 @@ var _ = Describe("/health", func() {
 				test.NopHTTPInstrumentation,
 				redis.Module,
 				config.Module,
-				webhttp.FiberModule,
+				apphttp.FiberModule,
 				health.Module,
 				mongo.Module,
 				kv.Module,
@@ -77,7 +77,7 @@ var _ = Describe("/health", func() {
 
 	Context("unhealthy", func() {
 		BeforeEach(func() {
-			var cfg webhttp.Config
+			var cfg apphttp.Config
 			app = fxtest.New(
 				GinkgoT(),
 				test.NopLogger,
@@ -88,7 +88,7 @@ var _ = Describe("/health", func() {
 				mongo.Module,
 				kv.Module,
 				health.Module,
-				webhttp.FiberModule,
+				apphttp.FiberModule,
 				fx.Invoke(func(app *fiber.App, controller *health.Controller) {
 					controller.Register(app)
 				}),

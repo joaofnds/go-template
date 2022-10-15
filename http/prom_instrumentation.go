@@ -24,7 +24,7 @@ type PromHabitInstrumentation struct{}
 func NewPromHTTPInstrumentation() *PromInstrumentation {
 	return &PromInstrumentation{
 		req: promauto.NewCounterVec(
-			prometheus.CounterOpts{Name: "web_request"},
+			prometheus.CounterOpts{Name: "app_request"},
 			[]string{lblIP, lblMethod, lblPath, lblStatus},
 		),
 	}

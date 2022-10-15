@@ -1,17 +1,17 @@
 package http_test
 
 import (
+	"app/config"
+	apphttp "app/http"
+	"app/test"
 	"fmt"
 	"net/http"
 	"testing"
-	"web/config"
-	webhttp "web/http"
-	"web/test"
 
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
 
-	. "web/test/matchers"
+	. "app/test/matchers"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -29,7 +29,7 @@ var _ = Describe("fiber middlewares", func() {
 	)
 
 	BeforeEach(func() {
-		var httpConfig webhttp.Config
+		var httpConfig apphttp.Config
 
 		fxApp = fxtest.New(
 			GinkgoT(),
@@ -38,7 +38,7 @@ var _ = Describe("fiber middlewares", func() {
 			test.NopHTTPInstrumentation,
 			test.PanicHandler,
 			config.Module,
-			webhttp.FiberModule,
+			apphttp.FiberModule,
 			fx.Populate(&httpConfig),
 		).RequireStart()
 

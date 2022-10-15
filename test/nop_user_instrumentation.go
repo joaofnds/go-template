@@ -1,7 +1,7 @@
 package test
 
 import (
-	"web/user"
+	"app/user"
 
 	"go.uber.org/fx"
 )

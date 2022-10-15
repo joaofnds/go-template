@@ -1,16 +1,16 @@
 package kv_test
 
 import (
+	"app/config"
+	apphttp "app/http"
+	"app/kv"
+	"app/redis"
+	"app/test"
+	. "app/test/matchers"
 	"fmt"
 	"io"
 	"net/http"
 	"strings"
-	"web/config"
-	webhttp "web/http"
-	"web/kv"
-	"web/redis"
-	"web/test"
-	. "web/test/matchers"
 
 	"github.com/gofiber/fiber/v2"
 	. "github.com/onsi/ginkgo/v2"
@@ -24,7 +24,7 @@ var _ = Describe("/kv", Ordered, func() {
 	var url string
 
 	BeforeAll(func() {
-		var httpConfig webhttp.Config
+		var httpConfig apphttp.Config
 
 		app = fxtest.New(
 			GinkgoT(),
@@ -32,7 +32,7 @@ var _ = Describe("/kv", Ordered, func() {
 			test.RandomAppConfigPort,
 			config.Module,
 			redis.Module,
-			webhttp.FiberModule,
+			apphttp.FiberModule,
 			kv.Module,
 			fx.Invoke(func(app *fiber.App, controller *kv.Controller) {
 				controller.Register(app)

@@ -1,12 +1,12 @@
 package user_test
 
 import (
+	"app/config"
+	"app/mongo"
+	"app/test"
+	. "app/test/matchers"
+	"app/user"
 	"testing"
-	"web/config"
-	"web/mongo"
-	"web/test"
-	. "web/test/matchers"
-	"web/user"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"

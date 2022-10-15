@@ -1,7 +1,7 @@
 package test
 
 import (
-	"web/http"
+	"app/http"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/fx"

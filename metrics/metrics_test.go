@@ -1,14 +1,14 @@
 package metrics_test
 
 import (
+	"app/config"
+	"app/metrics"
+	"app/test"
+	. "app/test/matchers"
 	"fmt"
 	"io"
 	"net/http"
 	"testing"
-	"web/config"
-	"web/metrics"
-	"web/test"
-	. "web/test/matchers"
 
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"

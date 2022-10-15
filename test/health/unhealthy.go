@@ -1,8 +1,8 @@
 package health
 
 import (
+	"app/health"
 	"context"
-	"web/health"
 
 	"go.uber.org/fx"
 )

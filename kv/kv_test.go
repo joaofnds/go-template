@@ -1,11 +1,11 @@
 package kv_test
 
 import (
+	"app/kv"
+	"app/redis"
+	"app/test"
+	. "app/test/matchers"
 	"testing"
-	"web/kv"
-	"web/redis"
-	"web/test"
-	. "web/test/matchers"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"

@@ -1,9 +1,9 @@
 package http
 
 import (
-	"web/health"
-	"web/kv"
-	"web/user"
+	"app/health"
+	"app/kv"
+	"app/user"
 
 	"github.com/gofiber/fiber/v2"
 

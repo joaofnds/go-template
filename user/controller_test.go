@@ -1,16 +1,16 @@
 package user_test
 
 import (
+	"app/config"
+	apphttp "app/http"
+	"app/mongo"
+	"app/test"
+	. "app/test/matchers"
+	"app/user"
 	"bytes"
 	"fmt"
 	"io"
 	"net/http"
-	"web/config"
-	webhttp "web/http"
-	"web/mongo"
-	"web/test"
-	. "web/test/matchers"
-	"web/user"
 
 	"github.com/gofiber/fiber/v2"
 	. "github.com/onsi/ginkgo/v2"
@@ -25,14 +25,14 @@ var _ = Describe("/users", Ordered, func() {
 	var url string
 
 	BeforeAll(func() {
-		var httpConfig webhttp.Config
+		var httpConfig apphttp.Config
 
 		app = fxtest.New(
 			GinkgoT(),
 			test.NopLogger,
 			test.RandomAppConfigPort,
 			config.Module,
-			webhttp.FiberModule,
+			apphttp.FiberModule,
 			mongo.Module,
 			user.Module,
 			fx.Invoke(func(app *fiber.App, controller *user.Controller) {

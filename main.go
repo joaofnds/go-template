@@ -1,15 +1,15 @@
 package main
 
 import (
-	"web/config"
-	"web/health"
-	"web/http"
-	"web/kv"
-	"web/logger"
-	"web/metrics"
-	"web/mongo"
-	"web/redis"
-	"web/user"
+	"app/config"
+	"app/health"
+	"app/http"
+	"app/kv"
+	"app/logger"
+	"app/metrics"
+	"app/mongo"
+	"app/redis"
+	"app/user"
 
 	"go.uber.org/fx"
 )
