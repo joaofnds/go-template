@@ -4,7 +4,6 @@ import (
 	"app/http"
 	"app/metrics"
 	"app/mongo"
-	"errors"
 	"os"
 
 	"github.com/spf13/viper"
@@ -26,10 +25,19 @@ type AppConfig struct {
 	Metrics metrics.Config `mapstructure:"metrics"`
 }
 
+func init() {
+	viper.MustBindEnv("env", "ENV")
+	viper.MustBindEnv("metrics.address", "METRICS_ADDRESS")
+	viper.MustBindEnv("http.port", "HTTP_PORT")
+	viper.MustBindEnv("http.limiter.requests", "HTTP_LIMITER_REQUESTS")
+	viper.MustBindEnv("http.limiter.expiration", "HTTP_LIMITER_EXPIRATION")
+	viper.MustBindEnv("mongo.uri", "MONGO_URI")
+}
+
 func LoadConfig() error {
 	configFile := os.Getenv("CONFIG_PATH")
 	if configFile == "" {
-		return errors.New("CONFIG_PATH env not set")
+		return nil
 	}
 
 	viper.SetConfigFile(configFile)
