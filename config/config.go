@@ -4,10 +4,12 @@ import (
 	"app/http"
 	"app/metrics"
 	"app/mongo"
+	"app/redis"
 	"os"
 
 	"github.com/spf13/viper"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 )
 
 var Module = fx.Options(
@@ -16,13 +18,15 @@ var Module = fx.Options(
 	fx.Provide(func(config AppConfig) http.Config { return config.HTTP }),
 	fx.Provide(func(config AppConfig) mongo.Config { return config.Mongo }),
 	fx.Provide(func(config AppConfig) metrics.Config { return config.Metrics }),
+	fx.Provide(func(config AppConfig) redis.Config { return config.Redis }),
 )
 
 type AppConfig struct {
 	Env     string         `mapstructure:"env"`
 	HTTP    http.Config    `mapstructure:"http"`
-	Mongo   mongo.Config   `mapstructure:"mongo"`
 	Metrics metrics.Config `mapstructure:"metrics"`
+	Mongo   mongo.Config   `mapstructure:"mongo"`
+	Redis   redis.Config   `mapstructure:"redis"`
 }
 
 func init() {
@@ -32,11 +36,13 @@ func init() {
 	viper.MustBindEnv("http.limiter.requests", "HTTP_LIMITER_REQUESTS")
 	viper.MustBindEnv("http.limiter.expiration", "HTTP_LIMITER_EXPIRATION")
 	viper.MustBindEnv("mongo.uri", "MONGO_URI")
+	viper.MustBindEnv("redis.addr", "REDIS_ADDR")
 }
 
-func LoadConfig() error {
+func LoadConfig(logger *zap.Logger) error {
 	configFile := os.Getenv("CONFIG_PATH")
 	if configFile == "" {
+		logger.Info("CONFIG_PATH not set, skipping file load")
 		return nil
 	}
 

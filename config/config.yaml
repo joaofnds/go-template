@@ -4,7 +4,9 @@ http:
   limiter:
     requests: 1000
     expiration: 1s
-mongo:
-  uri: mongodb://localhost:27017
 metrics:
   addr: localhost:9091
+mongo:
+  uri: mongodb://localhost:27017
+redis:
+  addr: localhost:6379

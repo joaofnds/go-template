@@ -1,6 +1,7 @@
 package kv_test
 
 import (
+	"app/config"
 	"app/kv"
 	"app/redis"
 	"app/test"
@@ -26,6 +27,7 @@ var _ = Describe("kv store", func() {
 		app = fxtest.New(
 			GinkgoT(),
 			test.NopLogger,
+			config.Module,
 			redis.Module,
 			kv.Module,
 			fx.Populate(&store),
