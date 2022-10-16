@@ -24,12 +24,12 @@ func TestFiber(t *testing.T) {
 
 var _ = Describe("fiber middlewares", func() {
 	var (
-		fxApp *fxtest.App
-		url   string
+		fxApp      *fxtest.App
+		url        string
+		httpConfig apphttp.Config
 	)
 
 	BeforeEach(func() {
-		var httpConfig apphttp.Config
 
 		fxApp = fxtest.New(
 			GinkgoT(),
@@ -58,7 +58,7 @@ var _ = Describe("fiber middlewares", func() {
 	})
 
 	It("limits requests", func() {
-		for i := 0; i < 120; i++ {
+		for i := 0; i < httpConfig.Limiter.Requests; i++ {
 			req := Must2(http.Get(url + "/somethingelse"))
 			Expect(req.StatusCode).To(Equal(http.StatusNotFound))
 		}
