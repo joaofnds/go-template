@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/joaofnds/go-template/compare/v1.10.1...v1.11.0) (2022-10-16)
+
+
+### Features
+
+* bind config to envs ([e3ac03c](https://github.com/joaofnds/go-template/commit/e3ac03cbe26df45f81c2f9f93c16a85fe80bb803))
+
 ## [1.10.1](https://github.com/joaofnds/go-template/compare/v1.10.0...v1.10.1) (2022-10-15)
 
 # [1.10.0](https://github.com/joaofnds/go-template/compare/v1.9.3...v1.10.0) (2022-10-15)
