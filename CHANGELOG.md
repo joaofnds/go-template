@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/joaofnds/go-template/compare/v1.11.0...v1.12.0) (2022-10-16)
+
+
+### Features
+
+* add redis config ([03bc808](https://github.com/joaofnds/go-template/commit/03bc8085a3dd220f0f461de4f3c99b3d451a2643))
+
 # [1.11.0](https://github.com/joaofnds/go-template/compare/v1.10.1...v1.11.0) (2022-10-16)
 
 
