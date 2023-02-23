@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/joaofnds/go-template/compare/v1.12.0...v1.13.0) (2023-02-23)
+
+
+### Features
+
+* update deps ([c30a95e](https://github.com/joaofnds/go-template/commit/c30a95e8fe081d77bbb57ace93bd9e416e2f3b5c))
+
 # [1.12.0](https://github.com/joaofnds/go-template/compare/v1.11.0...v1.12.0) (2022-10-16)
 
 
