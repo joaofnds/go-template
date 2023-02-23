@@ -40,11 +40,11 @@ var _ = Describe("/health", func() {
 				test.NopLogger,
 				test.RandomAppConfigPort,
 				test.NopHTTPInstrumentation,
-				redis.Module,
 				config.Module,
+				redis.Module,
+				mongo.Module,
 				apphttp.FiberModule,
 				health.Module,
-				mongo.Module,
 				kv.Module,
 				fx.Invoke(func(app *fiber.App, controller *health.Controller) {
 					controller.Register(app)

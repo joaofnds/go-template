@@ -12,7 +12,8 @@ import (
 	"go.uber.org/zap"
 )
 
-var Module = fx.Options(
+var Module = fx.Module(
+	"config",
 	fx.Invoke(LoadConfig),
 	fx.Provide(NewAppConfig),
 	fx.Provide(func(config AppConfig) http.Config { return config.HTTP }),
