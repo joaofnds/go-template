@@ -22,11 +22,11 @@ export function setup() {
   http.post("http://localhost:3000/kv/foo/bar");
 }
 
-export default function() {
+export default function () {
   const res = http.get("http://localhost:3000/kv/foo");
 
   check(res, {
-    "is status 200": (r) => r.status === 200,
+    "status is 200": (r) => r.status === 200,
     "body is 'bar'": (r) => r.body === "bar",
   });
 }
