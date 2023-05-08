@@ -24,5 +24,8 @@ func HookRedis(lifecycle fx.Lifecycle, redis *redis.Client) {
 		OnStart: func(ctx context.Context) error {
 			return redis.Ping(ctx).Err()
 		},
+		OnStop: func(ctx context.Context) error {
+			return redis.Close()
+		},
 	})
 }
