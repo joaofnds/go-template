@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/joaofnds/go-template/compare/v1.13.0...v1.14.0) (2023-05-08)
+
+
+### Features
+
+* add postgres ([74183df](https://github.com/joaofnds/go-template/commit/74183dfe1cac0c7295c0115ef0df191d57f5a7a0))
+
 # [1.13.0](https://github.com/joaofnds/go-template/compare/v1.12.0...v1.13.0) (2023-02-23)
 
 
