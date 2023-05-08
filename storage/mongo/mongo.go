@@ -10,7 +10,12 @@ import (
 	"go.uber.org/zap"
 )
 
-var Module = fx.Module("mongo", fx.Provide(NewClient), fx.Invoke(HookConnection))
+var Module = fx.Module(
+	"mongo",
+	fx.Provide(NewClient),
+	fx.Provide(NewMongoHealthChecker),
+	fx.Invoke(HookConnection),
+)
 
 func NewClient(config Config, logger *zap.Logger) (*mongo.Client, error) {
 	clientOptions := options.Client().ApplyURI(config.URI)

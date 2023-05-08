@@ -17,7 +17,7 @@ type unhealthyHealthService struct{}
 
 func (c *unhealthyHealthService) CheckHealth(_ context.Context) health.Check {
 	return health.Check{
-		Mongo: health.Status{Status: health.StatusDown},
-		Redis: health.Status{Status: health.StatusDown},
+		"mongo": health.Status{Status: health.StatusDown},
+		"redis": health.Status{Status: health.StatusDown},
 	}
 }
