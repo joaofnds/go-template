@@ -3,9 +3,9 @@ package config
 import (
 	"app/adapters/http"
 	"app/adapters/metrics"
-	"app/storage/mongo"
-	"app/storage/postgres"
-	"app/storage/redis"
+	"app/adapters/mongo"
+	"app/adapters/postgres"
+	"app/adapters/redis"
 	"os"
 
 	"github.com/spf13/viper"

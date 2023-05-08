@@ -2,9 +2,9 @@ package kv_test
 
 import (
 	apphttp "app/adapters/http"
+	"app/adapters/redis"
 	"app/config"
 	"app/kv"
-	"app/storage/redis"
 	"app/test"
 	. "app/test/matchers"
 	"fmt"

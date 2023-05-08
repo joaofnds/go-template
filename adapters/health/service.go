@@ -1,8 +1,8 @@
 package health
 
 import (
-	"app/storage/mongo"
-	"app/storage/redis"
+	"app/adapters/mongo"
+	"app/adapters/redis"
 
 	"context"
 )

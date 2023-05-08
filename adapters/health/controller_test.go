@@ -3,10 +3,10 @@ package health_test
 import (
 	"app/adapters/health"
 	apphttp "app/adapters/http"
+	"app/adapters/mongo"
+	"app/adapters/redis"
 	"app/config"
 	"app/kv"
-	"app/storage/mongo"
-	"app/storage/redis"
 	"app/test"
 	testhealth "app/test/health"
 	. "app/test/matchers"

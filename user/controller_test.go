@@ -2,8 +2,8 @@ package user_test
 
 import (
 	apphttp "app/adapters/http"
+	"app/adapters/mongo"
 	"app/config"
-	"app/storage/mongo"
 	"app/test"
 	. "app/test/matchers"
 	"app/user"

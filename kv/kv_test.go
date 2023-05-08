@@ -1,9 +1,9 @@
 package kv_test
 
 import (
+	"app/adapters/redis"
 	"app/config"
 	"app/kv"
-	"app/storage/redis"
 	"app/test"
 	. "app/test/matchers"
 	"testing"
