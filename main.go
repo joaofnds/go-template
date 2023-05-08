@@ -22,8 +22,9 @@ func main() {
 		health.Module,
 		http.Module,
 		user.Module,
-		redis.Module,
+		// postgres.Module,
 		mongo.Module,
+		redis.Module,
 		kv.Module,
 	).Run()
 }

@@ -1,6 +1,16 @@
 version: "3"
 
 services:
+  postgres:
+    image: postgres:alpine
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=template
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - data/postgres:/var/lib/postgresql/data
+
   mongo:
     image: mongo
     restart: always

@@ -6,6 +6,8 @@ http:
     expiration: 1s
 metrics:
   addr: localhost:9091
+postgres:
+  uri: postgres://postgres:postgres@localhost:5432/template?sslmode=disable
 mongo:
   uri: mongodb://localhost:27017
 redis:
