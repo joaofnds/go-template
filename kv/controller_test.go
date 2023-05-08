@@ -4,7 +4,7 @@ import (
 	"app/config"
 	apphttp "app/http"
 	"app/kv"
-	"app/redis"
+	"app/storage/redis"
 	"app/test"
 	. "app/test/matchers"
 	"fmt"

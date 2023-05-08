@@ -3,7 +3,7 @@ package user_test
 import (
 	"app/config"
 	apphttp "app/http"
-	"app/mongo"
+	"app/storage/mongo"
 	"app/test"
 	. "app/test/matchers"
 	"app/user"

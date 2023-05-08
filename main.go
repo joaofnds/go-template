@@ -7,8 +7,8 @@ import (
 	"app/kv"
 	"app/logger"
 	"app/metrics"
-	"app/mongo"
-	"app/redis"
+	"app/storage/mongo"
+	"app/storage/redis"
 	"app/user"
 
 	"go.uber.org/fx"

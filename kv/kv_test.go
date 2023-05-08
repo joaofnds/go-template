@@ -3,7 +3,7 @@ package kv_test
 import (
 	"app/config"
 	"app/kv"
-	"app/redis"
+	"app/storage/redis"
 	"app/test"
 	. "app/test/matchers"
 	"testing"
