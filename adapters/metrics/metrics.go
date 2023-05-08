@@ -2,6 +2,7 @@ package metrics
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -27,7 +28,7 @@ func HookMetricsHandler(lc fx.Lifecycle, server *Server, logger *zap.Logger) {
 		OnStart: func(context.Context) error {
 			go func() {
 				err := server.ListenAndServe()
-				if err != nil {
+				if err != nil && !errors.Is(err, http.ErrServerClosed) {
 					logger.Fatal("failed to start metrics server", zap.Error(err))
 				}
 			}()
