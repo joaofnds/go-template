@@ -1,8 +1,8 @@
 package config
 
 import (
-	"app/http"
-	"app/metrics"
+	"app/adapters/http"
+	"app/adapters/metrics"
 	"app/storage/mongo"
 	"app/storage/postgres"
 	"app/storage/redis"

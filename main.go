@@ -1,12 +1,12 @@
 package main
 
 import (
+	"app/adapters/health"
+	"app/adapters/http"
+	"app/adapters/logger"
+	"app/adapters/metrics"
 	"app/config"
-	"app/health"
-	"app/http"
 	"app/kv"
-	"app/logger"
-	"app/metrics"
 	"app/storage/mongo"
 	"app/storage/redis"
 	"app/user"

@@ -1,8 +1,8 @@
 package metrics_test
 
 import (
+	"app/adapters/metrics"
 	"app/config"
-	"app/metrics"
 	"app/test"
 	. "app/test/matchers"
 	"fmt"

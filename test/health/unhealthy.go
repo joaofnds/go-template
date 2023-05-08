@@ -1,7 +1,7 @@
 package health
 
 import (
-	"app/health"
+	"app/adapters/health"
 	"context"
 
 	"go.uber.org/fx"

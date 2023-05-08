@@ -1,8 +1,8 @@
 package kv_test
 
 import (
+	apphttp "app/adapters/http"
 	"app/config"
-	apphttp "app/http"
 	"app/kv"
 	"app/storage/redis"
 	"app/test"

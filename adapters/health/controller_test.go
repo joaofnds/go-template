@@ -1,9 +1,9 @@
 package health_test
 
 import (
+	"app/adapters/health"
+	apphttp "app/adapters/http"
 	"app/config"
-	"app/health"
-	apphttp "app/http"
 	"app/kv"
 	"app/storage/mongo"
 	"app/storage/redis"

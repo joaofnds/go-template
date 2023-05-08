@@ -1,7 +1,7 @@
 package test
 
 import (
-	"app/http"
+	"app/adapters/http"
 	"math/rand"
 
 	"go.uber.org/fx"
