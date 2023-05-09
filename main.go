@@ -7,6 +7,7 @@ import (
 	"app/adapters/metrics"
 	"app/adapters/mongo"
 	"app/adapters/redis"
+
 	"app/config"
 	"app/kv"
 	"app/user"
@@ -16,14 +17,16 @@ import (
 
 func main() {
 	fx.New(
-		logger.Module,
 		config.Module,
+		logger.Module,
 		metrics.Module,
 		health.Module,
+
 		http.Module,
-		user.Module,
 		mongo.Module,
 		redis.Module,
+
+		user.Module,
 		kv.Module,
 	).Run()
 }
