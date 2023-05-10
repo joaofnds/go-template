@@ -2,6 +2,7 @@ package user_test
 
 import (
 	apphttp "app/adapters/http"
+	"app/adapters/logger"
 	"app/adapters/mongo"
 	"app/config"
 	"app/test"
@@ -29,7 +30,7 @@ var _ = Describe("/users", Ordered, func() {
 
 		app = fxtest.New(
 			GinkgoT(),
-			test.NopLogger,
+			logger.NopLoggerProvider,
 			test.RandomAppConfigPort,
 			config.Module,
 			apphttp.FiberModule,

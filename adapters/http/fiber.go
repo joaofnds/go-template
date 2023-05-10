@@ -15,15 +15,15 @@ var FiberModule = fx.Module(
 	"fiber",
 	fx.Provide(NewFiber),
 	fx.Invoke(HookFiber),
-	fx.Provide(NewPromHTTPInstrumentation),
-	fx.Provide(func(instr *PromInstrumentation) Instrumentation { return instr }),
+	fx.Provide(NewPromProbe),
+	fx.Provide(func(probe *PromProbe) Probe { return probe }),
 )
 
-type Instrumentation interface {
+type Probe interface {
 	Middleware(*fiber.Ctx) error
 }
 
-func NewFiber(config Config, instrumentation Instrumentation) *fiber.App {
+func NewFiber(config Config, probe Probe) *fiber.App {
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 	})
@@ -33,7 +33,7 @@ func NewFiber(config Config, instrumentation Instrumentation) *fiber.App {
 		Expiration:        config.Limiter.Expiration,
 		LimiterMiddleware: limiter.SlidingWindow{},
 	}))
-	app.Use(instrumentation.Middleware)
+	app.Use(probe.Middleware)
 	app.Use(cors.New())
 	return app
 }

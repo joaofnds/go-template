@@ -13,6 +13,6 @@ var Module = fx.Module(
 	// fx.Provide(NewPostgresRepository),
 	// fx.Provide(func(repo *PostgresRepository) Repository { return repo }),
 
-	fx.Provide(NewPromInstrumentation),
-	fx.Provide(func(instr *PromInstrumentation) Instrumentation { return instr }),
+	fx.Provide(NewPromProbe),
+	fx.Provide(func(probe *PromProbe) Probe { return probe }),
 )

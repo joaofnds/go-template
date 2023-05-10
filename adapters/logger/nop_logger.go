@@ -1,4 +1,4 @@
-package test
+package logger
 
 import (
 	"go.uber.org/fx"
@@ -6,7 +6,7 @@ import (
 	"go.uber.org/zap"
 )
 
-var NopLogger = fx.Options(
+var NopLoggerProvider = fx.Options(
 	fx.NopLogger,
 	fx.Provide(func() *zap.Logger {
 		return zap.NewNop()

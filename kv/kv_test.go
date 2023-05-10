@@ -1,10 +1,10 @@
 package kv_test
 
 import (
+	"app/adapters/logger"
 	"app/adapters/redis"
 	"app/config"
 	"app/kv"
-	"app/test"
 	. "app/test/matchers"
 	"testing"
 
@@ -26,7 +26,7 @@ var _ = Describe("kv store", func() {
 	BeforeEach(func() {
 		app = fxtest.New(
 			GinkgoT(),
-			test.NopLogger,
+			logger.NopLoggerProvider,
 			config.Module,
 			redis.Module,
 			kv.Module,

@@ -15,14 +15,14 @@ const (
 	lblStatus = "status"
 )
 
-type PromInstrumentation struct {
+type PromProbe struct {
 	req *prometheus.CounterVec
 }
 
-type PromHabitInstrumentation struct{}
+type PromHabitProbe struct{}
 
-func NewPromHTTPInstrumentation() *PromInstrumentation {
-	return &PromInstrumentation{
+func NewPromProbe() *PromProbe {
+	return &PromProbe{
 		req: promauto.NewCounterVec(
 			prometheus.CounterOpts{Name: "app_request"},
 			[]string{lblIP, lblMethod, lblPath, lblStatus},
@@ -30,12 +30,12 @@ func NewPromHTTPInstrumentation() *PromInstrumentation {
 	}
 }
 
-func (i *PromInstrumentation) Middleware(ctx *fiber.Ctx) error {
+func (i *PromProbe) Middleware(ctx *fiber.Ctx) error {
 	defer i.LogReq(ctx)
 	return ctx.Next()
 }
 
-func (i *PromInstrumentation) LogReq(ctx *fiber.Ctx) {
+func (i *PromProbe) LogReq(ctx *fiber.Ctx) {
 	labels := prometheus.Labels{
 		lblIP:     ctx.IP(),
 		lblMethod: ctx.Route().Method,

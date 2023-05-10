@@ -4,7 +4,7 @@ import (
 	"context"
 )
 
-type Instrumentation interface {
+type Probe interface {
 	FailedToCreateUser(error)
 	FailedToDeleteAll(error)
 	FailedToFindByName(error)
@@ -21,12 +21,12 @@ type Repository interface {
 }
 
 type Service struct {
-	repo            Repository
-	instrumentation Instrumentation
+	repo  Repository
+	probe Probe
 }
 
-func NewUserService(repo Repository, instrumentation Instrumentation) *Service {
-	return &Service{repo, instrumentation}
+func NewUserService(repo Repository, probe Probe) *Service {
+	return &Service{repo, probe}
 }
 
 func (service *Service) CreateUser(name string) (User, error) {
@@ -34,9 +34,9 @@ func (service *Service) CreateUser(name string) (User, error) {
 
 	err := service.repo.CreateUser(context.Background(), user)
 	if err != nil {
-		service.instrumentation.FailedToCreateUser(err)
+		service.probe.FailedToCreateUser(err)
 	}
-	service.instrumentation.UserCreated()
+	service.probe.UserCreated()
 
 	return user, err
 }
@@ -45,7 +45,7 @@ func (service *Service) DeleteAll() error {
 	err := service.repo.DeleteAll(context.Background())
 
 	if err != nil {
-		service.instrumentation.FailedToDeleteAll(err)
+		service.probe.FailedToDeleteAll(err)
 	}
 
 	return err
@@ -58,7 +58,7 @@ func (service *Service) List() ([]User, error) {
 func (service *Service) FindByName(name string) (User, error) {
 	user, err := service.repo.FindByName(context.Background(), name)
 	if err != nil {
-		service.instrumentation.FailedToFindByName(err)
+		service.probe.FailedToFindByName(err)
 	}
 
 	return user, err
@@ -68,7 +68,7 @@ func (service *Service) Remove(user User) error {
 	err := service.repo.Delete(context.Background(), user)
 
 	if err != nil {
-		service.instrumentation.FailedToRemoveUser(err, user)
+		service.probe.FailedToRemoveUser(err, user)
 	}
 
 	return err

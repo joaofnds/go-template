@@ -2,6 +2,7 @@ package kv_test
 
 import (
 	apphttp "app/adapters/http"
+	"app/adapters/logger"
 	"app/adapters/redis"
 	"app/config"
 	"app/kv"
@@ -28,7 +29,7 @@ var _ = Describe("/kv", Ordered, func() {
 
 		app = fxtest.New(
 			GinkgoT(),
-			test.NopLogger,
+			logger.NopLoggerProvider,
 			test.RandomAppConfigPort,
 			config.Module,
 			redis.Module,

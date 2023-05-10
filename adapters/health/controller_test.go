@@ -3,12 +3,12 @@ package health_test
 import (
 	"app/adapters/health"
 	apphttp "app/adapters/http"
+	"app/adapters/logger"
 	"app/adapters/mongo"
 	"app/adapters/redis"
 	"app/config"
 	"app/kv"
 	"app/test"
-	testhealth "app/test/health"
 	. "app/test/matchers"
 
 	"fmt"
@@ -37,9 +37,9 @@ var _ = Describe("/health", func() {
 			var cfg apphttp.Config
 			app = fxtest.New(
 				GinkgoT(),
-				test.NopLogger,
+				logger.NopLoggerProvider,
 				test.RandomAppConfigPort,
-				test.NopHTTPInstrumentation,
+				apphttp.NopProbeProvider,
 				config.Module,
 				redis.Module,
 				mongo.Module,
@@ -64,14 +64,14 @@ var _ = Describe("/health", func() {
 
 		It("checks mongo connection", func() {
 			res := Must2(http.Get(url))
-			b := Must2(io.ReadAll(res.Body))
-			Expect(b).To(ContainSubstring(`"mongo":{"status":"up"}`))
+			body := Must2(io.ReadAll(res.Body))
+			Expect(body).To(ContainSubstring(`"mongo":{"status":"up"}`))
 		})
 
 		It("checks redis connection", func() {
 			res := Must2(http.Get(url))
-			b := Must2(io.ReadAll(res.Body))
-			Expect(b).To(ContainSubstring(`"redis":{"status":"up"}`))
+			body := Must2(io.ReadAll(res.Body))
+			Expect(body).To(ContainSubstring(`"redis":{"status":"up"}`))
 		})
 	})
 
@@ -80,15 +80,17 @@ var _ = Describe("/health", func() {
 			var cfg apphttp.Config
 			app = fxtest.New(
 				GinkgoT(),
-				test.NopLogger,
+				logger.NopLoggerProvider,
+				apphttp.NopProbeProvider,
 				test.RandomAppConfigPort,
-				test.NopHTTPInstrumentation,
-				testhealth.UnhealthyHealthService,
 				config.Module,
 				mongo.Module,
 				kv.Module,
-				health.Module,
 				apphttp.FiberModule,
+				health.Module,
+				fx.Decorate(func() health.Checker {
+					return health.NewUnhealthyHealthService()
+				}),
 				fx.Invoke(func(app *fiber.App, controller *health.Controller) {
 					controller.Register(app)
 				}),
@@ -107,14 +109,14 @@ var _ = Describe("/health", func() {
 
 		It("checks mongo connection", func() {
 			res := Must2(http.Get(url))
-			b := Must2(io.ReadAll(res.Body))
-			Expect(b).To(ContainSubstring(`"mongo":{"status":"down"}`))
+			body := Must2(io.ReadAll(res.Body))
+			Expect(body).To(ContainSubstring(`"mongo":{"status":"down"}`))
 		})
 
 		It("checks redis connection", func() {
 			res := Must2(http.Get(url))
-			b := Must2(io.ReadAll(res.Body))
-			Expect(b).To(ContainSubstring(`"redis":{"status":"down"}`))
+			body := Must2(io.ReadAll(res.Body))
+			Expect(body).To(ContainSubstring(`"redis":{"status":"down"}`))
 		})
 	})
 })

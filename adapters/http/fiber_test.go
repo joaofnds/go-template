@@ -2,9 +2,11 @@ package http_test
 
 import (
 	apphttp "app/adapters/http"
+	"app/adapters/logger"
 	"app/config"
 	"app/test"
 	"fmt"
+	"github.com/gofiber/fiber/v2"
 	"net/http"
 	"testing"
 
@@ -16,6 +18,12 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
+
+var PanicHandler = fx.Invoke(func(app *fiber.App) {
+	app.All("panic", func(c *fiber.Ctx) error {
+		panic("panic handler")
+	})
+})
 
 func TestFiber(t *testing.T) {
 	RegisterFailHandler(Fail)
@@ -33,12 +41,12 @@ var _ = Describe("fiber middlewares", func() {
 
 		fxApp = fxtest.New(
 			GinkgoT(),
-			test.NopLogger,
+			logger.NopLoggerProvider,
 			test.RandomAppConfigPort,
-			test.NopHTTPInstrumentation,
-			test.PanicHandler,
+			apphttp.NopProbeProvider,
 			config.Module,
 			apphttp.FiberModule,
+			PanicHandler,
 			fx.Populate(&httpConfig),
 		).RequireStart()
 

@@ -1,6 +1,7 @@
 package user_test
 
 import (
+	"app/adapters/logger"
 	"app/adapters/mongo"
 	"app/config"
 	"app/test"
@@ -26,9 +27,9 @@ var _ = Describe("user service", func() {
 	BeforeEach(func() {
 		app = fxtest.New(
 			GinkgoT(),
-			test.NopLogger,
+			logger.NopLoggerProvider,
 			test.RandomAppConfigPort,
-			test.NopUserInstrumentation,
+			user.NopProbeProvider,
 			config.Module,
 			mongo.Module,
 			user.Module,
