@@ -2,11 +2,11 @@ package postgres
 
 import (
 	"context"
-	"database/sql"
 
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
 
@@ -17,8 +17,8 @@ var Module = fx.Module(
 	fx.Invoke(HookConnection),
 )
 
-func NewClient(postgresConfig Config, logger *zap.Logger) (*sql.DB, error) {
-	db, err := sql.Open("postgres", postgresConfig.Addr)
+func NewClient(postgresConfig Config, logger *zap.Logger) (*sqlx.DB, error) {
+	db, err := sqlx.Connect("postgres", postgresConfig.Addr)
 	if err != nil {
 		logger.Error("failed to connect to postgres", zap.Error(err))
 		return nil, err
@@ -27,7 +27,7 @@ func NewClient(postgresConfig Config, logger *zap.Logger) (*sql.DB, error) {
 	return db, nil
 }
 
-func HookConnection(lifecycle fx.Lifecycle, db *sql.DB, logger *zap.Logger) {
+func HookConnection(lifecycle fx.Lifecycle, db *sqlx.DB, logger *zap.Logger) {
 	lifecycle.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			if err := db.PingContext(ctx); err != nil {
@@ -55,7 +55,7 @@ func HookConnection(lifecycle fx.Lifecycle, db *sql.DB, logger *zap.Logger) {
 	})
 }
 
-func createTables(ctx context.Context, db *sql.DB) error {
+func createTables(ctx context.Context, db *sqlx.DB) error {
 	_, err := db.ExecContext(ctx, `
     CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 

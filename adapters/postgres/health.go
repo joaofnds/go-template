@@ -2,14 +2,15 @@ package postgres
 
 import (
 	"context"
-	"database/sql"
+
+	"github.com/jmoiron/sqlx"
 )
 
 type HealthChecker struct {
-	client *sql.DB
+	client *sqlx.DB
 }
 
-func NewHealthChecker(client *sql.DB) HealthChecker {
+func NewHealthChecker(client *sqlx.DB) HealthChecker {
 	return HealthChecker{client}
 }
 
