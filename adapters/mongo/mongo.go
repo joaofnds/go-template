@@ -13,7 +13,7 @@ import (
 var Module = fx.Module(
 	"mongo",
 	fx.Provide(NewClient),
-	fx.Provide(NewMongoHealthChecker),
+	fx.Provide(NewHealthChecker),
 	fx.Invoke(HookConnection),
 )
 

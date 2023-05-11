@@ -6,14 +6,14 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-type RedisHealthChecker struct {
+type HealthChecker struct {
 	client *redis.Client
 }
 
-func NewRedisHealthChecker(client *redis.Client) RedisHealthChecker {
-	return RedisHealthChecker{client}
+func NewHealthChecker(client *redis.Client) HealthChecker {
+	return HealthChecker{client}
 }
 
-func (c RedisHealthChecker) CheckHealth(ctx context.Context) error {
+func (c HealthChecker) CheckHealth(ctx context.Context) error {
 	return c.client.Ping(ctx).Err()
 }

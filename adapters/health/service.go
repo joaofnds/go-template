@@ -8,13 +8,13 @@ import (
 )
 
 type Service struct {
-	mongoHealth mongo.MongoHealthChecker
-	redisHealth redis.RedisHealthChecker
+	mongoHealth mongo.HealthChecker
+	redisHealth redis.HealthChecker
 }
 
 func NewHealthService(
-	mongoHealth mongo.MongoHealthChecker,
-	redisHealth redis.RedisHealthChecker,
+	mongoHealth mongo.HealthChecker,
+	redisHealth redis.HealthChecker,
 ) *Service {
 	return &Service{mongoHealth, redisHealth}
 }

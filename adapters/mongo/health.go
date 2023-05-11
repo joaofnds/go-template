@@ -6,14 +6,14 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type MongoHealthChecker struct {
+type HealthChecker struct {
 	client *mongo.Client
 }
 
-func NewMongoHealthChecker(client *mongo.Client) MongoHealthChecker {
-	return MongoHealthChecker{client}
+func NewHealthChecker(client *mongo.Client) HealthChecker {
+	return HealthChecker{client}
 }
 
-func (c MongoHealthChecker) CheckHealth(ctx context.Context) error {
-	return c.client.Ping(ctx, nil)
+func (h HealthChecker) CheckHealth(ctx context.Context) error {
+	return h.client.Ping(ctx, nil)
 }

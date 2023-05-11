@@ -10,7 +10,7 @@ import (
 var Module = fx.Module(
 	"redis",
 	fx.Provide(NewClient),
-	fx.Provide(NewRedisHealthChecker),
+	fx.Provide(NewHealthChecker),
 	fx.Invoke(HookRedis),
 )
 
