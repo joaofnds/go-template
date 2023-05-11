@@ -1,6 +1,7 @@
 package user
 
 import (
+	"errors"
 	"net/http"
 	"strings"
 
@@ -59,9 +60,23 @@ func (c *Controller) Create(ctx *fiber.Ctx) error {
 
 func (c *Controller) Delete(ctx *fiber.Ctx) error {
 	name := ctx.Params("name")
-	err := c.service.Remove(User{Name: name})
-	if err != nil {
+	if name == "" {
+		return ctx.SendStatus(http.StatusBadRequest)
+	}
+
+	user, err := c.service.FindByName(name)
+	switch {
+	case errors.Is(err, ErrNotFound):
+		c.logger.Error("user not found", zap.String("name", name))
+		return ctx.SendStatus(http.StatusNotFound)
+	case errors.Is(err, ErrRepository):
+		c.logger.Error("repository error", zap.Error(err), zap.String("name", name))
+		return ctx.SendStatus(http.StatusInternalServerError)
+	}
+
+	if err = c.service.Remove(user); err != nil {
 		c.logger.Error("failed to remove user", zap.String("name", name))
+		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 
 	c.logger.Info("user removed", zap.String("name", name))
