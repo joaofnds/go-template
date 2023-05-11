@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/joaofnds/go-template/compare/v1.14.4...v1.15.0) (2023-05-11)
+
+
+### Features
+
+* add postgres health checker ([2edc3f3](https://github.com/joaofnds/go-template/commit/2edc3f30e778b485890d35da10aed795a78660eb))
+
 ## [1.14.4](https://github.com/joaofnds/go-template/compare/v1.14.3...v1.14.4) (2023-05-10)
 
 ## [1.14.3](https://github.com/joaofnds/go-template/compare/v1.14.2...v1.14.3) (2023-05-09)
