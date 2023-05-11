@@ -20,24 +20,24 @@ func NewPromProbe(logger *zap.Logger) *PromProbe {
 	}
 }
 
-func (i *PromProbe) FailedToCreateUser(err error) {
-	i.logger.Error("failed to create user", zap.Error(err))
-	i.usersCreateFailed.Inc()
+func (p *PromProbe) FailedToCreateUser(err error) {
+	p.logger.Error("failed to create user", zap.Error(err))
+	p.usersCreateFailed.Inc()
 }
 
-func (i *PromProbe) FailedToDeleteAll(err error) {
-	i.logger.Error("failed to delete all", zap.Error(err))
+func (p *PromProbe) FailedToDeleteAll(err error) {
+	p.logger.Error("failed to delete all", zap.Error(err))
 }
 
-func (i *PromProbe) FailedToFindByName(err error) {
-	i.logger.Error("failed to find user by name", zap.Error(err))
+func (p *PromProbe) FailedToFindByName(err error) {
+	p.logger.Error("failed to find user by name", zap.Error(err))
 }
 
-func (i *PromProbe) FailedToRemoveUser(err error, user User) {
-	i.logger.Error("failed to remove user", zap.Error(err), zap.String("name", user.Name))
+func (p *PromProbe) FailedToRemoveUser(err error, user User) {
+	p.logger.Error("failed to remove user", zap.Error(err), zap.String("name", user.Name))
 }
 
-func (l *PromProbe) UserCreated() {
-	l.logger.Info("user created")
-	l.usersCreated.Inc()
+func (p *PromProbe) UserCreated() {
+	p.logger.Info("user created")
+	p.usersCreated.Inc()
 }
