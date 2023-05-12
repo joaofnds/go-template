@@ -2,65 +2,57 @@ package user
 
 import (
 	"context"
-	"database/sql"
+	"errors"
+
+	"go.uber.org/fx"
+	"gorm.io/gorm"
 )
 
 type PostgresRepository struct {
-	db Querier
+	db *gorm.DB
 }
 
-type Querier interface {
-	QueryRowContext(context.Context, string, ...any) *sql.Row
-	QueryContext(context.Context, string, ...any) (*sql.Rows, error)
-	ExecContext(context.Context, string, ...any) (sql.Result, error)
+func AutoMigrate(lifecycle fx.Lifecycle, db *gorm.DB) {
+	lifecycle.Append(fx.Hook{
+		OnStart: func(ctx context.Context) error {
+			return db.WithContext(ctx).AutoMigrate(User{})
+		},
+	})
 }
 
-func NewPostgresRepository(db *sql.DB) *PostgresRepository {
+func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 	return &PostgresRepository{db}
 }
 
 func (repo *PostgresRepository) CreateUser(ctx context.Context, user User) error {
-	_, err := repo.db.ExecContext(ctx, "INSERT INTO users(name) VALUES($1)", user.Name)
-	return err
+	return gormErr(repo.db.WithContext(ctx).Exec("INSERT INTO users(name) VALUES(?)", user.Name))
 }
 
 func (repo *PostgresRepository) FindByName(ctx context.Context, name string) (User, error) {
 	var user User
-
-	row := repo.db.QueryRowContext(ctx, "SELECT name FROM users WHERE name = $1", name)
-	if row.Err() != nil {
-		return user, row.Err()
-	}
-
-	err := row.Scan(&user.Name)
-
-	return user, err
+	return user, gormErr(repo.db.WithContext(ctx).First(&user, "name = ?", name))
 }
 
 func (repo *PostgresRepository) Delete(ctx context.Context, user User) error {
-	_, err := repo.db.ExecContext(ctx, "DELETE FROM users WHERE name = $1", user.Name)
-	return err
+	return gormErr(repo.db.WithContext(ctx).Exec("DELETE FROM users WHERE name = ?", user.Name))
 }
 
 func (repo *PostgresRepository) DeleteAll(ctx context.Context) error {
-	_, err := repo.db.ExecContext(ctx, "DELETE FROM users")
-	return err
+	return gormErr(repo.db.WithContext(ctx).Exec("DELETE FROM users"))
 }
 
 func (repo *PostgresRepository) All(ctx context.Context) ([]User, error) {
-	rows, err := repo.db.QueryContext(ctx, "SELECT name FROM users")
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
 	var users []User
-	for rows.Next() {
-		var name string
-		if err := rows.Scan(&name); err != nil {
-			return users, err
-		}
-		users = append(users, User{name})
+	return users, gormErr(repo.db.WithContext(ctx).Find(&users))
+}
+
+func gormErr(result *gorm.DB) error {
+	switch {
+	case result.Error == nil:
+		return nil
+	case errors.Is(result.Error, gorm.ErrRecordNotFound):
+		return ErrNotFound
+	default:
+		return ErrRepository
 	}
-	return users, nil
 }
