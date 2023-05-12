@@ -1,3 +1,10 @@
+## [1.15.2](https://github.com/joaofnds/go-template/compare/v1.15.1...v1.15.2) (2023-05-12)
+
+
+### Reverts
+
+* "refactor: use `sqlx`" ([6ba61ea](https://github.com/joaofnds/go-template/commit/6ba61ea216b0e561ea134a3d28e52ae3a76cae0e))
+
 ## [1.15.1](https://github.com/joaofnds/go-template/compare/v1.15.0...v1.15.1) (2023-05-11)
 
 # [1.15.0](https://github.com/joaofnds/go-template/compare/v1.14.4...v1.15.0) (2023-05-11)
