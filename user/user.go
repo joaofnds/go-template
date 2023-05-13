@@ -1,19 +1,23 @@
 package user
 
-import "go.uber.org/fx"
+import "context"
 
-var Module = fx.Module(
-	"user",
-	fx.Provide(NewController),
-	fx.Provide(NewUserService),
+type User struct {
+	Name string `json:"name"`
+}
 
-	fx.Provide(NewMongoRepository),
-	fx.Provide(func(repo *MongoRepository) Repository { return repo }),
+type Probe interface {
+	FailedToCreateUser(error)
+	FailedToDeleteAll(error)
+	FailedToFindByName(error)
+	FailedToRemoveUser(error, User)
+	UserCreated()
+}
 
-	// fx.Provide(NewPostgresRepository),
-	// fx.Provide(func(repo *PostgresRepository) Repository { return repo }),
-	// fx.Invoke(AutoMigrate),
-
-	fx.Provide(NewPromProbe),
-	fx.Provide(func(probe *PromProbe) Probe { return probe }),
-)
+type Repository interface {
+	CreateUser(context.Context, User) error
+	All(context.Context) ([]User, error)
+	FindByName(context.Context, string) (User, error)
+	Delete(context.Context, User) error
+	DeleteAll(context.Context) error
+}

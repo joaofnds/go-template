@@ -4,22 +4,6 @@ import (
 	"context"
 )
 
-type Probe interface {
-	FailedToCreateUser(error)
-	FailedToDeleteAll(error)
-	FailedToFindByName(error)
-	FailedToRemoveUser(error, User)
-	UserCreated()
-}
-
-type Repository interface {
-	CreateUser(context.Context, User) error
-	All(context.Context) ([]User, error)
-	FindByName(context.Context, string) (User, error)
-	Delete(context.Context, User) error
-	DeleteAll(context.Context) error
-}
-
 type Service struct {
 	repo  Repository
 	probe Probe
