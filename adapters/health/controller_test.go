@@ -7,7 +7,6 @@ import (
 	"app/adapters/mongo"
 	"app/adapters/redis"
 	"app/config"
-	"app/kv"
 	"app/test"
 	. "app/test/matchers"
 
@@ -45,7 +44,6 @@ var _ = Describe("/health", func() {
 				mongo.Module,
 				apphttp.FiberModule,
 				health.Module,
-				kv.Module,
 				fx.Invoke(func(app *fiber.App, controller *health.Controller) {
 					controller.Register(app)
 				}),
@@ -84,8 +82,6 @@ var _ = Describe("/health", func() {
 				apphttp.NopProbeProvider,
 				test.RandomAppConfigPort,
 				config.Module,
-				mongo.Module,
-				kv.Module,
 				apphttp.FiberModule,
 				health.Module,
 				fx.Decorate(func() health.Checker {
