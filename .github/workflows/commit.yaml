@@ -53,7 +53,7 @@ jobs:
       - name: tests
         run: go test -v ./...
         env:
-          CONFIG_PATH: "/home/runner/work/go-template/go-template/config/config.yaml"
+          CONFIG_PATH: "${{ github.workspace }}/config/config.yaml"
 
   release:
     needs: [gitleaks, lint-go, lint-dockerfile, test]
