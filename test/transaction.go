@@ -7,20 +7,14 @@ import (
 	"gorm.io/gorm"
 )
 
-var TransactionModule = fx.Module(
-	"transaction",
-	fx.Decorate(BeginTransaction),
-	fx.Invoke(RollbackTransaction),
-)
+var Transaction = fx.Decorate(BeginTransaction)
 
-func BeginTransaction(db *gorm.DB) *gorm.DB {
-	return db.Begin()
-}
-
-func RollbackTransaction(lifecycle fx.Lifecycle, db *gorm.DB) {
+func BeginTransaction(lifecycle fx.Lifecycle, db *gorm.DB) *gorm.DB {
+	tx := db.Begin()
 	lifecycle.Append(fx.Hook{
 		OnStop: func(context.Context) error {
-			return db.Rollback().Error
+			return tx.Error
 		},
 	})
+	return tx
 }
