@@ -13,7 +13,6 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/gofiber/fiber/v2"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"go.uber.org/fx"
@@ -33,12 +32,9 @@ var _ = Describe("/users", Ordered, func() {
 			logger.NopLoggerProvider,
 			test.RandomAppConfigPort,
 			config.Module,
-			apphttp.FiberModule,
+			apphttp.Module,
 			mongo.Module,
 			user.Module,
-			fx.Invoke(func(app *fiber.App, controller *user.Controller) {
-				controller.Register(app)
-			}),
 			fx.Populate(&httpConfig, &userService),
 		).RequireStart()
 

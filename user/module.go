@@ -1,10 +1,12 @@
 package user
 
-import "go.uber.org/fx"
+import (
+	"github.com/gofiber/fiber/v2"
+	"go.uber.org/fx"
+)
 
 var Module = fx.Module(
 	"user",
-	fx.Provide(NewController),
 	fx.Provide(NewUserService),
 
 	fx.Provide(NewMongoRepository),
@@ -16,4 +18,7 @@ var Module = fx.Module(
 
 	fx.Provide(NewPromProbe),
 	fx.Provide(func(probe *PromProbe) Probe { return probe }),
+
+	fx.Provide(NewController),
+	fx.Invoke(func(app *fiber.App, controller *Controller) { controller.Register(app) }),
 )

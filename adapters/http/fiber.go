@@ -11,14 +11,6 @@ import (
 	"go.uber.org/fx"
 )
 
-var FiberModule = fx.Module(
-	"fiber",
-	fx.Provide(NewFiber),
-	fx.Invoke(HookFiber),
-	fx.Provide(NewPromProbe),
-	fx.Provide(func(probe *PromProbe) Probe { return probe }),
-)
-
 type Probe interface {
 	Middleware(*fiber.Ctx) error
 }

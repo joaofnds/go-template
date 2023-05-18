@@ -6,9 +6,10 @@ import (
 	"app/config"
 	"app/test"
 	"fmt"
-	"github.com/gofiber/fiber/v2"
 	"net/http"
 	"testing"
+
+	"github.com/gofiber/fiber/v2"
 
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
@@ -45,7 +46,7 @@ var _ = Describe("fiber middlewares", func() {
 			test.RandomAppConfigPort,
 			apphttp.NopProbeProvider,
 			config.Module,
-			apphttp.FiberModule,
+			apphttp.Module,
 			PanicHandler,
 			fx.Populate(&httpConfig),
 		).RequireStart()

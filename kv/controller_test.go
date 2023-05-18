@@ -13,7 +13,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gofiber/fiber/v2"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"go.uber.org/fx"
@@ -31,13 +30,10 @@ var _ = Describe("/kv", Ordered, func() {
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			test.RandomAppConfigPort,
+			apphttp.Module,
 			config.Module,
 			redis.Module,
-			apphttp.FiberModule,
 			kv.Module,
-			fx.Invoke(func(app *fiber.App, controller *kv.Controller) {
-				controller.Register(app)
-			}),
 			fx.Populate(&httpConfig),
 		).RequireStart()
 

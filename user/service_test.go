@@ -29,6 +29,7 @@ var _ = Describe("user service", func() {
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			test.RandomAppConfigPort,
+			test.TestFiber,
 			user.NopProbeProvider,
 			config.Module,
 			mongo.Module,
