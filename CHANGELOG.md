@@ -1,3 +1,5 @@
+## [1.15.5](https://github.com/joaofnds/go-template/compare/v1.15.4...v1.15.5) (2023-05-18)
+
 ## [1.15.4](https://github.com/joaofnds/go-template/compare/v1.15.3...v1.15.4) (2023-05-17)
 
 ## [1.15.3](https://github.com/joaofnds/go-template/compare/v1.15.2...v1.15.3) (2023-05-13)
