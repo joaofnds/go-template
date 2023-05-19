@@ -60,11 +60,10 @@ func (c *Controller) Set(ctx *fiber.Ctx) error {
 func (c *Controller) Delete(ctx *fiber.Ctx) error {
 	key := ctx.Params("key")
 	if key == "" {
-		return fiber.NewError(http.StatusBadRequest, "missing key")
+		return fiber.NewError(http.StatusBadRequest, "missing key param")
 	}
 
-	err := c.store.Del(key)
-	if err != nil {
+	if err := c.store.Del(key); err != nil {
 		return fiber.NewError(http.StatusInternalServerError, "failed to delete key")
 	}
 

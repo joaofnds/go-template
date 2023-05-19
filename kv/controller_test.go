@@ -8,10 +8,10 @@ import (
 	"app/kv"
 	"app/test"
 	. "app/test/matchers"
+	"app/test/req"
 	"fmt"
 	"io"
 	"net/http"
-	"strings"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -29,9 +29,9 @@ var _ = Describe("/kv", Ordered, func() {
 		app = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
+			config.Module,
 			test.RandomAppConfigPort,
 			apphttp.Module,
-			config.Module,
 			redis.Module,
 			kv.Module,
 			fx.Populate(&httpConfig),
@@ -46,8 +46,8 @@ var _ = Describe("/kv", Ordered, func() {
 
 	Context("GET", func() {
 		It("returns the value under the key", func() {
-			Must2(http.Post(url+"/foo/bar", "", strings.NewReader("")))
-			res := Must2(http.Get(url + "/foo"))
+			Must2(req.Post(url+"/foo/bar", nil, nil))
+			res := Must2(req.Get(url+"/foo", nil))
 
 			b := Must2(io.ReadAll(res.Body))
 			Expect(string(b)).To(Equal("bar"))
@@ -56,31 +56,28 @@ var _ = Describe("/kv", Ordered, func() {
 
 	Context("POST", func() {
 		It("responds with status created", func() {
-			res := Must2(http.Post(url+"/foo/bar", "", strings.NewReader("")))
+			res := Must2(req.Post(url+"/foo/bar", nil, nil))
 			Expect(res.StatusCode).To(Equal(http.StatusCreated))
 		})
 
 		It("sets the value to the key", func() {
-			Must2(http.Post(url+"/foo/bar", "", strings.NewReader("")))
+			Must2(req.Post(url+"/foo/bar", nil, nil))
 
-			res := Must2(http.Get(url + "/foo"))
+			res := Must2(req.Get(url+"/foo", nil))
 			b := Must2(io.ReadAll(res.Body))
 			Expect(string(b)).To(Equal("bar"))
 		})
 	})
 
 	Context("DELETE", func() {
-		It("adds the user", func() {
-			res := Must2(http.Post(url+"/foo/bar", "", strings.NewReader("")))
+		It("forgets the key", func() {
+			res := Must2(req.Post(url+"/bar/foo", nil, nil))
 			Expect(res.StatusCode).To(Equal(http.StatusCreated))
 
-			res = Must2(http.Get(url))
-			Expect(res.StatusCode).To(Equal(http.StatusNotFound))
+			res = Must2(req.Delete(url+"/bar", nil))
+			Expect(res.StatusCode).To(Equal(http.StatusOK))
 
-			req := Must2(http.NewRequest(http.MethodDelete, url+"/foo/bar", strings.NewReader("")))
-			Must2(http.DefaultClient.Do(req))
-
-			res = Must2(http.Get(url))
+			res = Must2(req.Get(url+"/bar", nil))
 			Expect(res.StatusCode).To(Equal(http.StatusNotFound))
 		})
 	})
