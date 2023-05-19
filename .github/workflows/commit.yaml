@@ -59,7 +59,7 @@ jobs:
     needs: [gitleaks, lint-go, lint-dockerfile, test]
     runs-on: ubuntu-latest
     steps:
-      - uses: joaofnds/semantic-release-action@v1.0.1
+      - uses: joaofnds/semantic-release-action@v1.1.0
         with:
           plugins: "@semantic-release/changelog @semantic-release/git"
         env:
