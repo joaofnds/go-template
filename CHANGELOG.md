@@ -1,3 +1,10 @@
+# [1.16.0](https://github.com/joaofnds/go-template/compare/v1.15.5...v1.16.0) (2023-05-19)
+
+
+### Features
+
+* return user json ([3498961](https://github.com/joaofnds/go-template/commit/34989614cb4a2a08154cb3c53f4e7d5d24cc350e))
+
 ## [1.15.5](https://github.com/joaofnds/go-template/compare/v1.15.4...v1.15.5) (2023-05-18)
 
 ## [1.15.4](https://github.com/joaofnds/go-template/compare/v1.15.3...v1.15.4) (2023-05-17)
