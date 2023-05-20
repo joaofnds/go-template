@@ -3,7 +3,6 @@ package user
 import (
 	"app/user/queue"
 
-	"github.com/gofiber/fiber/v2"
 	"go.uber.org/fx"
 )
 
@@ -24,5 +23,4 @@ var Module = fx.Module(
 	fx.Provide(func(probe *PromProbe) Probe { return probe }),
 
 	fx.Provide(NewController),
-	fx.Invoke(func(app *fiber.App, controller *Controller) { controller.Register(app) }),
 )

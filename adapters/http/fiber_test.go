@@ -46,7 +46,7 @@ var _ = Describe("fiber middlewares", func() {
 			test.RandomAppConfigPort,
 			apphttp.NopProbeProvider,
 			config.Module,
-			apphttp.Module,
+			apphttp.FiberProvider,
 			PanicHandler,
 			fx.Populate(&httpConfig),
 		).RequireStart()
@@ -54,9 +54,7 @@ var _ = Describe("fiber middlewares", func() {
 		url = fmt.Sprintf("http://localhost:%d", httpConfig.Port)
 	})
 
-	AfterEach(func() {
-		fxApp.RequireStop()
-	})
+	AfterEach(func() { fxApp.RequireStop() })
 
 	It("recovers from panic", func() {
 		req := Must2(http.Get(url + "/panic"))

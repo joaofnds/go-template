@@ -14,6 +14,7 @@ import (
 
 	. "app/test/matchers"
 
+	"github.com/gofiber/fiber/v2"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
@@ -37,9 +38,12 @@ var _ = Describe("/users", Ordered, func() {
 			test.RandomAppConfigPort,
 			test.QueueProvider,
 			config.Module,
-			apphttp.Module,
+			apphttp.FiberProvider,
 			mongo.Module,
 			user.Module,
+			fx.Invoke(func(app *fiber.App, controller *user.Controller) {
+				controller.Register(app)
+			}),
 			fx.Populate(&httpConfig, &userService),
 		).RequireStart()
 

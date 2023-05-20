@@ -11,6 +11,13 @@ import (
 	"go.uber.org/fx"
 )
 
+var FiberProvider = fx.Options(
+	fx.Provide(NewFiber),
+	fx.Invoke(HookFiber),
+	fx.Provide(NewPromProbe),
+	fx.Provide(func(probe *PromProbe) Probe { return probe }),
+)
+
 type Probe interface {
 	Middleware(*fiber.Ctx) error
 }

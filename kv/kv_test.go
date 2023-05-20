@@ -5,7 +5,6 @@ import (
 	"app/adapters/redis"
 	"app/config"
 	"app/kv"
-	"app/test"
 	. "app/test/matchers"
 	"testing"
 
@@ -27,7 +26,6 @@ var _ = Describe("kv store", func() {
 	BeforeEach(func() {
 		app = fxtest.New(
 			GinkgoT(),
-			test.TestFiber,
 			logger.NopLoggerProvider,
 			config.Module,
 			redis.Module,
