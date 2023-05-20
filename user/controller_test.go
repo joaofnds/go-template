@@ -35,6 +35,7 @@ var _ = Describe("/users", Ordered, func() {
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			test.RandomAppConfigPort,
+			test.QueueProvider,
 			config.Module,
 			apphttp.Module,
 			mongo.Module,

@@ -37,6 +37,10 @@ func (p *PromProbe) FailedToRemoveUser(err error, user User) {
 	p.logger.Error("failed to remove user", zap.Error(err), zap.String("name", user.Name))
 }
 
+func (p *PromProbe) FailedToEnqueue(err error) {
+	p.logger.Error("failed to enqueue", zap.Error(err))
+}
+
 func (p *PromProbe) UserCreated() {
 	p.logger.Info("user created")
 	p.usersCreated.Inc()

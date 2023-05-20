@@ -11,6 +11,7 @@ type Probe interface {
 	FailedToDeleteAll(error)
 	FailedToFindByName(error)
 	FailedToRemoveUser(error, User)
+	FailedToEnqueue(error)
 	UserCreated()
 }
 

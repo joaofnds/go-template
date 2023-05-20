@@ -30,6 +30,7 @@ var _ = Describe("user service", func() {
 			logger.NopLoggerProvider,
 			test.RandomAppConfigPort,
 			test.TestFiber,
+			test.QueueProvider,
 			user.NopProbeProvider,
 			config.Module,
 			mongo.Module,

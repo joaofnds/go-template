@@ -6,6 +6,7 @@ import (
 	"app/adapters/logger"
 	"app/adapters/metrics"
 	"app/adapters/mongo"
+	"app/adapters/queue"
 	"app/adapters/redis"
 
 	"app/config"
@@ -22,6 +23,7 @@ func main() {
 		metrics.Module,
 		health.Module,
 
+		queue.Module,
 		http.Module,
 		mongo.Module,
 		redis.Module,

@@ -1,12 +1,16 @@
 package user
 
 import (
+	"app/user/queue"
+
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/fx"
 )
 
 var Module = fx.Module(
 	"user",
+	queue.Module,
+
 	fx.Provide(NewUserService),
 
 	fx.Provide(NewMongoRepository),
