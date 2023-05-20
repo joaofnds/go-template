@@ -8,8 +8,6 @@ import (
 )
 
 var sharedProviders = fx.Options(
-	fx.Provide(NewLogger),
-	fx.Provide(func(logger *AsyncZapLogger) asynq.Logger { return logger }),
 	fx.Provide(NewServeMux),
 	fx.Provide(NewClient),
 	fx.Invoke(HookClient),

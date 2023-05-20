@@ -6,16 +6,17 @@ import (
 
 	"github.com/hibiken/asynq"
 	"go.uber.org/fx"
+	"go.uber.org/zap"
 )
 
 func NewServeMux() *asynq.ServeMux {
 	return asynq.NewServeMux()
 }
 
-func NewServer(config redis.Config, logger asynq.Logger) *asynq.Server {
+func NewServer(config redis.Config, logger *zap.Logger) *asynq.Server {
 	return asynq.NewServer(
 		asynq.RedisClientOpt{Addr: config.Addr},
-		asynq.Config{Concurrency: 10, Logger: logger},
+		asynq.Config{Concurrency: 10, Logger: NewAsyncZapLogger(logger)},
 	)
 }
 

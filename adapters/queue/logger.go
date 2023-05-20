@@ -10,7 +10,7 @@ type AsyncZapLogger struct {
 	zap *zap.Logger
 }
 
-func NewLogger(logger *zap.Logger) *AsyncZapLogger {
+func NewAsyncZapLogger(logger *zap.Logger) *AsyncZapLogger {
 	return &AsyncZapLogger{logger}
 }
 
