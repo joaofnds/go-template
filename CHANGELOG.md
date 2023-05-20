@@ -1,3 +1,10 @@
+## [1.18.1](https://github.com/joaofnds/go-template/compare/v1.18.0...v1.18.1) (2023-05-20)
+
+
+### Bug Fixes
+
+* worker docker image name ([19005c6](https://github.com/joaofnds/go-template/commit/19005c6e93c9afb393f4a720cec85ca3b25ba6af))
+
 # [1.18.0](https://github.com/joaofnds/go-template/compare/v1.17.0...v1.18.0) (2023-05-20)
 
 
