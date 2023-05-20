@@ -30,6 +30,6 @@ func (g Greeter) Enqueue(userName string) error {
 }
 
 func (g *Greeter) ProcessTask(ctx context.Context, task *asynq.Task) error {
-	fmt.Printf("\nA new user just signed up, welcome %s!\n", task.Payload())
+	fmt.Printf("[%s] A new user just signed up, welcome %s!\n", task.ResultWriter().TaskID(), task.Payload())
 	return nil
 }

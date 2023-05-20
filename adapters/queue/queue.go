@@ -7,16 +7,23 @@ import (
 	"go.uber.org/fx"
 )
 
-var Module = fx.Module(
-	"queue",
+var sharedProviders = fx.Options(
 	fx.Provide(NewLogger),
 	fx.Provide(func(logger *AsyncZapLogger) asynq.Logger { return logger }),
-
+	fx.Provide(NewServeMux),
 	fx.Provide(NewClient),
 	fx.Invoke(HookClient),
+	fx.Invoke(Register),
+)
 
-	fx.Provide(NewServeMux),
+var ClientModule = fx.Module(
+	"queue-client",
+	sharedProviders,
+)
 
+var WorkerModule = fx.Module(
+	"queue-worker",
+	sharedProviders,
 	fx.Provide(NewServer),
 	fx.Invoke(HookServer),
 )
