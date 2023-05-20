@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/joaofnds/go-template/compare/v1.16.0...v1.17.0) (2023-05-20)
+
+
+### Features
+
+* add task queue ([8a9ffb2](https://github.com/joaofnds/go-template/commit/8a9ffb23b8c305beb9487b973a0843c0413bca39))
+
 # [1.16.0](https://github.com/joaofnds/go-template/compare/v1.15.5...v1.16.0) (2023-05-19)
 
 
