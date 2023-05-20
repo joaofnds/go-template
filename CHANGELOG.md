@@ -1,3 +1,15 @@
+# [1.18.0](https://github.com/joaofnds/go-template/compare/v1.17.0...v1.18.0) (2023-05-20)
+
+
+### Features
+
+* build worker separately ([e1fc021](https://github.com/joaofnds/go-template/commit/e1fc021305f593936faafd7f9ff7aa67b9aa0406))
+
+
+### Reverts
+
+* split controller registration ([940320b](https://github.com/joaofnds/go-template/commit/940320b5945ee2bd8e9ecd099519ff5933fddfe4))
+
 # [1.17.0](https://github.com/joaofnds/go-template/compare/v1.16.0...v1.17.0) (2023-05-20)
 
 
