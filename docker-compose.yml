@@ -9,7 +9,6 @@ services:
   #     - POSTGRES_DB=template
   #     - POSTGRES_USER=postgres
   #     - POSTGRES_PASSWORD=postgres
-  #     - data/postgres:/var/lib/postgresql/data
 
   mongo:
     image: mongo
