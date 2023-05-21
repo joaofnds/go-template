@@ -29,6 +29,7 @@ var _ = Describe("user service", func() {
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			test.QueueProvider,
+			test.Transaction,
 			user.NopProbeProvider,
 			config.Module,
 			postgres.Module,

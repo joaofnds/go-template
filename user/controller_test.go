@@ -36,6 +36,7 @@ var _ = Describe("/users", Ordered, func() {
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			test.QueueProvider,
+			test.Transaction,
 			config.Module,
 			apphttp.FiberProvider,
 			postgres.Module,
