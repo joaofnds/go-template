@@ -8,6 +8,24 @@ plugins:
           release: patch
   - - "@semantic-release/release-notes-generator"
     - preset: conventionalcommits
+      presetConfig:
+        types:
+          - type: feat
+            section: Features
+          - type: fix
+            section: Fixes
+          - type: chore
+            section: Chores
+          - type: docs
+            section: Documentation
+          - type: refactor
+            section: Refactors
+          - type: perf
+            section: Performance
+          - type: test
+            section: Tests
+          - type: ci
+            section: CI
   - "@semantic-release/changelog"
   - - "@semantic-release/git"
     - message: "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
