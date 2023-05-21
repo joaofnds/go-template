@@ -69,6 +69,6 @@ jobs:
     steps:
       - uses: joaofnds/semantic-release-action@v1.1.0
         with:
-          plugins: "@semantic-release/changelog @semantic-release/git"
+          plugins: "@semantic-release/changelog @semantic-release/git conventional-changelog-conventionalcommits"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
