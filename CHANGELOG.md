@@ -1,3 +1,10 @@
+## [1.19.0](https://github.com/joaofnds/go-template/compare/v1.18.1...v1.19.0) (2023-05-21)
+
+
+### Features
+
+* add goose for migrations ([0aeb145](https://github.com/joaofnds/go-template/commit/0aeb145aa8ea1f2fa7389850096fa02638e3486a))
+
 ## [1.18.1](https://github.com/joaofnds/go-template/compare/v1.18.0...v1.18.1) (2023-05-20)
 
 
