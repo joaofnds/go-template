@@ -7,7 +7,6 @@ import (
 	"app/adapters/postgres"
 	"app/adapters/redis"
 	"app/config"
-	"app/test"
 	. "app/test/matchers"
 
 	"fmt"
@@ -27,17 +26,16 @@ func TestHealth(t *testing.T) {
 	RunSpecs(t, "/health suite")
 }
 
-var _ = Describe("/health", func() {
+var _ = Describe("/health", Ordered, func() {
 	var app *fxtest.App
 	var url string
 
 	Context("healthy", func() {
-		BeforeEach(func() {
+		BeforeAll(func() {
 			var cfg apphttp.Config
 			app = fxtest.New(
 				GinkgoT(),
 				logger.NopLoggerProvider,
-				test.RandomAppConfigPort,
 				apphttp.NopProbeProvider,
 				config.Module,
 				redis.Module,
@@ -53,7 +51,7 @@ var _ = Describe("/health", func() {
 			app.RequireStart()
 		})
 
-		AfterEach(func() { app.RequireStop() })
+		AfterAll(func() { app.RequireStop() })
 
 		It("returns status OK", func() {
 			res := Must2(http.Get(url))
@@ -80,7 +78,6 @@ var _ = Describe("/health", func() {
 				GinkgoT(),
 				logger.NopLoggerProvider,
 				apphttp.NopProbeProvider,
-				test.RandomAppConfigPort,
 				config.Module,
 				apphttp.FiberProvider,
 				health.Module,

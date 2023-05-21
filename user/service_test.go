@@ -28,7 +28,6 @@ var _ = Describe("user service", func() {
 		app = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
-			test.RandomAppConfigPort,
 			test.QueueProvider,
 			user.NopProbeProvider,
 			config.Module,

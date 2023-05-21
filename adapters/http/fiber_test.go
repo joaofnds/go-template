@@ -4,7 +4,6 @@ import (
 	apphttp "app/adapters/http"
 	"app/adapters/logger"
 	"app/config"
-	"app/test"
 	"fmt"
 	"net/http"
 	"testing"
@@ -43,7 +42,6 @@ var _ = Describe("fiber middlewares", func() {
 		fxApp = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
-			test.RandomAppConfigPort,
 			apphttp.NopProbeProvider,
 			config.Module,
 			apphttp.FiberProvider,
