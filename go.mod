@@ -7,6 +7,7 @@ require (
 	github.com/hibiken/asynq v0.24.1
 	github.com/onsi/ginkgo/v2 v2.9.5
 	github.com/onsi/gomega v1.27.7
+	github.com/pressly/goose/v3 v3.11.2
 	github.com/prometheus/client_golang v1.15.1
 	github.com/redis/go-redis/v9 v9.0.4
 	github.com/spf13/viper v1.15.0

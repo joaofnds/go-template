@@ -17,7 +17,6 @@ var Module = fx.Module(
 
 	fx.Provide(NewPostgresRepository),
 	fx.Provide(func(repo *PostgresRepository) Repository { return repo }),
-	fx.Invoke(AutoMigrate),
 
 	fx.Provide(NewPromProbe),
 	fx.Provide(func(probe *PromProbe) Probe { return probe }),
