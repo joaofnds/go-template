@@ -3,10 +3,10 @@ ENV CGO_ENABLED=0
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
-COPY . /app
-RUN go build -o /go/bin/app main.go
+COPY . ./
+RUN go build cmd/app/app.go \
+  && go build cmd/worker/worker.go
 
 FROM gcr.io/distroless/static:nonroot
-ENV CONFIG_PATH=/config.yaml
-COPY --from=build /go/bin/app /
+COPY --from=build /app/app /app/worker /
 CMD ["/app"]
