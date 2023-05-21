@@ -1,21 +1,21 @@
 version: "3"
 
 services:
-  # postgres:
-  #   image: postgres:alpine
-  #   ports:
-  #     - 5432:5432
-  #   environment:
-  #     - POSTGRES_DB=template
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=postgres
-
-  mongo:
-    image: mongo
-    restart: always
-    command: mongod --setParameter notablescan=1
+  postgres:
+    image: postgres:alpine
     ports:
-      - 27017:27017
+      - 5432:5432
+    environment:
+      - POSTGRES_DB=template
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+
+  # mongo:
+  #   image: mongo
+  #   restart: always
+  #   command: mongod --setParameter notablescan=1
+  #   ports:
+  #     - 27017:27017
 
   redis:
     image: redis:alpine

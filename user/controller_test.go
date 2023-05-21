@@ -6,7 +6,7 @@ import (
 
 	apphttp "app/adapters/http"
 	"app/adapters/logger"
-	"app/adapters/mongo"
+	"app/adapters/postgres"
 	"app/config"
 	"app/test"
 	"app/test/driver"
@@ -39,7 +39,7 @@ var _ = Describe("/users", Ordered, func() {
 			test.QueueProvider,
 			config.Module,
 			apphttp.FiberProvider,
-			mongo.Module,
+			postgres.Module,
 			user.Module,
 			fx.Invoke(func(app *fiber.App, controller *user.Controller) {
 				controller.Register(app)

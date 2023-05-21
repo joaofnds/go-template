@@ -35,10 +35,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     services:
-      mongodb:
-        image: mongo
+      postgres:
+        image: postgres:alpine
         ports:
-          - 27017:27017
+          - 5432:5432
+        env:
+          POSTGRES_DB: template
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
       redis:
         image: redis
         ports:

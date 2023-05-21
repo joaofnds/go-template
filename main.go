@@ -5,7 +5,7 @@ import (
 	"app/adapters/http"
 	"app/adapters/logger"
 	"app/adapters/metrics"
-	"app/adapters/mongo"
+	"app/adapters/postgres"
 	"app/adapters/queue"
 	"app/adapters/redis"
 
@@ -25,7 +25,7 @@ func main() {
 
 		queue.ClientModule,
 		http.Module,
-		mongo.Module,
+		postgres.Module,
 		redis.Module,
 
 		user.Module,

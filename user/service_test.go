@@ -2,7 +2,7 @@ package user_test
 
 import (
 	"app/adapters/logger"
-	"app/adapters/mongo"
+	"app/adapters/postgres"
 	"app/config"
 	"app/test"
 	. "app/test/matchers"
@@ -32,7 +32,7 @@ var _ = Describe("user service", func() {
 			test.QueueProvider,
 			user.NopProbeProvider,
 			config.Module,
-			mongo.Module,
+			postgres.Module,
 			user.Module,
 			fx.Populate(&userService),
 		)

@@ -2,7 +2,7 @@ package main
 
 import (
 	"app/adapters/logger"
-	"app/adapters/mongo"
+	"app/adapters/postgres"
 	"app/adapters/queue"
 
 	"app/config"
@@ -17,7 +17,7 @@ func main() {
 		logger.Module,
 
 		queue.WorkerModule,
-		mongo.Module,
+		postgres.Module,
 
 		user.Module,
 	).Run()
