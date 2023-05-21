@@ -23,7 +23,7 @@ func (g *Greeter) Register(mux *asynq.ServeMux) {
 	mux.Handle(g.Type(), g)
 }
 
-func (g Greeter) Enqueue(userName string) error {
+func (g *Greeter) Enqueue(userName string) error {
 	task := asynq.NewTask(g.Type(), []byte(userName))
 	_, err := g.client.Enqueue(task)
 	return err
