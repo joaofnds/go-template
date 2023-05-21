@@ -1,3 +1,17 @@
+## [1.19.1](https://github.com/joaofnds/go-template/compare/v1.19.0...v1.19.1) (2023-05-21)
+
+
+### CI
+
+* update release-notes-generator config ([f5d1b9c](https://github.com/joaofnds/go-template/commit/f5d1b9c294dfeabdfed0169d1a82e2b73045eaaa))
+
+
+### Refactors
+
+* **greeter:** use pointer receiver ([cfd52ff](https://github.com/joaofnds/go-template/commit/cfd52ff0071c27d1aea1fb50a7a61e1a84106386))
+* remove newline from migrate usage string ([92b71e6](https://github.com/joaofnds/go-template/commit/92b71e6c0bf719a5715d27a37ccd24b5f53a67f9))
+* **test:** use transaction module ([5c7a044](https://github.com/joaofnds/go-template/commit/5c7a044a63396c3e9b05b6e5901ad6dd65d4542f))
+
 ## [1.19.0](https://github.com/joaofnds/go-template/compare/v1.18.1...v1.19.0) (2023-05-21)
 
 
