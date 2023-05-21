@@ -24,8 +24,7 @@ func main() {
   go run cmd/migrate/migrate.go down
   go run cmd/migrate/migrate.go down-to 20170506082527
   go run cmd/migrate/migrate.go status
-  go run cmd/migrate/migrate.go redo
-	`)
+  go run cmd/migrate/migrate.go redo`)
 		os.Exit(1)
 	}
 
