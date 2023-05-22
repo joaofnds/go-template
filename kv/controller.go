@@ -7,12 +7,12 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func NewController(store Store) *Controller {
-	return &Controller{store}
-}
-
 type Controller struct {
 	store Store
+}
+
+func NewController(store Store) *Controller {
+	return &Controller{store}
 }
 
 func (c *Controller) Register(app *fiber.App) {
@@ -27,7 +27,7 @@ func (c *Controller) Get(ctx *fiber.Ctx) error {
 		return fiber.NewError(http.StatusBadRequest, "missing key")
 	}
 
-	val, err := c.store.Get(key)
+	val, err := c.store.Get(ctx.Context(), key)
 	if err != nil {
 		if errors.Is(err, ErrNotFound) {
 			return fiber.NewError(http.StatusNotFound, err.Error())
@@ -49,7 +49,7 @@ func (c *Controller) Set(ctx *fiber.Ctx) error {
 		return fiber.NewError(http.StatusBadRequest, "missing val")
 	}
 
-	err := c.store.Set(key, val)
+	err := c.store.Set(ctx.Context(), key, val)
 	if err != nil {
 		return fiber.NewError(http.StatusInternalServerError, "failed to delete key")
 	}
@@ -63,7 +63,7 @@ func (c *Controller) Delete(ctx *fiber.Ctx) error {
 		return fiber.NewError(http.StatusBadRequest, "missing key param")
 	}
 
-	if err := c.store.Del(key); err != nil {
+	if err := c.store.Del(ctx.Context(), key); err != nil {
 		return fiber.NewError(http.StatusInternalServerError, "failed to delete key")
 	}
 

@@ -1,6 +1,10 @@
 package kv
 
-import "go.uber.org/fx"
+import (
+	"context"
+
+	"go.uber.org/fx"
+)
 
 var Module = fx.Module(
 	"kv",
@@ -10,7 +14,7 @@ var Module = fx.Module(
 )
 
 type Store interface {
-	Get(string) (string, error)
-	Set(string, string) error
-	Del(string) error
+	Get(context.Context, string) (string, error)
+	Set(context.Context, string, string) error
+	Del(context.Context, string) error
 }

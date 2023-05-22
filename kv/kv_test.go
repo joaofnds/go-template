@@ -39,19 +39,19 @@ var _ = Describe("kv store", func() {
 		app.RequireStop()
 	})
 
-	It("can retrieve values", func() {
-		Must(store.Set("foo", "bar"))
+	It("can retrieve values", func(ctx SpecContext) {
+		Must(store.Set(ctx, "foo", "bar"))
 
-		val := Must2(store.Get("foo"))
+		val := Must2(store.Get(ctx, "foo"))
 
 		Expect(val).To(Equal("bar"))
 	})
 
-	It("cannot get values deleted", func() {
-		Must(store.Set("foo", "bar"))
-		Must(store.Del("foo"))
+	It("cannot get values deleted", func(ctx SpecContext) {
+		Must(store.Set(ctx, "foo", "bar"))
+		Must(store.Del(ctx, "foo"))
 
-		_, err := store.Get("foo")
+		_, err := store.Get(ctx, "foo")
 		Expect(err).To(Equal(kv.ErrNotFound))
 	})
 })
