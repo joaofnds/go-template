@@ -23,12 +23,12 @@ func (repo *MongoRepository) CreateUser(ctx context.Context, user User) error {
 
 func (repo *MongoRepository) FindByName(ctx context.Context, name string) (User, error) {
 	var user User
-	result := repo.collection.FindOne(context.Background(), bson.M{"name": name})
+	result := repo.collection.FindOne(ctx, bson.M{"name": name})
 	return user, translateErr(result.Decode(&user))
 }
 
 func (repo *MongoRepository) Delete(ctx context.Context, user User) error {
-	_, err := repo.collection.DeleteOne(context.Background(), bson.M{"name": user.Name})
+	_, err := repo.collection.DeleteOne(ctx, bson.M{"name": user.Name})
 	return translateErr(err)
 }
 

@@ -29,7 +29,7 @@ func (g *Greeter) Enqueue(userName string) error {
 	return err
 }
 
-func (g *Greeter) ProcessTask(ctx context.Context, task *asynq.Task) error {
+func (g *Greeter) ProcessTask(_ context.Context, task *asynq.Task) error {
 	fmt.Printf("[%s] A new user just signed up, welcome %s!\n", task.ResultWriter().TaskID(), task.Payload())
 	return nil
 }
