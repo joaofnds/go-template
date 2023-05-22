@@ -29,7 +29,7 @@ var _ = Describe("user service", func() {
 		app = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
-			test.QueueProvider,
+			test.Queue,
 			test.Transaction,
 			user.NopProbeProvider,
 			config.Module,

@@ -7,7 +7,7 @@ import (
 	"go.uber.org/fx"
 )
 
-var QueueProvider = fx.Options(
+var Queue = fx.Options(
 	fx.Provide(func(config redis.Config) *asynq.Client {
 		return asynq.NewClient(asynq.RedisClientOpt{Addr: config.Addr})
 	}),

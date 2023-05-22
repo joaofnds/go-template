@@ -36,7 +36,7 @@ var _ = Describe("/users", Ordered, func() {
 		fxApp = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
-			test.QueueProvider,
+			test.Queue,
 			test.Transaction,
 			config.Module,
 			apphttp.FiberProvider,
