@@ -15,10 +15,10 @@ func NewUserService(repo Repository, greeter *queue.Greeter, probe Probe) *Servi
 	return &Service{repo: repo, greeter: greeter, probe: probe}
 }
 
-func (service *Service) CreateUser(name string) (User, error) {
+func (service *Service) CreateUser(ctx context.Context, name string) (User, error) {
 	user := User{name}
 
-	err := service.repo.CreateUser(context.Background(), user)
+	err := service.repo.CreateUser(ctx, user)
 	if err != nil {
 		service.probe.FailedToCreateUser(err)
 	}
@@ -31,8 +31,8 @@ func (service *Service) CreateUser(name string) (User, error) {
 	return user, err
 }
 
-func (service *Service) DeleteAll() error {
-	err := service.repo.DeleteAll(context.Background())
+func (service *Service) DeleteAll(ctx context.Context) error {
+	err := service.repo.DeleteAll(ctx)
 
 	if err != nil {
 		service.probe.FailedToDeleteAll(err)
@@ -41,12 +41,12 @@ func (service *Service) DeleteAll() error {
 	return err
 }
 
-func (service *Service) List() ([]User, error) {
-	return service.repo.All(context.Background())
+func (service *Service) List(ctx context.Context) ([]User, error) {
+	return service.repo.All(ctx)
 }
 
-func (service *Service) FindByName(name string) (User, error) {
-	user, err := service.repo.FindByName(context.Background(), name)
+func (service *Service) FindByName(ctx context.Context, name string) (User, error) {
+	user, err := service.repo.FindByName(ctx, name)
 	if err != nil {
 		service.probe.FailedToFindByName(err)
 	}
@@ -54,8 +54,8 @@ func (service *Service) FindByName(name string) (User, error) {
 	return user, err
 }
 
-func (service *Service) Remove(user User) error {
-	err := service.repo.Delete(context.Background(), user)
+func (service *Service) Remove(ctx context.Context, user User) error {
+	err := service.repo.Delete(ctx, user)
 
 	if err != nil {
 		service.probe.FailedToRemoveUser(err, user)

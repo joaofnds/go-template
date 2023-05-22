@@ -1,6 +1,7 @@
 package user_test
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
@@ -50,7 +51,7 @@ var _ = Describe("/users", Ordered, func() {
 		app = driver.NewDriver(fmt.Sprintf("http://localhost:%d", httpConfig.Port))
 	})
 
-	BeforeEach(func() { Must(userService.DeleteAll()) })
+	BeforeEach(func() { Must(userService.DeleteAll(context.Background())) })
 
 	AfterAll(func() { fxApp.RequireStop() })
 

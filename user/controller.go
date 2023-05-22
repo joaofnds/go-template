@@ -23,7 +23,7 @@ func (c *Controller) Register(app *fiber.App) {
 }
 
 func (c *Controller) List(ctx *fiber.Ctx) error {
-	users, err := c.service.List()
+	users, err := c.service.List(ctx.Context())
 	if err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
@@ -38,7 +38,7 @@ func (c *Controller) Create(ctx *fiber.Ctx) error {
 		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	_, err = c.service.CreateUser(user.Name)
+	_, err = c.service.CreateUser(ctx.Context(), user.Name)
 	if err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
@@ -52,7 +52,7 @@ func (c *Controller) Get(ctx *fiber.Ctx) error {
 		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	user, err := c.service.FindByName(name)
+	user, err := c.service.FindByName(ctx.Context(), name)
 	switch {
 	case errors.Is(err, ErrNotFound):
 		return ctx.SendStatus(http.StatusNotFound)
@@ -69,7 +69,7 @@ func (c *Controller) Delete(ctx *fiber.Ctx) error {
 		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	user, err := c.service.FindByName(name)
+	user, err := c.service.FindByName(ctx.Context(), name)
 	switch {
 	case errors.Is(err, ErrNotFound):
 		return ctx.SendStatus(http.StatusNotFound)
@@ -77,7 +77,7 @@ func (c *Controller) Delete(ctx *fiber.Ctx) error {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 
-	if err = c.service.Remove(user); err != nil {
+	if err = c.service.Remove(ctx.Context(), user); err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 
