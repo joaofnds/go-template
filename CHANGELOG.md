@@ -1,3 +1,16 @@
+## [1.19.4](https://github.com/joaofnds/go-template/compare/v1.19.3...v1.19.4) (2023-05-22)
+
+
+### Refactors
+
+* **health:** reorganize health check action ([6e7bbbd](https://github.com/joaofnds/go-template/commit/6e7bbbddc0f0a0d265cd7d97a1427b36fce6aeba))
+* **logger:** inline providers ([33f3e62](https://github.com/joaofnds/go-template/commit/33f3e62714d3f203d2b8f7161006ade92d195388))
+
+
+### Documentation
+
+* add readme ([0e93719](https://github.com/joaofnds/go-template/commit/0e93719300dae0c630f9f2ed6e684239f864d9b4))
+
 ## [1.19.3](https://github.com/joaofnds/go-template/compare/v1.19.2...v1.19.3) (2023-05-22)
 
 
