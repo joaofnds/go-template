@@ -19,12 +19,9 @@ func (c *Controller) Register(app *fiber.App) {
 }
 
 func (c *Controller) CheckHealth(ctx *fiber.Ctx) error {
-	status := http.StatusOK
-
-	h := c.service.CheckHealth(ctx.Context())
-	if !h.AllUp() {
-		status = http.StatusServiceUnavailable
+	check := c.service.CheckHealth(ctx.Context())
+	if !check.AllUp() {
+		return ctx.Status(http.StatusServiceUnavailable).JSON(check)
 	}
-
-	return ctx.Status(status).JSON(h)
+	return ctx.JSON(check)
 }
