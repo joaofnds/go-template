@@ -1,3 +1,10 @@
+## [1.19.3](https://github.com/joaofnds/go-template/compare/v1.19.2...v1.19.3) (2023-05-22)
+
+
+### Refactors
+
+* add gorm zap logger adapter ([926e395](https://github.com/joaofnds/go-template/commit/926e395f8560ee7a33e0c6b30b71839c5699dc39))
+
 ## [1.19.2](https://github.com/joaofnds/go-template/compare/v1.19.1...v1.19.2) (2023-05-22)
 
 
