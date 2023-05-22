@@ -1,3 +1,18 @@
+## [1.19.2](https://github.com/joaofnds/go-template/compare/v1.19.1...v1.19.2) (2023-05-22)
+
+
+### Chores
+
+* update gitignore ([b50990e](https://github.com/joaofnds/go-template/commit/b50990e2e5420cc2e5e2c9504625f0f59f7ca886))
+
+
+### Refactors
+
+* **kv:** get context from controller ([eb137c1](https://github.com/joaofnds/go-template/commit/eb137c1058063585bbe8a501866d823d2fdaabb4))
+* remove unused variables ([516d722](https://github.com/joaofnds/go-template/commit/516d722d8fe443e77efb2f637d6a1c15eecdf3e7))
+* rename test queue provider ([f27406a](https://github.com/joaofnds/go-template/commit/f27406a06925e4f8f6e9c9c2b08f680ddc5ae392))
+* **user:** get context from request ([0d4c667](https://github.com/joaofnds/go-template/commit/0d4c6677058efc1c47c21ef48e8a855ed1987a27))
+
 ## [1.19.1](https://github.com/joaofnds/go-template/compare/v1.19.0...v1.19.1) (2023-05-21)
 
 
