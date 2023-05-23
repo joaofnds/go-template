@@ -4,10 +4,9 @@ import (
 	"app/adapters/logger"
 	"app/adapters/postgres"
 	"app/adapters/queue"
+	user "app/user/module"
 
 	"app/config"
-	"app/user"
-
 	"go.uber.org/fx"
 )
 

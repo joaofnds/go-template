@@ -1,9 +1,10 @@
-package user_test
+package http_test
 
 import (
 	"context"
 	"fmt"
 	"net/http"
+	"testing"
 
 	apphttp "app/adapters/http"
 	"app/adapters/logger"
@@ -11,9 +12,10 @@ import (
 	"app/config"
 	"app/test"
 	"app/test/driver"
-	"app/user"
-
 	. "app/test/matchers"
+	"app/user"
+	userhttp "app/user/http"
+	usermodule "app/user/module"
 
 	"github.com/gofiber/fiber/v2"
 	. "github.com/onsi/ginkgo/v2"
@@ -22,6 +24,11 @@ import (
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
 )
+
+func TestUserHTTP(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "user http suite")
+}
 
 var _ = Describe("/users", Ordered, func() {
 	var (
@@ -41,8 +48,8 @@ var _ = Describe("/users", Ordered, func() {
 			config.Module,
 			apphttp.FiberProvider,
 			postgres.Module,
-			user.Module,
-			fx.Invoke(func(app *fiber.App, controller *user.Controller) {
+			usermodule.Module,
+			fx.Invoke(func(app *fiber.App, controller *userhttp.Controller) {
 				controller.Register(app)
 			}),
 			fx.Populate(&httpConfig, &userService),

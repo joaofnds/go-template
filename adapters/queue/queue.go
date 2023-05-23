@@ -1,7 +1,7 @@
 package queue
 
 import (
-	userQueue "app/user/queue"
+	userqueue "app/user/queue"
 
 	"github.com/hibiken/asynq"
 	"go.uber.org/fx"
@@ -28,7 +28,7 @@ var WorkerModule = fx.Module(
 
 func Register(
 	mux *asynq.ServeMux,
-	greeter *userQueue.Greeter,
+	greeter *userqueue.Greeter,
 ) {
 	greeter.Register(mux)
 }

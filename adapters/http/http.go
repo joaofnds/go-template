@@ -3,7 +3,7 @@ package http
 import (
 	"app/adapters/health"
 	"app/kv"
-	"app/user"
+	userhttp "app/user/http"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/fx"
@@ -15,7 +15,7 @@ var Module = fx.Module(
 	fx.Invoke(func(
 		app *fiber.App,
 		healthController *health.Controller,
-		userController *user.Controller,
+		userController *userhttp.Controller,
 		kvController *kv.Controller,
 	) {
 		healthController.Register(app)

@@ -1,14 +1,17 @@
 package user_test
 
 import (
+	"context"
+	"testing"
+
 	"app/adapters/logger"
 	"app/adapters/postgres"
 	"app/config"
 	"app/test"
 	. "app/test/matchers"
 	"app/user"
-	"context"
-	"testing"
+	"app/user/adapter"
+	usermodule "app/user/module"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -16,9 +19,9 @@ import (
 	"go.uber.org/fx/fxtest"
 )
 
-func TestUser(t *testing.T) {
+func TestUserService(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "User Service Test")
+	RunSpecs(t, "user service suite")
 }
 
 var _ = Describe("user service", func() {
@@ -31,10 +34,10 @@ var _ = Describe("user service", func() {
 			logger.NopLoggerProvider,
 			test.Queue,
 			test.Transaction,
-			user.NopProbeProvider,
+			adapter.NopProbeProvider,
 			config.Module,
 			postgres.Module,
-			user.Module,
+			usermodule.Module,
 			fx.Populate(&userService),
 		)
 		app.RequireStart()

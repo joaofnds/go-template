@@ -1,6 +1,8 @@
-package user
+package adapter
 
 import (
+	"app/user"
+
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 	"go.uber.org/zap"
@@ -33,7 +35,7 @@ func (p *PromProbe) FailedToFindByName(err error) {
 	p.logger.Error("failed to find user by name", zap.Error(err))
 }
 
-func (p *PromProbe) FailedToRemoveUser(err error, user User) {
+func (p *PromProbe) FailedToRemoveUser(err error, user user.User) {
 	p.logger.Error("failed to remove user", zap.Error(err), zap.String("name", user.Name))
 }
 

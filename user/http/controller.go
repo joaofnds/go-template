@@ -1,18 +1,19 @@
-package user
+package http
 
 import (
+	"app/user"
 	"errors"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func NewController(service *Service) *Controller {
-	return &Controller{service}
+func NewController(service *user.Service) *Controller {
+	return &Controller{service: service}
 }
 
 type Controller struct {
-	service *Service
+	service *user.Service
 }
 
 func (c *Controller) Register(app *fiber.App) {
@@ -32,18 +33,18 @@ func (c *Controller) List(ctx *fiber.Ctx) error {
 }
 
 func (c *Controller) Create(ctx *fiber.Ctx) error {
-	var user User
-	err := ctx.BodyParser(&user)
+	var u user.User
+	err := ctx.BodyParser(&u)
 	if err != nil {
 		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	_, err = c.service.CreateUser(ctx.Context(), user.Name)
+	_, err = c.service.CreateUser(ctx.Context(), u.Name)
 	if err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 
-	return ctx.Status(http.StatusCreated).JSON(user)
+	return ctx.Status(http.StatusCreated).JSON(u)
 }
 
 func (c *Controller) Get(ctx *fiber.Ctx) error {
@@ -52,15 +53,15 @@ func (c *Controller) Get(ctx *fiber.Ctx) error {
 		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	user, err := c.service.FindByName(ctx.Context(), name)
+	u, err := c.service.FindByName(ctx.Context(), name)
 	switch {
-	case errors.Is(err, ErrNotFound):
+	case errors.Is(err, user.ErrNotFound):
 		return ctx.SendStatus(http.StatusNotFound)
-	case errors.Is(err, ErrRepository):
+	case errors.Is(err, user.ErrRepository):
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 
-	return ctx.JSON(user)
+	return ctx.JSON(u)
 }
 
 func (c *Controller) Delete(ctx *fiber.Ctx) error {
@@ -69,15 +70,15 @@ func (c *Controller) Delete(ctx *fiber.Ctx) error {
 		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	user, err := c.service.FindByName(ctx.Context(), name)
+	u, err := c.service.FindByName(ctx.Context(), name)
 	switch {
-	case errors.Is(err, ErrNotFound):
+	case errors.Is(err, user.ErrNotFound):
 		return ctx.SendStatus(http.StatusNotFound)
-	case errors.Is(err, ErrRepository):
+	case errors.Is(err, user.ErrRepository):
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 
-	if err = c.service.Remove(ctx.Context(), user); err != nil {
+	if err = c.service.Remove(ctx.Context(), u); err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 

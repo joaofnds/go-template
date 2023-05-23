@@ -8,11 +8,10 @@ import (
 	"app/adapters/postgres"
 	"app/adapters/queue"
 	"app/adapters/redis"
+	user "app/user/module"
 
 	"app/config"
 	"app/kv"
-	"app/user"
-
 	"go.uber.org/fx"
 )
 
