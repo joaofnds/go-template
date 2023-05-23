@@ -5,15 +5,17 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
-func NewController(service *user.Service) *Controller {
-	return &Controller{service: service}
+func NewController(service *user.Service, validator *validator.Validate) *Controller {
+	return &Controller{service: service, validator: validator}
 }
 
 type Controller struct {
-	service *user.Service
+	service   *user.Service
+	validator *validator.Validate
 }
 
 func (c *Controller) Register(app *fiber.App) {
@@ -33,13 +35,20 @@ func (c *Controller) List(ctx *fiber.Ctx) error {
 }
 
 func (c *Controller) Create(ctx *fiber.Ctx) error {
-	var u user.User
-	err := ctx.BodyParser(&u)
-	if err != nil {
+	var dto UserCreateDTO
+	if err := ctx.BodyParser(&dto); err != nil {
 		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	_, err = c.service.CreateUser(ctx.Context(), u.Name)
+	if err := c.validator.Struct(dto); err != nil {
+		var errorMessages []string
+		for _, err := range err.(validator.ValidationErrors) {
+			errorMessages = append(errorMessages, err.Error())
+		}
+		return ctx.Status(http.StatusBadRequest).JSON(fiber.Map{"errors": errorMessages})
+	}
+
+	u, err := c.service.CreateUser(ctx.Context(), dto.Name)
 	if err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}

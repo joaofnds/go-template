@@ -8,10 +8,12 @@ import (
 	"app/adapter/postgres"
 	"app/adapter/queue"
 	"app/adapter/redis"
-	user "app/user/module"
+	"app/adapter/validation"
 
 	"app/config"
 	"app/kv"
+	user "app/user/module"
+
 	"go.uber.org/fx"
 )
 
@@ -21,6 +23,7 @@ func main() {
 		logger.Module,
 		metrics.Module,
 		health.Module,
+		validation.Module,
 
 		queue.ClientModule,
 		http.Module,
