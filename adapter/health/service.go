@@ -1,8 +1,8 @@
 package health
 
 import (
-	"app/adapters/postgres"
-	"app/adapters/redis"
+	"app/adapter/postgres"
+	"app/adapter/redis"
 
 	"context"
 )

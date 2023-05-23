@@ -1,8 +1,8 @@
 package http_test
 
 import (
-	apphttp "app/adapters/http"
-	"app/adapters/logger"
+	apphttp "app/adapter/http"
+	"app/adapter/logger"
 	"app/config"
 	"fmt"
 	"net/http"

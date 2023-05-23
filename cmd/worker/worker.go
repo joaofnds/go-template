@@ -1,9 +1,9 @@
 package main
 
 import (
-	"app/adapters/logger"
-	"app/adapters/postgres"
-	"app/adapters/queue"
+	"app/adapter/logger"
+	"app/adapter/postgres"
+	"app/adapter/queue"
 	user "app/user/module"
 
 	"app/config"

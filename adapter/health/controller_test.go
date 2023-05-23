@@ -1,11 +1,11 @@
 package health_test
 
 import (
-	"app/adapters/health"
-	apphttp "app/adapters/http"
-	"app/adapters/logger"
-	"app/adapters/postgres"
-	"app/adapters/redis"
+	"app/adapter/health"
+	apphttp "app/adapter/http"
+	"app/adapter/logger"
+	"app/adapter/postgres"
+	"app/adapter/redis"
 	"app/config"
 	. "app/test/matchers"
 

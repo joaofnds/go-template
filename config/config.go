@@ -1,11 +1,11 @@
 package config
 
 import (
-	"app/adapters/http"
-	"app/adapters/metrics"
-	"app/adapters/mongo"
-	"app/adapters/postgres"
-	"app/adapters/redis"
+	"app/adapter/http"
+	"app/adapter/metrics"
+	"app/adapter/mongo"
+	"app/adapter/postgres"
+	"app/adapter/redis"
 	"os"
 
 	"github.com/spf13/viper"

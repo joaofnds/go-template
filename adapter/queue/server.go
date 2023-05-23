@@ -1,7 +1,7 @@
 package queue
 
 import (
-	"app/adapters/redis"
+	"app/adapter/redis"
 	"context"
 
 	"github.com/hibiken/asynq"

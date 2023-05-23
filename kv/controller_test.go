@@ -1,9 +1,9 @@
 package kv_test
 
 import (
-	apphttp "app/adapters/http"
-	"app/adapters/logger"
-	"app/adapters/redis"
+	apphttp "app/adapter/http"
+	"app/adapter/logger"
+	"app/adapter/redis"
 	"app/config"
 	"app/kv"
 	. "app/test/matchers"

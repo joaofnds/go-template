@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"testing"
 
-	apphttp "app/adapters/http"
-	"app/adapters/logger"
-	"app/adapters/postgres"
+	apphttp "app/adapter/http"
+	"app/adapter/logger"
+	"app/adapter/postgres"
 	"app/config"
 	"app/test"
 	"app/test/driver"

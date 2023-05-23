@@ -1,7 +1,7 @@
 package http
 
 import (
-	"app/adapters/health"
+	"app/adapter/health"
 	"app/kv"
 	userhttp "app/user/http"
 

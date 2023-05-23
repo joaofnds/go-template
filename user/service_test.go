@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"app/adapters/logger"
-	"app/adapters/postgres"
+	"app/adapter/logger"
+	"app/adapter/postgres"
 	"app/config"
 	"app/test"
 	. "app/test/matchers"

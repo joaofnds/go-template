@@ -1,7 +1,7 @@
 package test
 
 import (
-	"app/adapters/redis"
+	"app/adapter/redis"
 
 	"github.com/hibiken/asynq"
 	"go.uber.org/fx"

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"app/adapters/health"
-	"app/adapters/http"
-	"app/adapters/logger"
-	"app/adapters/metrics"
-	"app/adapters/postgres"
-	"app/adapters/queue"
-	"app/adapters/redis"
+	"app/adapter/health"
+	"app/adapter/http"
+	"app/adapter/logger"
+	"app/adapter/metrics"
+	"app/adapter/postgres"
+	"app/adapter/queue"
+	"app/adapter/redis"
 	user "app/user/module"
 
 	"app/config"
