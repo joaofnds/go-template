@@ -6,24 +6,26 @@ plugins:
     - releaseRules:
         - type: refactor
           release: patch
+        - type: chore
+          release: patch
   - - "@semantic-release/release-notes-generator"
     - preset: conventionalcommits
       presetConfig:
         types:
           - type: feat
-            section: Features
+            section: Feature
           - type: fix
-            section: Fixes
+            section: Fix
           - type: chore
-            section: Chores
+            section: Chore
           - type: docs
             section: Documentation
           - type: refactor
-            section: Refactors
+            section: Refactor
           - type: perf
             section: Performance
           - type: test
-            section: Tests
+            section: Test
           - type: ci
             section: CI
   - "@semantic-release/changelog"
