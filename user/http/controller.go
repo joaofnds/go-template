@@ -63,11 +63,12 @@ func (c *Controller) Get(ctx *fiber.Ctx) error {
 	}
 
 	u, err := c.service.FindByName(ctx.Context(), name)
-	switch {
-	case errors.Is(err, user.ErrNotFound):
-		return ctx.SendStatus(http.StatusNotFound)
-	case errors.Is(err, user.ErrRepository):
-		return ctx.SendStatus(http.StatusInternalServerError)
+	if err != nil {
+		if errors.Is(err, user.ErrNotFound) {
+			return ctx.SendStatus(http.StatusNotFound)
+		} else {
+			return ctx.SendStatus(http.StatusInternalServerError)
+		}
 	}
 
 	return ctx.JSON(u)
@@ -80,14 +81,16 @@ func (c *Controller) Delete(ctx *fiber.Ctx) error {
 	}
 
 	u, err := c.service.FindByName(ctx.Context(), name)
-	switch {
-	case errors.Is(err, user.ErrNotFound):
-		return ctx.SendStatus(http.StatusNotFound)
-	case errors.Is(err, user.ErrRepository):
-		return ctx.SendStatus(http.StatusInternalServerError)
+	if err != nil {
+		if errors.Is(err, user.ErrNotFound) {
+			return ctx.SendStatus(http.StatusNotFound)
+		} else {
+			return ctx.SendStatus(http.StatusInternalServerError)
+		}
 	}
 
-	if err = c.service.Remove(ctx.Context(), u); err != nil {
+	err = c.service.Remove(ctx.Context(), u)
+	if err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 
