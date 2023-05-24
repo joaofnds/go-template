@@ -2,6 +2,7 @@ package adapter
 
 import (
 	"app/user"
+	"context"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -43,7 +44,7 @@ func (p *PromProbe) FailedToEnqueue(err error) {
 	p.logger.Error("failed to enqueue", zap.Error(err))
 }
 
-func (p *PromProbe) UserCreated() {
-	p.logger.Info("user created")
+func (p *PromProbe) UserCreated(_ context.Context, u user.User) {
+	p.logger.Info("user created", zap.String("name", u.Name))
 	p.usersCreated.Inc()
 }

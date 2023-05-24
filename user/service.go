@@ -23,7 +23,7 @@ func (service *Service) CreateUser(ctx context.Context, name string) (User, erro
 	if err != nil {
 		service.probe.FailedToCreateUser(err)
 	}
-	service.probe.UserCreated()
+	service.probe.UserCreated(ctx, user)
 
 	if err := service.greeter.Enqueue(name); err != nil {
 		service.probe.FailedToEnqueue(err)
