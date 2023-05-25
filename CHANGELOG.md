@@ -1,3 +1,30 @@
+## [1.20.0](https://github.com/joaofnds/go-template/compare/v1.19.4...v1.20.0) (2023-05-25)
+
+
+### CI
+
+* release chore as patch ([3d995e5](https://github.com/joaofnds/go-template/commit/3d995e5bd5c9b2fc222b66ef69b0ec8d2a0ebbb6))
+
+
+### Documentation
+
+* update readme links ([ac6ae9e](https://github.com/joaofnds/go-template/commit/ac6ae9eea0ee0c2bc323d51074e94b52f139a429))
+
+
+### Refactor
+
+* add user modules ([f5bb5c4](https://github.com/joaofnds/go-template/commit/f5bb5c482360230a4744a82b7d2c0da409269c71))
+* inline stop function ([0fb5a12](https://github.com/joaofnds/go-template/commit/0fb5a129603ea5b611c6c461a8f45d01ccec0c6e))
+* provide context and user to probe ([90a1b3b](https://github.com/joaofnds/go-template/commit/90a1b3b361fcdb237f23a3f5a5d5c7cc87b470dc))
+* rename `adapters` to `adapter` ([4ebd784](https://github.com/joaofnds/go-template/commit/4ebd784e269074f177850edc66b63e7fea2df512))
+* **user:** update error handling ([791a3cb](https://github.com/joaofnds/go-template/commit/791a3cb43e2c738b939a0b4230339a90c151ba24))
+
+
+### Feature
+
+* add internal events ([ac2e00c](https://github.com/joaofnds/go-template/commit/ac2e00cccbbb040c16a38799e1eb58123ef67b29))
+* add validation ([77d2e5c](https://github.com/joaofnds/go-template/commit/77d2e5c9a13d4b2cfb35a5352f2306ab51b9fad0))
+
 ## [1.19.4](https://github.com/joaofnds/go-template/compare/v1.19.3...v1.19.4) (2023-05-22)
 
 
