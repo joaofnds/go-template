@@ -1,19 +1,16 @@
 package user
 
 import (
-	"app/user/queue"
-
 	"context"
 )
 
 type Service struct {
-	repo    Repository
-	greeter *queue.Greeter
-	probe   Probe
+	repo  Repository
+	probe Probe
 }
 
-func NewUserService(repo Repository, greeter *queue.Greeter, probe Probe) *Service {
-	return &Service{repo: repo, greeter: greeter, probe: probe}
+func NewUserService(repo Repository, probe Probe) *Service {
+	return &Service{repo: repo, probe: probe}
 }
 
 func (service *Service) CreateUser(ctx context.Context, name string) (User, error) {
@@ -24,10 +21,6 @@ func (service *Service) CreateUser(ctx context.Context, name string) (User, erro
 		service.probe.FailedToCreateUser(err)
 	}
 	service.probe.UserCreated(ctx, user)
-
-	if err := service.greeter.Enqueue(name); err != nil {
-		service.probe.FailedToEnqueue(err)
-	}
 
 	return user, err
 }

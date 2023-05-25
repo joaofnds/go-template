@@ -1,6 +1,7 @@
 package adapter
 
 import (
+	"app/internal/event"
 	"app/user"
 	"context"
 
@@ -11,13 +12,15 @@ import (
 
 type PromProbe struct {
 	logger            *zap.Logger
+	userCreatedEvent  *event.Event[user.UserCreated]
 	usersCreated      prometheus.Counter
 	usersCreateFailed prometheus.Counter
 }
 
-func NewPromProbe(logger *zap.Logger) *PromProbe {
+func NewPromProbe(logger *zap.Logger, userCreatedEvent *event.Event[user.UserCreated]) *PromProbe {
 	return &PromProbe{
 		logger:            logger,
+		userCreatedEvent:  userCreatedEvent,
 		usersCreated:      promauto.NewCounter(prometheus.CounterOpts{Name: "users_created"}),
 		usersCreateFailed: promauto.NewCounter(prometheus.CounterOpts{Name: "users_create_fail"}),
 	}
@@ -45,6 +48,6 @@ func (p *PromProbe) FailedToEnqueue(err error) {
 }
 
 func (p *PromProbe) UserCreated(_ context.Context, u user.User) {
-	p.logger.Info("user created", zap.String("name", u.Name))
 	p.usersCreated.Inc()
+	p.userCreatedEvent.Send(user.NewUserCreated(u))
 }
