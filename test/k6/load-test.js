@@ -14,19 +14,18 @@ export const options = {
   },
   thresholds: {
     http_req_failed: ["rate<0.01"],
-    http_req_duration: ["p(95) < 3"],
+    http_req_duration: ["p(95) < 10"],
   },
 };
 
-export function setup() {
-  http.post("http://localhost:3000/kv/foo/bar");
-}
-
 export default function () {
-  const res = http.get("http://localhost:3000/kv/foo");
+  const res = http.post(
+    "http://localhost:3000/users",
+    JSON.stringify({ name: "joao" }),
+    { headers: { "Content-Type": "application/json" } }
+  );
 
   check(res, {
-    "status is 200": (r) => r.status === 200,
-    "body is 'bar'": (r) => r.body === "bar",
+    "status is 201": (r) => r.status === 201,
   });
 }
