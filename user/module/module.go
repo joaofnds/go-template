@@ -6,7 +6,6 @@ import (
 	"app/user/adapter"
 	"app/user/http"
 	"app/user/queue"
-	"context"
 
 	"go.uber.org/fx"
 )
@@ -28,22 +27,9 @@ var Module = fx.Module(
 
 	fx.Provide(http.NewController),
 
-	fx.Provide(func(lifecycle fx.Lifecycle) *event.Event[user.UserCreated] {
-		e := event.NewEvent[user.UserCreated](10)
-		lifecycle.Append(fx.Hook{
-			OnStop: func(_ context.Context) error {
-				e.Close()
-				return nil
-			},
+	fx.Invoke(func(greeter *queue.Greeter) {
+		event.On(func(event user.UserCreated) {
+			_ = greeter.Enqueue(event.User.Name)
 		})
-		return e
-	}),
-
-	fx.Invoke(func(event *event.Event[user.UserCreated], greeter *queue.Greeter) {
-		go func() {
-			for userCreatedEvent := range event.Listen() {
-				_ = greeter.Enqueue(userCreatedEvent.User.Name)
-			}
-		}()
 	}),
 )

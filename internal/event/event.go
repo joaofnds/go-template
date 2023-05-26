@@ -1,32 +1,37 @@
 package event
 
-type Event[T any] struct {
-	cap       int
-	listeners []chan T
+import (
+	"fmt"
+	"sync"
+)
+
+var (
+	lock      = sync.RWMutex{}
+	listeners = make(map[string][]Handler[any])
+)
+
+type Handler[T any] func(t T)
+
+func On[T any](f Handler[T]) {
+	name := fmt.Sprintf("%T", *new(T))
+
+	lock.Lock()
+	defer lock.Unlock()
+
+	listeners[name] = append(listeners[name], wrap(f))
 }
 
-func NewEvent[T any](cap int) *Event[T] {
-	return &Event[T]{cap: cap}
-}
+func Send[T any](t T) {
+	name := fmt.Sprintf("%T", t)
 
-func (e *Event[T]) Close() {
-	for _, c := range e.listeners {
-		close(c)
+	lock.RLock()
+	defer lock.RUnlock()
+
+	for _, l := range listeners[name] {
+		go l(t)
 	}
 }
 
-func (e *Event[T]) Listen() <-chan T {
-	c := make(chan T, e.cap)
-	e.listeners = append(e.listeners, c)
-	return c
-}
-
-func (e *Event[T]) Send(t T) {
-	go func() {
-		defer func() { _ = recover() }()
-
-		for _, c := range e.listeners {
-			c <- t
-		}
-	}()
+func wrap[T any](f Handler[T]) Handler[any] {
+	return func(t any) { f(t.(T)) }
 }
