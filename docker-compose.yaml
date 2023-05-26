@@ -3,6 +3,7 @@ version: "3"
 services:
   postgres:
     image: postgres:alpine
+    restart: unless-stopped
     ports:
       - 5432:5432
     environment:
@@ -19,6 +20,7 @@ services:
 
   redis:
     image: redis:alpine
+    restart: unless-stopped
     ports:
       - 6379:6379
 
