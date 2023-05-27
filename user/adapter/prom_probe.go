@@ -3,7 +3,6 @@ package adapter
 import (
 	"app/internal/event"
 	"app/user"
-	"context"
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -24,6 +23,18 @@ func NewPromProbe(logger *zap.Logger) *PromProbe {
 	}
 }
 
+func (p *PromProbe) Listen() {
+	event.On(func(e user.UserCreated) { p.UserCreated(e.User) })
+	event.On(func(e user.FailedToCreateUser) { p.FailedToCreateUser(e.Err) })
+	event.On(func(e user.FailedToDeleteAll) { p.FailedToDeleteAll(e.Err) })
+	event.On(func(e user.FailedToFindByName) { p.FailedToFindByName(e.Err) })
+	event.On(func(e user.FailedToRemoveUser) { p.FailedToRemoveUser(e.Err, e.User) })
+}
+
+func (p *PromProbe) UserCreated(user.User) {
+	p.usersCreated.Inc()
+}
+
 func (p *PromProbe) FailedToCreateUser(err error) {
 	p.logger.Error("failed to create user", zap.Error(err))
 	p.usersCreateFailed.Inc()
@@ -39,13 +50,4 @@ func (p *PromProbe) FailedToFindByName(err error) {
 
 func (p *PromProbe) FailedToRemoveUser(err error, user user.User) {
 	p.logger.Error("failed to remove user", zap.Error(err), zap.String("name", user.Name))
-}
-
-func (p *PromProbe) FailedToEnqueue(err error) {
-	p.logger.Error("failed to enqueue", zap.Error(err))
-}
-
-func (p *PromProbe) UserCreated(_ context.Context, u user.User) {
-	p.usersCreated.Inc()
-	event.Send(user.NewUserCreated(u))
 }

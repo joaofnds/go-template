@@ -5,12 +5,12 @@ import (
 )
 
 type Service struct {
-	repo  Repository
-	probe Probe
+	repo    Repository
+	emitter Emitter
 }
 
-func NewUserService(repo Repository, probe Probe) *Service {
-	return &Service{repo: repo, probe: probe}
+func NewUserService(repo Repository, emitter Emitter) *Service {
+	return &Service{repo: repo, emitter: emitter}
 }
 
 func (service *Service) CreateUser(ctx context.Context, name string) (User, error) {
@@ -18,9 +18,9 @@ func (service *Service) CreateUser(ctx context.Context, name string) (User, erro
 
 	err := service.repo.CreateUser(ctx, user)
 	if err != nil {
-		service.probe.FailedToCreateUser(err)
+		service.emitter.FailedToCreateUser(err)
 	}
-	service.probe.UserCreated(ctx, user)
+	service.emitter.UserCreated(user)
 
 	return user, err
 }
@@ -29,7 +29,7 @@ func (service *Service) DeleteAll(ctx context.Context) error {
 	err := service.repo.DeleteAll(ctx)
 
 	if err != nil {
-		service.probe.FailedToDeleteAll(err)
+		service.emitter.FailedToDeleteAll(err)
 	}
 
 	return err
@@ -42,7 +42,7 @@ func (service *Service) List(ctx context.Context) ([]User, error) {
 func (service *Service) FindByName(ctx context.Context, name string) (User, error) {
 	user, err := service.repo.FindByName(ctx, name)
 	if err != nil {
-		service.probe.FailedToFindByName(err)
+		service.emitter.FailedToFindByName(err)
 	}
 
 	return user, err
@@ -52,7 +52,7 @@ func (service *Service) Remove(ctx context.Context, user User) error {
 	err := service.repo.Delete(ctx, user)
 
 	if err != nil {
-		service.probe.FailedToRemoveUser(err, user)
+		service.emitter.FailedToRemoveUser(err, user)
 	}
 
 	return err

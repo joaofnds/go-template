@@ -1,6 +1,8 @@
 package queue
 
 import (
+	"app/internal/event"
+	"app/user"
 	"context"
 	"fmt"
 
@@ -13,6 +15,10 @@ type Greeter struct {
 
 func NewGreeter(client *asynq.Client) *Greeter {
 	return &Greeter{client: client}
+}
+
+func (g *Greeter) Listen() {
+	event.On(func(e user.UserCreated) { _ = g.Enqueue(e.User.Name) })
 }
 
 func (g *Greeter) Type() string {

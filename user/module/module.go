@@ -1,7 +1,6 @@
 package user
 
 import (
-	"app/internal/event"
 	"app/user"
 	"app/user/adapter"
 	"app/user/http"
@@ -12,24 +11,17 @@ import (
 
 var Module = fx.Module(
 	"user",
-	queue.Module,
 
 	fx.Provide(user.NewUserService),
 
-	//fx.Provide(adapter.NewMongoRepository),
-	//fx.Provide(func(repo *adapter.MongoRepository) user.Repository { return repo }),
+	fx.Provide(adapter.NewEventEmitter),
+	fx.Provide(func(emitter *adapter.EventEmitter) user.Emitter { return emitter }),
 
 	fx.Provide(adapter.NewPostgresRepository),
 	fx.Provide(func(repo *adapter.PostgresRepository) user.Repository { return repo }),
 
 	fx.Provide(adapter.NewPromProbe),
-	fx.Provide(func(probe *adapter.PromProbe) user.Probe { return probe }),
 
 	fx.Provide(http.NewController),
-
-	fx.Invoke(func(greeter *queue.Greeter) {
-		event.On(func(event user.UserCreated) {
-			_ = greeter.Enqueue(event.User.Name)
-		})
-	}),
+	fx.Provide(queue.NewGreeter),
 )

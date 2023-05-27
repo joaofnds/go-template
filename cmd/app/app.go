@@ -1,6 +1,7 @@
 package main
 
 import (
+	"app/adapter/event"
 	"app/adapter/health"
 	"app/adapter/http"
 	"app/adapter/logger"
@@ -25,6 +26,7 @@ func main() {
 		health.Module,
 		validation.Module,
 
+		event.Module,
 		queue.ClientModule,
 		http.Module,
 		postgres.Module,

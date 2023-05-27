@@ -1,12 +1,9 @@
 package user
 
-import "context"
-
-type Probe interface {
+type Emitter interface {
+	UserCreated(User)
 	FailedToCreateUser(error)
 	FailedToDeleteAll(error)
 	FailedToFindByName(error)
 	FailedToRemoveUser(error, User)
-	FailedToEnqueue(error)
-	UserCreated(context.Context, User)
 }

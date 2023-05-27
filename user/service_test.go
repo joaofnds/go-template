@@ -10,7 +10,6 @@ import (
 	"app/test"
 	. "app/test/matchers"
 	"app/user"
-	"app/user/adapter"
 	usermodule "app/user/module"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -34,7 +33,6 @@ var _ = Describe("user service", func() {
 			logger.NopLoggerProvider,
 			test.Queue,
 			test.Transaction,
-			adapter.NopProbeProvider,
 			config.Module,
 			postgres.Module,
 			usermodule.Module,
