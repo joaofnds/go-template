@@ -1,3 +1,20 @@
+## [1.20.2](https://github.com/joaofnds/go-template/compare/v1.20.1...v1.20.2) (2023-05-27)
+
+
+### Documentation
+
+* update readme line references ([481bacb](https://github.com/joaofnds/go-template/commit/481bacb2b675c3ead69ca6ba0626b40d9d4772d7))
+
+
+### Refactor
+
+* remove unused code ([6020743](https://github.com/joaofnds/go-template/commit/6020743108874e5b5d2c95931975574b8580836c))
+
+
+### Test
+
+* search for available ports to avoid conflict ([62aac70](https://github.com/joaofnds/go-template/commit/62aac7041fa4ed85cf74ca3adc2b675b3e3142d3))
+
 ## [1.20.1](https://github.com/joaofnds/go-template/compare/v1.20.0...v1.20.1) (2023-05-27)
 
 
