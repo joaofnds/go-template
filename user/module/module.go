@@ -13,9 +13,7 @@ var Module = fx.Module(
 	"user",
 
 	fx.Provide(user.NewUserService),
-
-	fx.Provide(adapter.NewEventEmitter),
-	fx.Provide(func(emitter *adapter.EventEmitter) user.Emitter { return emitter }),
+	fx.Provide(user.NewEventEmitter),
 
 	fx.Provide(adapter.NewPostgresRepository),
 	fx.Provide(func(repo *adapter.PostgresRepository) user.Repository { return repo }),
