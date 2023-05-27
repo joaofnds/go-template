@@ -1,3 +1,21 @@
+## [1.20.1](https://github.com/joaofnds/go-template/compare/v1.20.0...v1.20.1) (2023-05-27)
+
+
+### Chore
+
+* set restart policy on docker compose storage services ([a99c37e](https://github.com/joaofnds/go-template/commit/a99c37e696acaee50fad34acaa11e29e0869035c))
+
+
+### Test
+
+* **load:** test create users ([f8f5907](https://github.com/joaofnds/go-template/commit/f8f5907c0859ed9fb8bbe1860d34128c47dc5b0f))
+
+
+### Refactor
+
+* add user event emitter ([9126933](https://github.com/joaofnds/go-template/commit/9126933893f447a79e1c4cfcbc00cf00d87fe6ee))
+* update internal event lib ([26c6de8](https://github.com/joaofnds/go-template/commit/26c6de868b872cb5977dd329ec6ae314ed6ecff1))
+
 ## [1.20.0](https://github.com/joaofnds/go-template/compare/v1.19.4...v1.20.0) (2023-05-25)
 
 
