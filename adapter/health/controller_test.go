@@ -7,6 +7,7 @@ import (
 	"app/adapter/postgres"
 	"app/adapter/redis"
 	"app/config"
+	"app/test"
 	. "app/test/matchers"
 
 	"fmt"
@@ -37,6 +38,7 @@ var _ = Describe("/health", Ordered, func() {
 				GinkgoT(),
 				logger.NopLoggerProvider,
 				apphttp.NopProbeProvider,
+				test.AvailablePortProvider,
 				config.Module,
 				redis.Module,
 				postgres.Module,
@@ -78,6 +80,7 @@ var _ = Describe("/health", Ordered, func() {
 				GinkgoT(),
 				logger.NopLoggerProvider,
 				apphttp.NopProbeProvider,
+				test.AvailablePortProvider,
 				config.Module,
 				apphttp.FiberProvider,
 				health.Module,

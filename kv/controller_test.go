@@ -6,6 +6,7 @@ import (
 	"app/adapter/redis"
 	"app/config"
 	"app/kv"
+	"app/test"
 	. "app/test/matchers"
 	"app/test/req"
 	"fmt"
@@ -30,6 +31,7 @@ var _ = Describe("/kv", Ordered, func() {
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			config.Module,
+			test.AvailablePortProvider,
 			apphttp.FiberProvider,
 			redis.Module,
 			kv.Module,
