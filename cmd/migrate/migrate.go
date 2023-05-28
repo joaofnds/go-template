@@ -24,7 +24,8 @@ func main() {
   go run cmd/migrate/migrate.go down
   go run cmd/migrate/migrate.go down-to 20170506082527
   go run cmd/migrate/migrate.go status
-  go run cmd/migrate/migrate.go redo`)
+  go run cmd/migrate/migrate.go redo
+	go run cmd/migrate/migrate.go create`)
 		os.Exit(1)
 	}
 
@@ -34,15 +35,18 @@ func main() {
 		postgres.Module,
 		fx.Invoke(func(db *sql.DB, config postgres.Config) error {
 			goose.SetBaseFS(migrations)
-			return goose.Run(os.Args[1], db, "migrations", os.Args[2:]...)
+			action, args := os.Args[1], os.Args[2:]
+			return goose.Run(action, db, dir(action), args...)
 		}),
 	)
-	defer func() { must(app.Stop(context.Background())) }()
-	must(app.Start(context.Background()))
+	defer func() { _ = app.Stop(context.Background()) }()
+	_ = app.Start(context.Background())
 }
 
-func must(err error) {
-	if err != nil {
-		panic(err)
+func dir(action string) string {
+	if action == "create" {
+		return "cmd/migrate/migrations"
 	}
+
+	return "migrations"
 }
