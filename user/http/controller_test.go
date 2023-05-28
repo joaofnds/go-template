@@ -66,30 +66,33 @@ var _ = Describe("/users", Ordered, func() {
 	AfterAll(func() { fxApp.RequireStop() })
 
 	It("creates and gets user", func() {
-		bob := Must2(app.CreateUser("bob"))
-		found := Must2(app.GetUser(bob.Name))
+		bob := Must2(app.User.CreateUser("bob"))
+		found := Must2(app.User.GetUser(bob.Name))
 
 		Expect(found).To(Equal(bob))
 	})
 
 	It("lists users", func() {
-		bob := Must2(app.CreateUser("bob"))
-		dave := Must2(app.CreateUser("dave"))
+		bob := Must2(app.User.CreateUser("bob"))
+		dave := Must2(app.User.CreateUser("dave"))
 
-		users := Must2(app.ListUsers())
+		users := Must2(app.User.ListUsers())
 		Expect(users).To(Equal([]user.User{bob, dave}))
 	})
 
 	It("deletes users", func() {
-		bob := Must2(app.CreateUser("bob"))
-		dave := Must2(app.CreateUser("dave"))
+		bob := Must2(app.User.CreateUser("bob"))
+		dave := Must2(app.User.CreateUser("dave"))
 
-		Must(app.DeleteUser(dave.Name))
+		Must(app.User.DeleteUser(dave.Name))
 
-		res := Must2(app.API.DeleteUser(dave.Name))
-		Expect(res.StatusCode).To(Equal(http.StatusNotFound))
+		_, err := app.User.GetUser(dave.Name)
+		Expect(err).To(Equal(driver.RequestFailure{
+			Status: http.StatusNotFound,
+			Body:   "Not Found",
+		}))
 
-		users := Must2(app.ListUsers())
+		users := Must2(app.User.ListUsers())
 		Expect(users).To(Equal([]user.User{bob}))
 	})
 })

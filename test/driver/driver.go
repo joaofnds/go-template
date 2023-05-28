@@ -1,55 +1,21 @@
 package driver
 
 import (
-	"app/user"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 )
 
 type Driver struct {
-	API *API
+	URL  string
+	User *UserDriver
 }
 
 func NewDriver(url string) *Driver {
-	return &Driver{API: NewAPI(url)}
-}
-
-func (d *Driver) CreateUser(name string) (user.User, error) {
-	var u user.User
-
-	return u, makeJSONRequest(params{
-		into:   &u,
-		status: http.StatusCreated,
-		req:    func() (*http.Response, error) { return d.API.CreateUser(name) },
-	})
-}
-
-func (d *Driver) GetUser(name string) (user.User, error) {
-	var u user.User
-
-	return u, makeJSONRequest(params{
-		into:   &u,
-		status: http.StatusOK,
-		req:    func() (*http.Response, error) { return d.API.GetUser(name) },
-	})
-}
-
-func (d *Driver) ListUsers() ([]user.User, error) {
-	var users []user.User
-	return users, makeJSONRequest(params{
-		into:   &users,
-		status: http.StatusOK,
-		req:    d.API.ListUsers,
-	})
-}
-
-func (d *Driver) DeleteUser(name string) error {
-	return makeJSONRequest(params{
-		status: http.StatusOK,
-		req:    func() (*http.Response, error) { return d.API.DeleteUser(name) },
-	})
+	return &Driver{
+		URL:  url,
+		User: NewUserDriver(url),
+	}
 }
 
 type params struct {
@@ -65,18 +31,27 @@ func makeJSONRequest(p params) error {
 	}
 	defer res.Body.Close()
 
+	b, err := io.ReadAll(res.Body)
+	if err != nil {
+		return err
+	}
+
 	if res.StatusCode != p.status {
-		return fmt.Errorf("expected status %d, got %d", p.status, res.StatusCode)
+		return RequestFailure{Status: res.StatusCode, Body: string(b)}
 	}
 
 	if p.into == nil {
 		return nil
 	}
 
-	b, err := io.ReadAll(res.Body)
-	if err != nil {
-		return err
-	}
-
 	return json.Unmarshal(b, p.into)
+}
+
+type RequestFailure struct {
+	Status int
+	Body   string
+}
+
+func (e RequestFailure) Error() string {
+	return e.Body
 }
