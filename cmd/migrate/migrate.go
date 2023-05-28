@@ -9,6 +9,7 @@ import (
 	"embed"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/pressly/goose/v3"
 	"go.uber.org/fx"
@@ -36,7 +37,11 @@ func main() {
 		fx.Invoke(func(db *sql.DB, config postgres.Config) error {
 			goose.SetBaseFS(migrations)
 			action, args := os.Args[1], os.Args[2:]
-			return goose.Run(action, db, dir(action), args...)
+			err := goose.Run(action, db, dir(action), args...)
+			if err != nil {
+				fmt.Println(strings.ReplaceAll(err.Error(), `\n`, "\n"))
+			}
+			return err
 		}),
 	)
 	defer func() { _ = app.Stop(context.Background()) }()
