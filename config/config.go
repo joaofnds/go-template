@@ -33,21 +33,11 @@ type AppConfig struct {
 	Redis    redis.Config    `mapstructure:"redis"`
 }
 
-func init() {
-	viper.MustBindEnv("env", "ENV")
-	viper.MustBindEnv("metrics.address", "METRICS_ADDRESS")
-	viper.MustBindEnv("http.port", "HTTP_PORT")
-	viper.MustBindEnv("http.limiter.requests", "HTTP_LIMITER_REQUESTS")
-	viper.MustBindEnv("http.limiter.expiration", "HTTP_LIMITER_EXPIRATION")
-	viper.MustBindEnv("postgres.uri", "POSTGRES_URI")
-	viper.MustBindEnv("mongo.uri", "MONGO_URI")
-	viper.MustBindEnv("redis.addr", "REDIS_ADDR")
-}
-
 func LoadConfig(logger *zap.Logger) error {
 	configFile := os.Getenv("CONFIG_PATH")
 	if configFile == "" {
-		logger.Info("CONFIG_PATH not set, skipping file load")
+		logger.Info("CONFIG_PATH not set, skipping config file load")
+		bindEnvs()
 		return nil
 	}
 
@@ -58,4 +48,15 @@ func LoadConfig(logger *zap.Logger) error {
 func NewAppConfig() (AppConfig, error) {
 	var config AppConfig
 	return config, viper.UnmarshalExact(&config)
+}
+
+func bindEnvs() {
+	viper.MustBindEnv("env", "ENV")
+	viper.MustBindEnv("metrics.address", "METRICS_ADDRESS")
+	viper.MustBindEnv("http.port", "HTTP_PORT")
+	viper.MustBindEnv("http.limiter.requests", "HTTP_LIMITER_REQUESTS")
+	viper.MustBindEnv("http.limiter.expiration", "HTTP_LIMITER_EXPIRATION")
+	viper.MustBindEnv("postgres.uri", "POSTGRES_URI")
+	viper.MustBindEnv("mongo.uri", "MONGO_URI")
+	viper.MustBindEnv("redis.addr", "REDIS_ADDR")
 }
