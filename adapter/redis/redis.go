@@ -7,11 +7,16 @@ import (
 	"go.uber.org/fx"
 )
 
-var Module = fx.Module(
-	"redis",
-	fx.Provide(NewClient),
-	fx.Provide(NewHealthChecker),
-	fx.Invoke(HookRedis),
+var (
+	Module = fx.Module("redis", Providers, Invokes)
+
+	Providers = fx.Options(
+		fx.Provide(NewClient),
+		fx.Provide(NewHealthChecker),
+	)
+	Invokes = fx.Options(
+		fx.Invoke(HookRedis),
+	)
 )
 
 func NewClient(config Config) *redis.Client {

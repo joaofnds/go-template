@@ -32,7 +32,7 @@ var _ = Describe("/kv", Ordered, func() {
 			logger.NopLoggerProvider,
 			config.Module,
 			test.AvailablePortProvider,
-			apphttp.FiberProvider,
+			apphttp.FiberModule,
 			redis.Module,
 			kv.Module,
 			fx.Invoke(func(app *fiber.App, controller *kv.Controller) {

@@ -11,15 +11,8 @@ import (
 
 var Module = fx.Module(
 	"http",
-	FiberProvider,
-	fx.Invoke(func(
-		app *fiber.App,
-		healthController *health.Controller,
-		userController *userhttp.Controller,
-		kvController *kv.Controller,
-	) {
-		healthController.Register(app)
-		userController.Register(app)
-		kvController.Register(app)
-	}),
+	FiberModule,
+	fx.Invoke(func(app *fiber.App, healthController *health.Controller) { healthController.Register(app) }),
+	fx.Invoke(func(app *fiber.App, userController *userhttp.Controller) { userController.Register(app) }),
+	fx.Invoke(func(app *fiber.App, kvController *kv.Controller) { kvController.Register(app) }),
 )

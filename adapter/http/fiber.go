@@ -11,11 +11,17 @@ import (
 	"go.uber.org/fx"
 )
 
-var FiberProvider = fx.Options(
-	fx.Provide(NewFiber),
-	fx.Invoke(HookFiber),
-	fx.Provide(NewPromProbe),
-	fx.Provide(func(probe *PromProbe) Probe { return probe }),
+var (
+	FiberModule = fx.Module("fiber", FiberProviders, FiberInvokes)
+
+	FiberProviders = fx.Options(
+		fx.Provide(NewFiber),
+		fx.Provide(NewPromProbe),
+		fx.Provide(func(probe *PromProbe) Probe { return probe }),
+	)
+	FiberInvokes = fx.Options(
+		fx.Invoke(HookFiber),
+	)
 )
 
 type Probe interface {

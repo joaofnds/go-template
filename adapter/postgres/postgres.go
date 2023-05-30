@@ -12,12 +12,17 @@ import (
 	gormlogger "gorm.io/gorm/logger"
 )
 
-var Module = fx.Module(
-	"postgres",
-	fx.Provide(NewGORMDB),
-	fx.Provide(NewSQLDB),
-	fx.Provide(NewHealthChecker),
-	fx.Invoke(HookConnection),
+var (
+	Module = fx.Module("postgres", Providers, Invokes)
+
+	Providers = fx.Options(
+		fx.Provide(NewGORMDB),
+		fx.Provide(NewSQLDB),
+		fx.Provide(NewHealthChecker),
+	)
+	Invokes = fx.Options(
+		fx.Invoke(HookConnection),
+	)
 )
 
 func NewGORMDB(postgresConfig Config, logger *zap.Logger) (*gorm.DB, error) {

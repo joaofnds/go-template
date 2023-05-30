@@ -48,7 +48,7 @@ var _ = Describe("/users", Ordered, func() {
 			test.Transaction,
 			test.AvailablePortProvider,
 			config.Module,
-			apphttp.FiberProvider,
+			apphttp.FiberModule,
 			validation.Module,
 			postgres.Module,
 			usermodule.Module,

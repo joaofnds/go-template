@@ -42,7 +42,7 @@ var _ = Describe("/health", Ordered, func() {
 				config.Module,
 				redis.Module,
 				postgres.Module,
-				apphttp.FiberProvider,
+				apphttp.FiberModule,
 				health.Module,
 				fx.Invoke(func(app *fiber.App, controller *health.Controller) {
 					controller.Register(app)
@@ -82,7 +82,7 @@ var _ = Describe("/health", Ordered, func() {
 				apphttp.NopProbeProvider,
 				test.AvailablePortProvider,
 				config.Module,
-				apphttp.FiberProvider,
+				apphttp.FiberModule,
 				health.Module,
 				fx.Invoke(func(app *fiber.App, controller *health.Controller) {
 					controller.Register(app)

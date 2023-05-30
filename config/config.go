@@ -13,15 +13,20 @@ import (
 	"go.uber.org/zap"
 )
 
-var Module = fx.Module(
-	"config",
-	fx.Invoke(LoadConfig),
-	fx.Provide(NewAppConfig),
-	fx.Provide(func(config AppConfig) http.Config { return config.HTTP }),
-	fx.Provide(func(config AppConfig) metrics.Config { return config.Metrics }),
-	fx.Provide(func(config AppConfig) postgres.Config { return config.Postgres }),
-	fx.Provide(func(config AppConfig) mongo.Config { return config.Mongo }),
-	fx.Provide(func(config AppConfig) redis.Config { return config.Redis }),
+var (
+	Module = fx.Module("config", Providers, Invokes)
+
+	Providers = fx.Options(
+		fx.Provide(NewAppConfig),
+		fx.Provide(func(config AppConfig) http.Config { return config.HTTP }),
+		fx.Provide(func(config AppConfig) metrics.Config { return config.Metrics }),
+		fx.Provide(func(config AppConfig) postgres.Config { return config.Postgres }),
+		fx.Provide(func(config AppConfig) mongo.Config { return config.Mongo }),
+		fx.Provide(func(config AppConfig) redis.Config { return config.Redis }),
+	)
+	Invokes = fx.Options(
+		fx.Invoke(LoadConfig),
+	)
 )
 
 type AppConfig struct {
