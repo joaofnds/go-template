@@ -19,8 +19,9 @@ func (service *Service) CreateUser(ctx context.Context, name string) (User, erro
 	err := service.repo.CreateUser(ctx, user)
 	if err != nil {
 		service.emitter.FailedToCreateUser(err)
+	} else {
+		service.emitter.UserCreated(user)
 	}
-	service.emitter.UserCreated(user)
 
 	return user, err
 }
