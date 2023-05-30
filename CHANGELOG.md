@@ -1,3 +1,29 @@
+## [1.21.0](https://github.com/joaofnds/go-template/compare/v1.20.2...v1.21.0) (2023-05-30)
+
+
+### Feature
+
+* **migrate:** print goose errors ([f32c3d5](https://github.com/joaofnds/go-template/commit/f32c3d50aac1ba97221a970659bcd3c30aaa7780))
+
+
+### Chore
+
+* fix gitignore ([9f8d0ad](https://github.com/joaofnds/go-template/commit/9f8d0adb438e5e9b1404e71ac999baeacd6e6dbd))
+* update gitignore ([8201535](https://github.com/joaofnds/go-template/commit/8201535f39890fadaf64d28951736d185af0a6b8))
+
+
+### Refactor
+
+* move viper env binds to init ([48969d6](https://github.com/joaofnds/go-template/commit/48969d69c1f2bb88a1ca17a4c7620e1f0e45082f))
+* split modules into providers and invokes ([ea22204](https://github.com/joaofnds/go-template/commit/ea22204e4c1115567bd1c024c2273fd7ca2792d0))
+* **test:** inline api and split driver ([f5b4e51](https://github.com/joaofnds/go-template/commit/f5b4e51732523d4513105e7d9373c9d7ffbb9784))
+
+
+### Fix
+
+* **migrate:** fix create command ([e840199](https://github.com/joaofnds/go-template/commit/e840199aed758bb9679190d2fe13d5eca40bbb0a))
+* **user:** fix created user report ([86354b7](https://github.com/joaofnds/go-template/commit/86354b7f62413f152dbdde9c039dc689b14c54eb))
+
 ## [1.20.2](https://github.com/joaofnds/go-template/compare/v1.20.1...v1.20.2) (2023-05-27)
 
 
