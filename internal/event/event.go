@@ -21,7 +21,7 @@ func On[T any](f Handler[T]) {
 	listeners[name] = append(listeners[name], wrap(f))
 }
 
-func Send[T any](t T) {
+func Emit[T any](t T) {
 	name := fmt.Sprintf("%T", t)
 
 	lock.RLock()
