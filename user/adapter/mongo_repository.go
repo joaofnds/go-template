@@ -17,29 +17,29 @@ func NewMongoRepository(client *mongo.Client) *MongoRepository {
 	return &MongoRepository{client.Database("template").Collection("users")}
 }
 
-func (repo *MongoRepository) CreateUser(ctx context.Context, user user.User) error {
-	_, err := repo.collection.InsertOne(ctx, user)
+func (repository *MongoRepository) CreateUser(ctx context.Context, newUser user.User) error {
+	_, err := repository.collection.InsertOne(ctx, newUser)
 	return translateErr(err)
 }
 
-func (repo *MongoRepository) FindByName(ctx context.Context, name string) (user.User, error) {
-	var user user.User
-	result := repo.collection.FindOne(ctx, bson.M{"name": name})
-	return user, translateErr(result.Decode(&user))
+func (repository *MongoRepository) FindByName(ctx context.Context, name string) (user.User, error) {
+	var userFound user.User
+	result := repository.collection.FindOne(ctx, bson.M{"name": name})
+	return userFound, translateErr(result.Decode(&userFound))
 }
 
-func (repo *MongoRepository) Delete(ctx context.Context, user user.User) error {
-	_, err := repo.collection.DeleteOne(ctx, bson.M{"name": user.Name})
+func (repository *MongoRepository) Delete(ctx context.Context, userToDelete user.User) error {
+	_, err := repository.collection.DeleteOne(ctx, bson.M{"name": userToDelete.Name})
 	return translateErr(err)
 }
 
-func (repo *MongoRepository) DeleteAll(ctx context.Context) error {
-	_, err := repo.collection.DeleteMany(ctx, bson.M{})
+func (repository *MongoRepository) DeleteAll(ctx context.Context) error {
+	_, err := repository.collection.DeleteMany(ctx, bson.M{})
 	return translateErr(err)
 }
 
-func (repo *MongoRepository) All(ctx context.Context) ([]user.User, error) {
-	cursor, err := repo.collection.Find(ctx, bson.M{})
+func (repository *MongoRepository) All(ctx context.Context) ([]user.User, error) {
+	cursor, err := repository.collection.Find(ctx, bson.M{})
 	if err != nil {
 		return nil, translateErr(err)
 	}

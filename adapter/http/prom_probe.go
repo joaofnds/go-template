@@ -30,12 +30,12 @@ func NewPromProbe() *PromProbe {
 	}
 }
 
-func (p *PromProbe) Middleware(ctx *fiber.Ctx) error {
-	defer p.LogReq(ctx)
+func (probe *PromProbe) Middleware(ctx *fiber.Ctx) error {
+	defer probe.LogReq(ctx)
 	return ctx.Next()
 }
 
-func (p *PromProbe) LogReq(ctx *fiber.Ctx) {
+func (probe *PromProbe) LogReq(ctx *fiber.Ctx) {
 	labels := prometheus.Labels{
 		lblIP:     ctx.IP(),
 		lblMethod: ctx.Route().Method,
@@ -43,5 +43,5 @@ func (p *PromProbe) LogReq(ctx *fiber.Ctx) {
 		lblStatus: strconv.Itoa(ctx.Response().StatusCode()),
 	}
 
-	p.req.With(labels).Inc()
+	probe.req.With(labels).Inc()
 }

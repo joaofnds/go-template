@@ -19,9 +19,9 @@ func NewHealthService(
 	return &Service{postgresHealth: postgresHealth, redisHealth: redisHealth}
 }
 
-func (s *Service) CheckHealth(ctx context.Context) Check {
+func (service *Service) CheckHealth(ctx context.Context) Check {
 	return Check{
-		"postgres": NewStatus(s.postgresHealth.CheckHealth(ctx)),
-		"redis":    NewStatus(s.redisHealth.CheckHealth(ctx)),
+		"postgres": NewStatus(service.postgresHealth.CheckHealth(ctx)),
+		"redis":    NewStatus(service.redisHealth.CheckHealth(ctx)),
 	}
 }

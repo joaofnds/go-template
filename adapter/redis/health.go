@@ -14,6 +14,6 @@ func NewHealthChecker(client *redis.Client) HealthChecker {
 	return HealthChecker{client}
 }
 
-func (c HealthChecker) CheckHealth(ctx context.Context) error {
-	return c.client.Ping(ctx).Err()
+func (healthChecker HealthChecker) CheckHealth(ctx context.Context) error {
+	return healthChecker.client.Ping(ctx).Err()
 }

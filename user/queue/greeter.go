@@ -17,25 +17,25 @@ func NewGreeter(client *asynq.Client) *Greeter {
 	return &Greeter{client: client}
 }
 
-func (g *Greeter) Listen() {
-	event.On(func(e user.UserCreated) { _ = g.Enqueue(e.User.Name) })
+func (greeter *Greeter) Listen() {
+	event.On(func(e user.UserCreated) { _ = greeter.Enqueue(e.User.Name) })
 }
 
-func (g *Greeter) Type() string {
+func (greeter *Greeter) Type() string {
 	return "greet"
 }
 
-func (g *Greeter) Register(mux *asynq.ServeMux) {
-	mux.Handle(g.Type(), g)
+func (greeter *Greeter) Register(mux *asynq.ServeMux) {
+	mux.Handle(greeter.Type(), greeter)
 }
 
-func (g *Greeter) Enqueue(userName string) error {
-	task := asynq.NewTask(g.Type(), []byte(userName))
-	_, err := g.client.Enqueue(task)
+func (greeter *Greeter) Enqueue(userName string) error {
+	task := asynq.NewTask(greeter.Type(), []byte(userName))
+	_, err := greeter.client.Enqueue(task)
 	return err
 }
 
-func (g *Greeter) ProcessTask(_ context.Context, task *asynq.Task) error {
+func (greeter *Greeter) ProcessTask(_ context.Context, task *asynq.Task) error {
 	fmt.Printf("[%s] A new user just signed up, welcome %s!\n", task.ResultWriter().TaskID(), task.Payload())
 	return nil
 }

@@ -9,6 +9,6 @@ var NopProbeProvider = fx.Decorate(func() Probe { return NopProbe{} })
 
 type NopProbe struct{}
 
-func (p NopProbe) Middleware(ctx *fiber.Ctx) error {
+func (probe NopProbe) Middleware(ctx *fiber.Ctx) error {
 	return ctx.Next()
 }

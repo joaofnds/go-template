@@ -23,31 +23,31 @@ func NewPromProbe(logger *zap.Logger) *PromProbe {
 	}
 }
 
-func (p *PromProbe) Listen() {
-	event.On(func(e user.UserCreated) { p.UserCreated(e.User) })
-	event.On(func(e user.FailedToCreateUser) { p.FailedToCreateUser(e.Err) })
-	event.On(func(e user.FailedToDeleteAll) { p.FailedToDeleteAll(e.Err) })
-	event.On(func(e user.FailedToFindByName) { p.FailedToFindByName(e.Err) })
-	event.On(func(e user.FailedToRemoveUser) { p.FailedToRemoveUser(e.Err, e.User) })
+func (probe *PromProbe) Listen() {
+	event.On(func(event user.UserCreated) { probe.UserCreated(event.User) })
+	event.On(func(event user.FailedToCreateUser) { probe.FailedToCreateUser(event.Err) })
+	event.On(func(event user.FailedToDeleteAll) { probe.FailedToDeleteAll(event.Err) })
+	event.On(func(event user.FailedToFindByName) { probe.FailedToFindByName(event.Err) })
+	event.On(func(event user.FailedToRemoveUser) { probe.FailedToRemoveUser(event.Err, event.User) })
 }
 
-func (p *PromProbe) UserCreated(user.User) {
-	p.usersCreated.Inc()
+func (probe *PromProbe) UserCreated(_ user.User) {
+	probe.usersCreated.Inc()
 }
 
-func (p *PromProbe) FailedToCreateUser(err error) {
-	p.logger.Error("failed to create user", zap.Error(err))
-	p.usersCreateFailed.Inc()
+func (probe *PromProbe) FailedToCreateUser(err error) {
+	probe.logger.Error("failed to create user", zap.Error(err))
+	probe.usersCreateFailed.Inc()
 }
 
-func (p *PromProbe) FailedToDeleteAll(err error) {
-	p.logger.Error("failed to delete all", zap.Error(err))
+func (probe *PromProbe) FailedToDeleteAll(err error) {
+	probe.logger.Error("failed to delete all", zap.Error(err))
 }
 
-func (p *PromProbe) FailedToFindByName(err error) {
-	p.logger.Error("failed to find user by name", zap.Error(err))
+func (probe *PromProbe) FailedToFindByName(err error) {
+	probe.logger.Error("failed to find user by name", zap.Error(err))
 }
 
-func (p *PromProbe) FailedToRemoveUser(err error, user user.User) {
-	p.logger.Error("failed to remove user", zap.Error(err), zap.String("name", user.Name))
+func (probe *PromProbe) FailedToRemoveUser(err error, failedUser user.User) {
+	probe.logger.Error("failed to remove user", zap.Error(err), zap.String("name", failedUser.Name))
 }

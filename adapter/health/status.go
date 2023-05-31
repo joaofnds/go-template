@@ -16,6 +16,6 @@ func NewStatus(err error) Status {
 	return Status{Status: StatusUp}
 }
 
-func (s Status) IsUp() bool {
-	return s.Status == StatusUp
+func (status Status) IsUp() bool {
+	return status.Status == StatusUp
 }

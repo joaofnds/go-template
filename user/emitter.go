@@ -6,22 +6,22 @@ type Emitter struct{}
 
 func NewEventEmitter() Emitter { return Emitter{} }
 
-func (e Emitter) UserCreated(u User) {
-	event.Emit(UserCreated{User: u})
+func (emitter Emitter) UserCreated(user User) {
+	event.Emit(UserCreated{User: user})
 }
 
-func (e Emitter) FailedToCreateUser(err error) {
+func (emitter Emitter) FailedToCreateUser(err error) {
 	event.Emit(FailedToCreateUser{Err: err})
 }
 
-func (e Emitter) FailedToDeleteAll(err error) {
+func (emitter Emitter) FailedToDeleteAll(err error) {
 	event.Emit(FailedToDeleteAll{Err: err})
 }
 
-func (e Emitter) FailedToFindByName(err error) {
+func (emitter Emitter) FailedToFindByName(err error) {
 	event.Emit(FailedToFindByName{Err: err})
 }
 
-func (e Emitter) FailedToRemoveUser(err error, u User) {
-	event.Emit(FailedToRemoveUser{Err: err, User: u})
+func (emitter Emitter) FailedToRemoveUser(err error, user User) {
+	event.Emit(FailedToRemoveUser{Err: err, User: user})
 }

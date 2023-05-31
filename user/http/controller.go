@@ -18,15 +18,15 @@ type Controller struct {
 	validator *validator.Validate
 }
 
-func (c *Controller) Register(app *fiber.App) {
-	app.Post("/users", c.Create)
-	app.Get("/users", c.List)
-	app.Get("/users/:name", c.Get)
-	app.Delete("/users/:name", c.Delete)
+func (controller *Controller) Register(app *fiber.App) {
+	app.Post("/users", controller.Create)
+	app.Get("/users", controller.List)
+	app.Get("/users/:name", controller.Get)
+	app.Delete("/users/:name", controller.Delete)
 }
 
-func (c *Controller) List(ctx *fiber.Ctx) error {
-	users, err := c.service.List(ctx.Context())
+func (controller *Controller) List(ctx *fiber.Ctx) error {
+	users, err := controller.service.List(ctx.Context())
 	if err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
@@ -34,13 +34,13 @@ func (c *Controller) List(ctx *fiber.Ctx) error {
 	return ctx.JSON(users)
 }
 
-func (c *Controller) Create(ctx *fiber.Ctx) error {
-	var dto UserCreateDTO
-	if err := ctx.BodyParser(&dto); err != nil {
+func (controller *Controller) Create(ctx *fiber.Ctx) error {
+	var body UserCreateDTO
+	if err := ctx.BodyParser(&body); err != nil {
 		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	if err := c.validator.Struct(dto); err != nil {
+	if err := controller.validator.Struct(body); err != nil {
 		var errorMessages []string
 		for _, err := range err.(validator.ValidationErrors) {
 			errorMessages = append(errorMessages, err.Error())
@@ -48,21 +48,21 @@ func (c *Controller) Create(ctx *fiber.Ctx) error {
 		return ctx.Status(http.StatusBadRequest).JSON(fiber.Map{"errors": errorMessages})
 	}
 
-	u, err := c.service.CreateUser(ctx.Context(), dto.Name)
+	createdUser, err := controller.service.CreateUser(ctx.Context(), body.Name)
 	if err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 
-	return ctx.Status(http.StatusCreated).JSON(u)
+	return ctx.Status(http.StatusCreated).JSON(createdUser)
 }
 
-func (c *Controller) Get(ctx *fiber.Ctx) error {
+func (controller *Controller) Get(ctx *fiber.Ctx) error {
 	name := ctx.Params("name")
 	if name == "" {
 		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	u, err := c.service.FindByName(ctx.Context(), name)
+	userFound, err := controller.service.FindByName(ctx.Context(), name)
 	if err != nil {
 		if errors.Is(err, user.ErrNotFound) {
 			return ctx.SendStatus(http.StatusNotFound)
@@ -71,16 +71,16 @@ func (c *Controller) Get(ctx *fiber.Ctx) error {
 		}
 	}
 
-	return ctx.JSON(u)
+	return ctx.JSON(userFound)
 }
 
-func (c *Controller) Delete(ctx *fiber.Ctx) error {
+func (controller *Controller) Delete(ctx *fiber.Ctx) error {
 	name := ctx.Params("name")
 	if name == "" {
 		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	u, err := c.service.FindByName(ctx.Context(), name)
+	userFound, err := controller.service.FindByName(ctx.Context(), name)
 	if err != nil {
 		if errors.Is(err, user.ErrNotFound) {
 			return ctx.SendStatus(http.StatusNotFound)
@@ -89,7 +89,7 @@ func (c *Controller) Delete(ctx *fiber.Ctx) error {
 		}
 	}
 
-	err = c.service.Remove(ctx.Context(), u)
+	err = controller.service.Remove(ctx.Context(), userFound)
 	if err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}

@@ -15,19 +15,19 @@ func NewController(store Store) *Controller {
 	return &Controller{store}
 }
 
-func (c *Controller) Register(app *fiber.App) {
-	app.Get("/kv/:key", c.Get)
-	app.Post("/kv/:key/:val", c.Set)
-	app.Delete("/kv/:key", c.Delete)
+func (controller *Controller) Register(app *fiber.App) {
+	app.Get("/kv/:key", controller.Get)
+	app.Post("/kv/:key/:val", controller.Set)
+	app.Delete("/kv/:key", controller.Delete)
 }
 
-func (c *Controller) Get(ctx *fiber.Ctx) error {
+func (controller *Controller) Get(ctx *fiber.Ctx) error {
 	key := ctx.Params("key")
 	if key == "" {
 		return fiber.NewError(http.StatusBadRequest, "missing key")
 	}
 
-	val, err := c.store.Get(ctx.Context(), key)
+	val, err := controller.store.Get(ctx.Context(), key)
 	if err != nil {
 		if errors.Is(err, ErrNotFound) {
 			return fiber.NewError(http.StatusNotFound, err.Error())
@@ -38,7 +38,7 @@ func (c *Controller) Get(ctx *fiber.Ctx) error {
 	return ctx.Status(http.StatusOK).Send([]byte(val))
 }
 
-func (c *Controller) Set(ctx *fiber.Ctx) error {
+func (controller *Controller) Set(ctx *fiber.Ctx) error {
 	key := ctx.Params("key")
 	if key == "" {
 		return fiber.NewError(http.StatusBadRequest, "missing key")
@@ -49,7 +49,7 @@ func (c *Controller) Set(ctx *fiber.Ctx) error {
 		return fiber.NewError(http.StatusBadRequest, "missing val")
 	}
 
-	err := c.store.Set(ctx.Context(), key, val)
+	err := controller.store.Set(ctx.Context(), key, val)
 	if err != nil {
 		return fiber.NewError(http.StatusInternalServerError, "failed to delete key")
 	}
@@ -57,13 +57,13 @@ func (c *Controller) Set(ctx *fiber.Ctx) error {
 	return ctx.SendStatus(http.StatusCreated)
 }
 
-func (c *Controller) Delete(ctx *fiber.Ctx) error {
+func (controller *Controller) Delete(ctx *fiber.Ctx) error {
 	key := ctx.Params("key")
 	if key == "" {
 		return fiber.NewError(http.StatusBadRequest, "missing key param")
 	}
 
-	if err := c.store.Del(ctx.Context(), key); err != nil {
+	if err := controller.store.Del(ctx.Context(), key); err != nil {
 		return fiber.NewError(http.StatusInternalServerError, "failed to delete key")
 	}
 

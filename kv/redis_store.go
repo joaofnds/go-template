@@ -17,12 +17,12 @@ func NewRedisStore(client *redis.Client) *RedisStore {
 	return &RedisStore{client}
 }
 
-func (s *RedisStore) Set(ctx context.Context, key, value string) error {
-	return s.client.Set(ctx, key, value, 0).Err()
+func (store *RedisStore) Set(ctx context.Context, key, value string) error {
+	return store.client.Set(ctx, key, value, 0).Err()
 }
 
-func (s *RedisStore) Get(ctx context.Context, key string) (string, error) {
-	cmd := s.client.Get(ctx, key)
+func (store *RedisStore) Get(ctx context.Context, key string) (string, error) {
+	cmd := store.client.Get(ctx, key)
 	if cmd.Err() != nil {
 		return "", ErrNotFound
 	}
@@ -30,6 +30,6 @@ func (s *RedisStore) Get(ctx context.Context, key string) (string, error) {
 	return cmd.Val(), nil
 }
 
-func (s *RedisStore) Del(ctx context.Context, key string) error {
-	return s.client.Del(ctx, key).Err()
+func (store *RedisStore) Del(ctx context.Context, key string) error {
+	return store.client.Del(ctx, key).Err()
 }

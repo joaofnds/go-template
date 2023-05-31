@@ -8,8 +8,8 @@ type Checker interface {
 
 type Check map[string]Status
 
-func (c Check) AllUp() bool {
-	for _, status := range c {
+func (check Check) AllUp() bool {
+	for _, status := range check {
 		if !status.IsUp() {
 			return false
 		}

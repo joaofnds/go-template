@@ -13,6 +13,6 @@ func NewHealthChecker(client *sql.DB) HealthChecker {
 	return HealthChecker{client}
 }
 
-func (c HealthChecker) CheckHealth(ctx context.Context) error {
-	return c.client.PingContext(ctx)
+func (healthChecker HealthChecker) CheckHealth(ctx context.Context) error {
+	return healthChecker.client.PingContext(ctx)
 }

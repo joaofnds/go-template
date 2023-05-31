@@ -16,26 +16,26 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 	return &PostgresRepository{db}
 }
 
-func (repo *PostgresRepository) CreateUser(ctx context.Context, user user.User) error {
-	return gormErr(repo.db.WithContext(ctx).Exec("INSERT INTO users(name) VALUES(?)", user.Name))
+func (repository *PostgresRepository) CreateUser(ctx context.Context, newUser user.User) error {
+	return gormErr(repository.db.WithContext(ctx).Exec("INSERT INTO users(name) VALUES(?)", newUser.Name))
 }
 
-func (repo *PostgresRepository) FindByName(ctx context.Context, name string) (user.User, error) {
-	var user user.User
-	return user, gormErr(repo.db.WithContext(ctx).First(&user, "name = ?", name))
+func (repository *PostgresRepository) FindByName(ctx context.Context, name string) (user.User, error) {
+	var userFound user.User
+	return userFound, gormErr(repository.db.WithContext(ctx).First(&userFound, "name = ?", name))
 }
 
-func (repo *PostgresRepository) Delete(ctx context.Context, user user.User) error {
-	return gormErr(repo.db.WithContext(ctx).Exec("DELETE FROM users WHERE name = ?", user.Name))
+func (repository *PostgresRepository) Delete(ctx context.Context, userToDelete user.User) error {
+	return gormErr(repository.db.WithContext(ctx).Exec("DELETE FROM users WHERE name = ?", userToDelete.Name))
 }
 
-func (repo *PostgresRepository) DeleteAll(ctx context.Context) error {
-	return gormErr(repo.db.WithContext(ctx).Exec("DELETE FROM users"))
+func (repository *PostgresRepository) DeleteAll(ctx context.Context) error {
+	return gormErr(repository.db.WithContext(ctx).Exec("DELETE FROM users"))
 }
 
-func (repo *PostgresRepository) All(ctx context.Context) ([]user.User, error) {
+func (repository *PostgresRepository) All(ctx context.Context) ([]user.User, error) {
 	var users []user.User
-	return users, gormErr(repo.db.WithContext(ctx).Find(&users))
+	return users, gormErr(repository.db.WithContext(ctx).Find(&users))
 }
 
 func gormErr(result *gorm.DB) error {

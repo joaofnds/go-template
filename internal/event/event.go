@@ -12,26 +12,26 @@ var (
 
 type Handler[T any] func(t T)
 
-func On[T any](f Handler[T]) {
+func On[T any](handler Handler[T]) {
 	name := fmt.Sprintf("%T", *new(T))
 
 	lock.Lock()
 	defer lock.Unlock()
 
-	listeners[name] = append(listeners[name], wrap(f))
+	listeners[name] = append(listeners[name], wrap(handler))
 }
 
-func Emit[T any](t T) {
-	name := fmt.Sprintf("%T", t)
+func Emit[T any](value T) {
+	name := fmt.Sprintf("%T", value)
 
 	lock.RLock()
 	defer lock.RUnlock()
 
 	for _, l := range listeners[name] {
-		go l(t)
+		go l(value)
 	}
 }
 
-func wrap[T any](f Handler[T]) Handler[any] {
-	return func(t any) { f(t.(T)) }
+func wrap[T any](handler Handler[T]) Handler[any] {
+	return func(value any) { handler(value.(T)) }
 }

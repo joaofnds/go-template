@@ -14,6 +14,6 @@ func NewHealthChecker(client *mongo.Client) HealthChecker {
 	return HealthChecker{client}
 }
 
-func (h HealthChecker) CheckHealth(ctx context.Context) error {
-	return h.client.Ping(ctx, nil)
+func (healthChecker HealthChecker) CheckHealth(ctx context.Context) error {
+	return healthChecker.client.Ping(ctx, nil)
 }
