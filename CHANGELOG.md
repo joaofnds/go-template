@@ -1,3 +1,11 @@
+## [1.21.1](https://github.com/joaofnds/go-template/compare/v1.21.0...v1.21.1) (2023-05-31)
+
+
+### Refactor
+
+* **event:** rename `Send` to `Emit` ([e7bac00](https://github.com/joaofnds/go-template/commit/e7bac00114bcad56c1233e30c2a79293ec9ba8f3))
+* expand receiver names ([209b023](https://github.com/joaofnds/go-template/commit/209b023e9a6150a9f1bef639cdd8546c8d8e6ecf))
+
 ## [1.21.0](https://github.com/joaofnds/go-template/compare/v1.20.2...v1.21.0) (2023-05-30)
 
 
