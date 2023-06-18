@@ -10,7 +10,6 @@ import (
 	"app/adapter/queue"
 	"app/adapter/redis"
 	"app/adapter/validation"
-
 	"app/config"
 	"app/kv"
 	user "app/user/module"

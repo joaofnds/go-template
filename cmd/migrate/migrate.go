@@ -1,15 +1,16 @@
 package main
 
 import (
-	"app/adapter/logger"
-	"app/adapter/postgres"
-	"app/config"
 	"context"
 	"database/sql"
 	"embed"
 	"fmt"
 	"os"
 	"strings"
+
+	"app/adapter/logger"
+	"app/adapter/postgres"
+	"app/config"
 
 	"github.com/pressly/goose/v3"
 	"go.uber.org/fx"
