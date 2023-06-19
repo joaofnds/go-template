@@ -1,3 +1,10 @@
+## [1.22.1](https://github.com/joaofnds/go-template/compare/v1.22.0...v1.22.1) (2023-06-19)
+
+
+### Chore
+
+* add `flags` locals ([a185d02](https://github.com/joaofnds/go-template/commit/a185d0267daa66d038c339c8c67ecbf374982ddc))
+
 ## [1.22.0](https://github.com/joaofnds/go-template/compare/v1.21.1...v1.22.0) (2023-06-19)
 
 
