@@ -66,7 +66,7 @@ func (controller *Controller) Get(ctx *fiber.Ctx) error {
 }
 
 func (controller *Controller) GetFeature(ctx *fiber.Ctx) error {
-	return ctx.JSON(fiber.Map{"cool-feature": ctx.Locals("flag.cool-feature")})
+	return ctx.JSON(ctx.Locals("flags"))
 }
 
 func (controller *Controller) Delete(ctx *fiber.Ctx) error {

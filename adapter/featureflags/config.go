@@ -12,6 +12,5 @@ type Config struct {
 }
 
 func (c Config) Retrieve(context.Context) ([]byte, error) {
-	b, err := json.Marshal(c.Flags)
-	return b, err
+	return json.Marshal(c.Flags)
 }

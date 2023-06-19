@@ -51,14 +51,18 @@ func ForUser(u user.User) (map[string]any, error) {
 }
 
 func Middleware(ctx *fiber.Ctx) error {
-	u := ctx.Locals("user").(user.User)
-	flags, err := ForUser(u)
+	if ctx.Locals("user") == nil {
+		return ctx.Next()
+	}
+
+	flags, err := ForUser(ctx.Locals("user").(user.User))
 	if err != nil {
 		return fiber.ErrInternalServerError
 	}
 
+	ctx.Locals("flags", flags)
 	for name, value := range flags {
-		ctx.Locals("flag."+name, value)
+		ctx.Locals("flags."+name, value)
 	}
 	return ctx.Next()
 }
