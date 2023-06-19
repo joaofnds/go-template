@@ -1,3 +1,15 @@
+## [1.22.0](https://github.com/joaofnds/go-template/compare/v1.21.1...v1.22.0) (2023-06-19)
+
+
+### Feature
+
+* add feature flags ([e110f6f](https://github.com/joaofnds/go-template/commit/e110f6fbf58e436de58bd5d888e8f99033f66a0f))
+
+
+### Refactor
+
+* move imports ([6f1c3cf](https://github.com/joaofnds/go-template/commit/6f1c3cfd95029b6d959f8fdc0b22d6945b37e233))
+
 ## [1.21.1](https://github.com/joaofnds/go-template/compare/v1.21.0...v1.21.1) (2023-05-31)
 
 
