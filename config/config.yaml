@@ -6,6 +6,17 @@ http:
     expiration: 1s
 metrics:
   addr: localhost:9091
+feature_flags:
+  polling_interval: 15s
+  flags:
+    cool-feature:
+      variations:
+        on: "on"
+        off: "off"
+      defaultRule:
+        percentage:
+          on: 50
+          off: 50
 postgres:
   uri: postgres://postgres:postgres@localhost:5432/template?sslmode=disable
 mongo:

@@ -5,6 +5,7 @@
 - [Logging](adapter/logger/logger.go#L10) with [Zap](https://github.com/uber-go/zap)
 - [Metrics](adapter/metrics/metrics.go#L22) with [Prometheus](https://github.com/prometheus/client_golang)
 - [Health checks](adapter/health/controller.go#L18)
+- [Feature](adapter/featureflags/featureflags.go#L23) [flags](user/http/controller.go#L69) with [Go Feature Flag](https://github.com/thomaspoignant/go-feature-flag)
 - [Validation](user/http/dto.go#L4) with [Validator](https://github.com/go-playground/validator)
 - [HTTP](adapter/http/fiber.go#L26) with [Fiber](https://github.com/gofiber/fiber)
 - [Background](adapter/queue/client.go#L12) [tasks](user/queue/greeter.go#L33)/[workers](cmd/worker/worker.go#L14) with [Asynq](https://github.com/hibiken/asynq)

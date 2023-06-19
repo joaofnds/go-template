@@ -1,6 +1,7 @@
 package config
 
 import (
+	"app/adapter/featureflags"
 	"app/adapter/http"
 	"app/adapter/metrics"
 	"app/adapter/mongo"
@@ -23,6 +24,7 @@ var (
 		fx.Provide(func(config AppConfig) postgres.Config { return config.Postgres }),
 		fx.Provide(func(config AppConfig) mongo.Config { return config.Mongo }),
 		fx.Provide(func(config AppConfig) redis.Config { return config.Redis }),
+		fx.Provide(func(config AppConfig) featureflags.Config { return config.FeatureFlags }),
 	)
 	Invokes = fx.Options(
 		fx.Invoke(LoadConfig),
@@ -30,12 +32,13 @@ var (
 )
 
 type AppConfig struct {
-	Env      string          `mapstructure:"env"`
-	HTTP     http.Config     `mapstructure:"http"`
-	Metrics  metrics.Config  `mapstructure:"metrics"`
-	Postgres postgres.Config `mapstructure:"postgres"`
-	Mongo    mongo.Config    `mapstructure:"mongo"`
-	Redis    redis.Config    `mapstructure:"redis"`
+	Env          string              `mapstructure:"env"`
+	HTTP         http.Config         `mapstructure:"http"`
+	Metrics      metrics.Config      `mapstructure:"metrics"`
+	Postgres     postgres.Config     `mapstructure:"postgres"`
+	Mongo        mongo.Config        `mapstructure:"mongo"`
+	Redis        redis.Config        `mapstructure:"redis"`
+	FeatureFlags featureflags.Config `mapstructure:"feature_flags"`
 }
 
 func LoadConfig(logger *zap.Logger) error {

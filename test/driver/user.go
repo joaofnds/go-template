@@ -73,3 +73,18 @@ func (d *UserDriver) DeleteUser(name string) error {
 		},
 	})
 }
+
+func (d *UserDriver) GetFeature(name string) (map[string]any, error) {
+	var features map[string]any
+
+	return features, makeJSONRequest(params{
+		into:   &features,
+		status: http.StatusOK,
+		req: func() (*http.Response, error) {
+			return req.Get(
+				d.url+"/users/"+name+"/feature",
+				map[string]string{"Accept": "application/json"},
+			)
+		},
+	})
+}

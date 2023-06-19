@@ -2,6 +2,7 @@ package main
 
 import (
 	"app/adapter/event"
+	"app/adapter/featureflags"
 	"app/adapter/health"
 	"app/adapter/http"
 	"app/adapter/logger"
@@ -24,6 +25,7 @@ func main() {
 		metrics.Module,
 		health.Module,
 		validation.Module,
+		featureflags.Module,
 
 		event.Module,
 		queue.ClientModule,

@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"testing"
 
+	"app/adapter/featureflags"
 	apphttp "app/adapter/http"
 	"app/adapter/logger"
 	"app/adapter/postgres"
@@ -48,6 +49,7 @@ var _ = Describe("/users", Ordered, func() {
 			test.Transaction,
 			test.AvailablePortProvider,
 			config.Module,
+			featureflags.Module,
 			apphttp.FiberModule,
 			validation.Module,
 			postgres.Module,
@@ -94,5 +96,15 @@ var _ = Describe("/users", Ordered, func() {
 
 		users := Must2(app.User.ListUsers())
 		Expect(users).To(Equal([]user.User{bob}))
+	})
+
+	It("switches feature flag", func() {
+		bob := Must2(app.User.CreateUser("bob"))
+		bobFeatures := Must2(app.User.GetFeature(bob.Name))
+		Expect(bobFeatures).To(Equal(map[string]any{"cool-feature": "on"}))
+
+		frank := Must2(app.User.CreateUser("frank"))
+		frankFeatures := Must2(app.User.GetFeature(frank.Name))
+		Expect(frankFeatures).To(Equal(map[string]any{"cool-feature": "off"}))
 	})
 })

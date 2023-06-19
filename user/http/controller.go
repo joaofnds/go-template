@@ -1,9 +1,11 @@
 package http
 
 import (
-	"app/user"
 	"errors"
 	"net/http"
+
+	"app/adapter/featureflags"
+	"app/user"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -21,8 +23,11 @@ type Controller struct {
 func (controller *Controller) Register(app *fiber.App) {
 	app.Post("/users", controller.Create)
 	app.Get("/users", controller.List)
-	app.Get("/users/:name", controller.Get)
-	app.Delete("/users/:name", controller.Delete)
+
+	userGroup := app.Group("/users/:name", controller.middlewareGetUser)
+	userGroup.Get("/", controller.Get)
+	userGroup.Delete("/", controller.Delete)
+	userGroup.Get("/feature", featureflags.Middleware, controller.GetFeature)
 }
 
 func (controller *Controller) List(ctx *fiber.Ctx) error {
@@ -57,42 +62,38 @@ func (controller *Controller) Create(ctx *fiber.Ctx) error {
 }
 
 func (controller *Controller) Get(ctx *fiber.Ctx) error {
-	name := ctx.Params("name")
-	if name == "" {
-		return ctx.SendStatus(http.StatusBadRequest)
-	}
+	return ctx.JSON(ctx.Locals("user"))
+}
 
-	userFound, err := controller.service.FindByName(ctx.Context(), name)
-	if err != nil {
-		if errors.Is(err, user.ErrNotFound) {
-			return ctx.SendStatus(http.StatusNotFound)
-		} else {
-			return ctx.SendStatus(http.StatusInternalServerError)
-		}
-	}
-
-	return ctx.JSON(userFound)
+func (controller *Controller) GetFeature(ctx *fiber.Ctx) error {
+	return ctx.JSON(fiber.Map{"cool-feature": ctx.Locals("flag.cool-feature")})
 }
 
 func (controller *Controller) Delete(ctx *fiber.Ctx) error {
-	name := ctx.Params("name")
-	if name == "" {
-		return ctx.SendStatus(http.StatusBadRequest)
-	}
+	userFound := ctx.Locals("user").(user.User)
 
-	userFound, err := controller.service.FindByName(ctx.Context(), name)
-	if err != nil {
-		if errors.Is(err, user.ErrNotFound) {
-			return ctx.SendStatus(http.StatusNotFound)
-		} else {
-			return ctx.SendStatus(http.StatusInternalServerError)
-		}
-	}
-
-	err = controller.service.Remove(ctx.Context(), userFound)
-	if err != nil {
+	if err := controller.service.Remove(ctx.Context(), userFound); err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 
 	return ctx.SendStatus(http.StatusOK)
+}
+
+func (controller *Controller) middlewareGetUser(ctx *fiber.Ctx) error {
+	name := ctx.Params("name")
+	if name == "" {
+		return ctx.SendStatus(http.StatusBadRequest)
+	}
+
+	userFound, err := controller.service.FindByName(ctx.Context(), name)
+	if err != nil {
+		if errors.Is(err, user.ErrNotFound) {
+			return ctx.SendStatus(http.StatusNotFound)
+		} else {
+			return ctx.SendStatus(http.StatusInternalServerError)
+		}
+	}
+
+	ctx.Locals("user", userFound)
+	return ctx.Next()
 }
