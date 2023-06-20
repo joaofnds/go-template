@@ -24,10 +24,10 @@ func (controller *Controller) Register(app *fiber.App) {
 	app.Post("/users", controller.Create)
 	app.Get("/users", controller.List)
 
-	userGroup := app.Group("/users/:name", controller.middlewareGetUser)
+	userGroup := app.Group("/users/:name", controller.middlewareGetUser, featureflags.Middleware)
 	userGroup.Get("/", controller.Get)
 	userGroup.Delete("/", controller.Delete)
-	userGroup.Get("/feature", featureflags.Middleware, controller.GetFeature)
+	userGroup.Get("/feature", controller.GetFeature)
 }
 
 func (controller *Controller) List(ctx *fiber.Ctx) error {

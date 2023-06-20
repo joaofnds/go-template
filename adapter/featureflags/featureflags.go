@@ -4,9 +4,6 @@ import (
 	"context"
 	"errors"
 
-	"app/user"
-
-	"github.com/gofiber/fiber/v2"
 	ffclient "github.com/thomaspoignant/go-feature-flag"
 	"github.com/thomaspoignant/go-feature-flag/ffuser"
 	"go.uber.org/fx"
@@ -33,10 +30,8 @@ func HookClient(lifecycle fx.Lifecycle, config Config) {
 	})
 }
 
-func ForUser(u user.User) (map[string]any, error) {
-	flagsUser := ffuser.NewUser(u.Name)
-
-	flags := ffclient.AllFlagsState(flagsUser)
+func forKey(key string) (map[string]any, error) {
+	flags := ffclient.AllFlagsState(ffuser.NewUser(key))
 	if !flags.IsValid() {
 		return nil, errors.New("invalid flags state")
 	}
@@ -48,21 +43,4 @@ func ForUser(u user.User) (map[string]any, error) {
 		m[name] = state.Value
 	}
 	return m, nil
-}
-
-func Middleware(ctx *fiber.Ctx) error {
-	if ctx.Locals("user") == nil {
-		return ctx.Next()
-	}
-
-	flags, err := ForUser(ctx.Locals("user").(user.User))
-	if err != nil {
-		return fiber.ErrInternalServerError
-	}
-
-	ctx.Locals("flags", flags)
-	for name, value := range flags {
-		ctx.Locals("flags."+name, value)
-	}
-	return ctx.Next()
 }
