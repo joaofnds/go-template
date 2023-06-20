@@ -1,7 +1,7 @@
-# Features
+## Features
 
 - [Dependency Injection](cmd/app/app.go#L22) with [Fx](https://github.com/uber-go/fx)
-- [Configuration](config/config.go#L47) with [Viper](https://github.com/spf13/viper)
+- [Configuration](config/config.go#L44) with [Viper](https://github.com/spf13/viper)
 - [Logging](adapter/logger/logger.go#L10) with [Zap](https://github.com/uber-go/zap)
 - [Metrics](adapter/metrics/metrics.go#L22) with [Prometheus](https://github.com/prometheus/client_golang)
 - [Health checks](adapter/health/controller.go#L18)
@@ -14,3 +14,26 @@
 - [Sto](user/adapter/mongo_repository.go)[ra](kv/redis_store.go)[ge](user/adapter/postgres_repository.go) with [Mongo](https://github.com/mongodb/mongo-go-driver), [Redis](https://github.com/redis/go-redis), and [Gorm](https://github.com/go-gorm/gorm) ([Postgres](https://github.com/go-gorm/postgres))
 - [Version](.github/workflows/commit.yaml#L66) [management](.releaserc.yaml) with [Semantic Release](https://github.com/semantic-release/semantic-release)
 - [Image](Dockerfile) (using [distroless](https://github.com/GoogleContainerTools/distroless)) [publishing to GitHub Container Registry](.github/workflows/build.yaml)
+
+## Setup
+
+```sh
+# set config path manually
+export CONFIG_PATH="$PWD/config/config.yaml"
+# or use direnv (recommended)
+direnv allow .
+
+docker compose up -d
+
+# run migrations
+go run cmd/migrate/migrate.go up
+
+# run tests
+go test ./...
+
+# start server
+go run cmd/app/app.go
+
+# start worker
+go run cmd/worker/worker.go
+```
