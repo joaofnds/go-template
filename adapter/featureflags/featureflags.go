@@ -14,10 +14,10 @@ import (
 
 var Module = fx.Module(
 	"featureflags",
-	fx.Invoke(HookFFClient),
+	fx.Invoke(HookClient),
 )
 
-func HookFFClient(lifecycle fx.Lifecycle, config Config) {
+func HookClient(lifecycle fx.Lifecycle, config Config) {
 	lifecycle.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			return ffclient.Init(ffclient.Config{
