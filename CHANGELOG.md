@@ -1,3 +1,15 @@
+## [1.22.2](https://github.com/joaofnds/go-template/compare/v1.22.1...v1.22.2) (2023-06-20)
+
+
+### Documentation
+
+* **readme:** add setup doc ([5d6086c](https://github.com/joaofnds/go-template/commit/5d6086ceaaa81c2b3b39574ba5a85dad0349d2e5))
+
+
+### Refactor
+
+* name hook ([6a922e6](https://github.com/joaofnds/go-template/commit/6a922e63bf1babd4b038be979e09c058ebd54445))
+
 ## [1.22.1](https://github.com/joaofnds/go-template/compare/v1.22.0...v1.22.1) (2023-06-19)
 
 
