@@ -28,7 +28,4 @@ plugins:
             section: Test
           - type: ci
             section: CI
-  - "@semantic-release/changelog"
-  - - "@semantic-release/git"
-    - message: "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
   - "@semantic-release/github"
