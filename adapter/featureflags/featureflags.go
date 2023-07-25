@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	ffclient "github.com/thomaspoignant/go-feature-flag"
-	"github.com/thomaspoignant/go-feature-flag/ffuser"
+	"github.com/thomaspoignant/go-feature-flag/ffcontext"
 	"go.uber.org/fx"
 )
 
@@ -31,7 +31,7 @@ func HookClient(lifecycle fx.Lifecycle, config Config) {
 }
 
 func forKey(key string) (map[string]any, error) {
-	flags := ffclient.AllFlagsState(ffuser.NewUser(key))
+	flags := ffclient.AllFlagsState(ffcontext.NewEvaluationContext(key))
 	if !flags.IsValid() {
 		return nil, errors.New("invalid flags state")
 	}

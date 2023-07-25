@@ -22,28 +22,15 @@ var (
 	)
 )
 
-func NewClient(config Config, logger *zap.Logger) (*mongo.Client, error) {
+func NewClient(ctx context.Context, config Config) (*mongo.Client, error) {
 	clientOptions := options.Client().ApplyURI(config.URI)
-	client, err := mongo.NewClient(clientOptions)
-	if err != nil {
-		logger.Error("failed to connect to mongo", zap.Error(err))
-		return nil, err
-	}
-
-	return client, nil
+	return mongo.Connect(ctx, clientOptions)
 }
 
 func HookConnection(lc fx.Lifecycle, client *mongo.Client, logger *zap.Logger) {
 	lc.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
-			err := client.Connect(ctx)
-			if err != nil {
-				logger.Error("failed to connect to mongo", zap.Error(err))
-				return err
-			}
-			logger.Info("successfully connected to mongo")
-
-			err = client.Ping(ctx, nil)
+			err := client.Ping(ctx, nil)
 			if err != nil {
 				logger.Error("failed to ping mongo", zap.Error(err))
 				return err
