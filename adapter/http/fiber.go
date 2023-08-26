@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/gofiber/contrib/otelfiber"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/limiter"
@@ -33,6 +34,7 @@ func NewFiber(config Config, probe Probe) *fiber.App {
 		DisableStartupMessage: true,
 	})
 	app.Use(recover.New())
+	app.Use(otelfiber.Middleware())
 	app.Use(limiter.New(limiter.Config{
 		Max:               config.Limiter.Requests,
 		Expiration:        config.Limiter.Expiration,

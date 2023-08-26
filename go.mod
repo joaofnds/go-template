@@ -4,6 +4,7 @@ go 1.21
 
 require (
 	github.com/go-playground/validator/v10 v10.15.0
+	github.com/gofiber/contrib/otelfiber v1.0.10
 	github.com/gofiber/fiber/v2 v2.48.0
 	github.com/hibiken/asynq v0.24.1
 	github.com/onsi/ginkgo/v2 v2.11.0
@@ -14,6 +15,10 @@ require (
 	github.com/spf13/viper v1.16.0
 	github.com/thomaspoignant/go-feature-flag v1.15.0
 	go.mongodb.org/mongo-driver v1.12.1
+	go.opentelemetry.io/otel v1.16.0
+	go.opentelemetry.io/otel/exporters/jaeger v1.16.0
+	go.opentelemetry.io/otel/sdk v1.16.0
+	go.opentelemetry.io/otel/trace v1.16.0
 	go.uber.org/fx v1.20.0
 	go.uber.org/zap v1.25.0
 	gorm.io/driver/postgres v1.5.2
@@ -31,6 +36,7 @@ require (
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/go-logr/logr v1.2.4 // indirect
+	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-task/slim-sprig v0.0.0-20230315185526-52ccab3ef572 // indirect
@@ -75,6 +81,8 @@ require (
 	github.com/xdg-go/scram v1.1.2 // indirect
 	github.com/xdg-go/stringprep v1.0.4 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20201027041543-1326539a0a0a // indirect
+	go.opentelemetry.io/contrib v1.17.0 // indirect
+	go.opentelemetry.io/otel/metric v1.16.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/dig v1.17.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect

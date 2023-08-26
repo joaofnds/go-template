@@ -20,3 +20,12 @@ services:
       - ./grafana.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
     ports:
       - 9000:3000
+
+  jaeger:
+    image: jaegertracing/all-in-one
+    restart: unless-stopped
+    ports:
+      - 16686:16686
+      - 14268:14268
+    extra_hosts:
+      - "host.lima.internal:host-gateway"

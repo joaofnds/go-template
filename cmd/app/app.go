@@ -10,6 +10,7 @@ import (
 	"app/adapter/postgres"
 	"app/adapter/queue"
 	"app/adapter/redis"
+	"app/adapter/tracing"
 	"app/adapter/validation"
 	"app/config"
 	"app/kv"
@@ -23,6 +24,7 @@ func main() {
 		config.Module,
 		logger.Module,
 		metrics.Module,
+		tracing.Module,
 		health.Module,
 		validation.Module,
 		featureflags.Module,
