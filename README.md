@@ -4,6 +4,7 @@
 - [Configuration](config/config.go#L44) with [Viper](https://github.com/spf13/viper)
 - [Logging](adapter/logger/logger.go#L10) with [Zap](https://github.com/uber-go/zap)
 - [Metrics](adapter/metrics/metrics.go#L22) with [Prometheus](https://github.com/prometheus/client_golang)
+- [Tracing](adapter/tracing/tracing.go#L18) with [Open Telemetry](https://opentelemetry.io/)
 - [Health checks](adapter/health/controller.go#L18)
 - [Feature](adapter/featureflags/featureflags.go#L23) [flags](user/http/controller.go#L69) with [Go Feature Flag](https://github.com/thomaspoignant/go-feature-flag)
 - [Validation](user/http/dto.go#L4) with [Validator](https://github.com/go-playground/validator)
