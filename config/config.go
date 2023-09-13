@@ -7,6 +7,7 @@ import (
 	"app/adapter/mongo"
 	"app/adapter/postgres"
 	"app/adapter/redis"
+	"app/adapter/tracing"
 	"os"
 
 	"github.com/spf13/viper"
@@ -25,6 +26,7 @@ var (
 		fx.Provide(func(config AppConfig) mongo.Config { return config.Mongo }),
 		fx.Provide(func(config AppConfig) redis.Config { return config.Redis }),
 		fx.Provide(func(config AppConfig) featureflags.Config { return config.FeatureFlags }),
+		fx.Provide(func(config AppConfig) tracing.Config { return config.Tracing }),
 	)
 	Invokes = fx.Options(
 		fx.Invoke(LoadConfig),
@@ -39,6 +41,7 @@ type AppConfig struct {
 	Mongo        mongo.Config        `mapstructure:"mongo"`
 	Redis        redis.Config        `mapstructure:"redis"`
 	FeatureFlags featureflags.Config `mapstructure:"feature_flags"`
+	Tracing      tracing.Config      `mapstructure:"tracing"`
 }
 
 func LoadConfig(logger *zap.Logger) error {

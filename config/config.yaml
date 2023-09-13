@@ -6,6 +6,10 @@ http:
     expiration: 1s
 metrics:
   addr: localhost:9091
+tracing:
+  addr: localhost:4317
+  secure: false
+  timeout: 1s
 feature_flags:
   polling_interval: 15s
   flags:

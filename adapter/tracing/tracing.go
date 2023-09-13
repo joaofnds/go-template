@@ -19,11 +19,17 @@ var Module = fx.Options(
 		return otel.Tracer("go-template")
 	}),
 
-	fx.Provide(func() *otlptrace.Exporter {
-		return otlptracegrpc.NewUnstarted(
-			otlptracegrpc.WithEndpoint("localhost:4317"),
-			otlptracegrpc.WithInsecure(),
-		)
+	fx.Provide(func(config Config) *otlptrace.Exporter {
+		opts := []otlptracegrpc.Option{
+			otlptracegrpc.WithEndpoint(config.Addr),
+			otlptracegrpc.WithTimeout(config.Timeout),
+		}
+
+		if !config.Secure {
+			opts = append(opts, otlptracegrpc.WithInsecure())
+		}
+
+		return otlptracegrpc.NewUnstarted(opts...)
 	}),
 
 	fx.Provide(func(exporter *otlptrace.Exporter) *sdktrace.TracerProvider {
