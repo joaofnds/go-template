@@ -25,7 +25,8 @@ services:
     image: jaegertracing/all-in-one
     restart: unless-stopped
     ports:
-      - 16686:16686
-      - 14268:14268
+      - 16686:16686 # serve frontend
+      - 14268:14268 # accep jaeger.thrift directly from clients
+      - 4317:4317 # accep OpenTelemetry Protocol (OTLP) over gRPC
     extra_hosts:
       - "host.lima.internal:host-gateway"

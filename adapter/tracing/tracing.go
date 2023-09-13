@@ -6,7 +6,8 @@ import (
 	"go.opentelemetry.io/otel"
 	"go.uber.org/fx"
 
-	"go.opentelemetry.io/otel/exporters/jaeger"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
@@ -18,11 +19,14 @@ var Module = fx.Options(
 		return otel.Tracer("go-template")
 	}),
 
-	fx.Provide(func() (*jaeger.Exporter, error) {
-		return jaeger.New(jaeger.WithCollectorEndpoint())
+	fx.Provide(func() *otlptrace.Exporter {
+		return otlptracegrpc.NewUnstarted(
+			otlptracegrpc.WithEndpoint("localhost:4317"),
+			otlptracegrpc.WithInsecure(),
+		)
 	}),
 
-	fx.Provide(func(exporter *jaeger.Exporter) *sdktrace.TracerProvider {
+	fx.Provide(func(exporter *otlptrace.Exporter) *sdktrace.TracerProvider {
 		provider := sdktrace.NewTracerProvider(
 			sdktrace.WithSampler(sdktrace.AlwaysSample()),
 			sdktrace.WithBatcher(exporter),
@@ -37,8 +41,11 @@ var Module = fx.Options(
 		return provider
 	}),
 
-	fx.Invoke(func(livecycle fx.Lifecycle, provider *sdktrace.TracerProvider) {
+	fx.Invoke(func(livecycle fx.Lifecycle, exporter *otlptrace.Exporter, provider *sdktrace.TracerProvider) {
 		livecycle.Append(fx.Hook{
+			OnStart: func(ctx context.Context) error {
+				return exporter.Start(ctx)
+			},
 			OnStop: func(context.Context) error {
 				return provider.Shutdown(context.Background())
 			},
