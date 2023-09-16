@@ -3,6 +3,7 @@ package redis
 import (
 	"context"
 
+	"github.com/redis/go-redis/extra/redisotel/v9"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/fx"
 )
@@ -15,6 +16,7 @@ var (
 		fx.Provide(NewHealthChecker),
 	)
 	Invokes = fx.Options(
+		fx.Invoke(EnableTracing),
 		fx.Invoke(HookRedis),
 	)
 )
@@ -34,4 +36,8 @@ func HookRedis(lifecycle fx.Lifecycle, redis *redis.Client) {
 			return redis.Close()
 		},
 	})
+}
+
+func EnableTracing(redis *redis.Client) error {
+	return redisotel.InstrumentTracing(redis)
 }
