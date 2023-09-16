@@ -34,11 +34,11 @@ func NewFiber(config Config, probe Probe) *fiber.App {
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
 	})
+	app.Use(otelfiber.Middleware())
 	app.Use(recover.New())
 	app.Use(compress.New(compress.Config{
 		Level: compress.LevelBestSpeed,
 	}))
-	app.Use(otelfiber.Middleware())
 	app.Use(limiter.New(limiter.Config{
 		Max:               config.Limiter.Requests,
 		Expiration:        config.Limiter.Expiration,

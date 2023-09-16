@@ -10,6 +10,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	gormlogger "gorm.io/gorm/logger"
+	"gorm.io/plugin/opentelemetry/tracing"
 )
 
 var (
@@ -17,6 +18,7 @@ var (
 
 	Providers = fx.Options(
 		fx.Provide(NewGORMDB),
+		fx.Invoke(RegisterPlugins),
 		fx.Provide(NewSQLDB),
 		fx.Provide(NewHealthChecker),
 	)
@@ -38,6 +40,10 @@ func NewGORMDB(postgresConfig Config, logger *zap.Logger) (*gorm.DB, error) {
 			DisableNestedTransaction: true,
 		},
 	)
+}
+
+func RegisterPlugins(db *gorm.DB) error {
+	return db.Use(tracing.NewPlugin())
 }
 
 func NewSQLDB(orm *gorm.DB) (*sql.DB, error) { return orm.DB() }
