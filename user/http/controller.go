@@ -31,7 +31,7 @@ func (controller *Controller) Register(app *fiber.App) {
 }
 
 func (controller *Controller) List(ctx *fiber.Ctx) error {
-	users, err := controller.service.List(ctx.Context())
+	users, err := controller.service.List(ctx.UserContext())
 	if err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
@@ -53,7 +53,7 @@ func (controller *Controller) Create(ctx *fiber.Ctx) error {
 		return ctx.Status(http.StatusBadRequest).JSON(fiber.Map{"errors": errorMessages})
 	}
 
-	createdUser, err := controller.service.CreateUser(ctx.Context(), body.Name)
+	createdUser, err := controller.service.CreateUser(ctx.UserContext(), body.Name)
 	if err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
@@ -72,7 +72,7 @@ func (controller *Controller) GetFeature(ctx *fiber.Ctx) error {
 func (controller *Controller) Delete(ctx *fiber.Ctx) error {
 	userFound := ctx.Locals("user").(user.User)
 
-	if err := controller.service.Remove(ctx.Context(), userFound); err != nil {
+	if err := controller.service.Remove(ctx.UserContext(), userFound); err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 
@@ -85,7 +85,7 @@ func (controller *Controller) middlewareGetUser(ctx *fiber.Ctx) error {
 		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	userFound, err := controller.service.FindByName(ctx.Context(), name)
+	userFound, err := controller.service.FindByName(ctx.UserContext(), name)
 	if err != nil {
 		if errors.Is(err, user.ErrNotFound) {
 			return ctx.SendStatus(http.StatusNotFound)

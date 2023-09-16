@@ -27,7 +27,7 @@ func (controller *Controller) Get(ctx *fiber.Ctx) error {
 		return fiber.NewError(http.StatusBadRequest, "missing key")
 	}
 
-	val, err := controller.store.Get(ctx.Context(), key)
+	val, err := controller.store.Get(ctx.UserContext(), key)
 	if err != nil {
 		if errors.Is(err, ErrNotFound) {
 			return fiber.NewError(http.StatusNotFound, err.Error())
@@ -49,7 +49,7 @@ func (controller *Controller) Set(ctx *fiber.Ctx) error {
 		return fiber.NewError(http.StatusBadRequest, "missing val")
 	}
 
-	err := controller.store.Set(ctx.Context(), key, val)
+	err := controller.store.Set(ctx.UserContext(), key, val)
 	if err != nil {
 		return fiber.NewError(http.StatusInternalServerError, "failed to delete key")
 	}
@@ -63,7 +63,7 @@ func (controller *Controller) Delete(ctx *fiber.Ctx) error {
 		return fiber.NewError(http.StatusBadRequest, "missing key param")
 	}
 
-	if err := controller.store.Del(ctx.Context(), key); err != nil {
+	if err := controller.store.Del(ctx.UserContext(), key); err != nil {
 		return fiber.NewError(http.StatusInternalServerError, "failed to delete key")
 	}
 

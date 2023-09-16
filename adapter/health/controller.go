@@ -19,7 +19,7 @@ func (controller *Controller) Register(app *fiber.App) {
 }
 
 func (controller *Controller) CheckHealth(ctx *fiber.Ctx) error {
-	check := controller.service.CheckHealth(ctx.Context())
+	check := controller.service.CheckHealth(ctx.UserContext())
 	if !check.AllUp() {
 		return ctx.Status(http.StatusServiceUnavailable).JSON(check)
 	}
