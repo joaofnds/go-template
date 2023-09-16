@@ -10,6 +10,7 @@ tracing:
   addr: localhost:4317
   secure: false
   timeout: 1s
+  sample_rate: 1.0
 feature_flags:
   polling_interval: 15s
   flags:

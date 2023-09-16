@@ -32,9 +32,9 @@ var Module = fx.Options(
 		return otlptracegrpc.NewUnstarted(opts...)
 	}),
 
-	fx.Provide(func(exporter *otlptrace.Exporter) *sdktrace.TracerProvider {
+	fx.Provide(func(config Config, exporter *otlptrace.Exporter) *sdktrace.TracerProvider {
 		provider := sdktrace.NewTracerProvider(
-			sdktrace.WithSampler(sdktrace.AlwaysSample()),
+			sdktrace.WithSampler(sdktrace.TraceIDRatioBased(config.SampleRate)),
 			sdktrace.WithBatcher(exporter),
 			sdktrace.WithResource(resource.NewWithAttributes(
 				semconv.SchemaURL,
