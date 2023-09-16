@@ -18,11 +18,11 @@ var (
 
 	Providers = fx.Options(
 		fx.Provide(NewGORMDB),
-		fx.Invoke(RegisterPlugins),
 		fx.Provide(NewSQLDB),
 		fx.Provide(NewHealthChecker),
 	)
 	Invokes = fx.Options(
+		fx.Invoke(EnableTracing),
 		fx.Invoke(HookConnection),
 	)
 )
@@ -42,7 +42,7 @@ func NewGORMDB(postgresConfig Config, logger *zap.Logger) (*gorm.DB, error) {
 	)
 }
 
-func RegisterPlugins(db *gorm.DB) error {
+func EnableTracing(db *gorm.DB) error {
 	return db.Use(tracing.NewPlugin())
 }
 
