@@ -1,10 +1,18 @@
 package driver
 
 import (
+	apphttp "app/adapter/http"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
+
+	"go.uber.org/fx"
 )
+
+var Provider = fx.Provide(func(config apphttp.Config) *Driver {
+	return NewDriver(fmt.Sprintf("http://localhost:%d", config.Port))
+})
 
 type Driver struct {
 	URL  string

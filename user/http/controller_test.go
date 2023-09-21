@@ -2,7 +2,6 @@ package http_test
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"testing"
 
@@ -40,14 +39,13 @@ var _ = Describe("/users", Ordered, func() {
 	)
 
 	BeforeAll(func() {
-		var httpConfig apphttp.Config
-
 		fxApp = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			test.Queue,
 			test.Transaction,
 			test.AvailablePortProvider,
+			driver.Provider,
 			config.Module,
 			featureflags.Module,
 			apphttp.FiberModule,
@@ -57,10 +55,8 @@ var _ = Describe("/users", Ordered, func() {
 			fx.Invoke(func(app *fiber.App, controller *userhttp.Controller) {
 				controller.Register(app)
 			}),
-			fx.Populate(&httpConfig, &userService),
+			fx.Populate(&app, &userService),
 		).RequireStart()
-
-		app = driver.NewDriver(fmt.Sprintf("http://localhost:%d", httpConfig.Port))
 	})
 
 	BeforeEach(func() { Must(userService.DeleteAll(context.Background())) })
