@@ -31,11 +31,13 @@ func main() {
 		os.Exit(1)
 	}
 
+	ctx := context.Background()
+
 	app := fx.New(
 		logger.NopLoggerProvider,
 		config.Module,
 		postgres.Module,
-		fx.Invoke(func(ctx context.Context, db *sql.DB, config postgres.Config) error {
+		fx.Invoke(func(db *sql.DB, config postgres.Config) error {
 			goose.SetBaseFS(migrations)
 			action, args := os.Args[1], os.Args[2:]
 			err := goose.RunContext(ctx, action, db, dir(action), args...)
@@ -45,8 +47,9 @@ func main() {
 			return err
 		}),
 	)
-	defer func() { _ = app.Stop(context.Background()) }()
-	_ = app.Start(context.Background())
+
+	defer func() { checkErr(app.Stop(ctx)) }()
+	checkErr(app.Start(ctx))
 }
 
 func dir(action string) string {
@@ -55,4 +58,10 @@ func dir(action string) string {
 	}
 
 	return "migrations"
+}
+
+func checkErr(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
