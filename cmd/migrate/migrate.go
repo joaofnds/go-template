@@ -35,10 +35,10 @@ func main() {
 		logger.NopLoggerProvider,
 		config.Module,
 		postgres.Module,
-		fx.Invoke(func(db *sql.DB, config postgres.Config) error {
+		fx.Invoke(func(ctx context.Context, db *sql.DB, config postgres.Config) error {
 			goose.SetBaseFS(migrations)
 			action, args := os.Args[1], os.Args[2:]
-			err := goose.Run(action, db, dir(action), args...)
+			err := goose.RunContext(ctx, action, db, dir(action), args...)
 			if err != nil {
 				fmt.Println(strings.ReplaceAll(err.Error(), `\n`, "\n"))
 			}
