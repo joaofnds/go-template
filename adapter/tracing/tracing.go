@@ -52,8 +52,8 @@ var Module = fx.Options(
 			OnStart: func(ctx context.Context) error {
 				return exporter.Start(ctx)
 			},
-			OnStop: func(context.Context) error {
-				return provider.Shutdown(context.Background())
+			OnStop: func(ctx context.Context) error {
+				return provider.Shutdown(ctx)
 			},
 		})
 	}),

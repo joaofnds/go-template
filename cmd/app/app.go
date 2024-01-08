@@ -13,6 +13,7 @@ import (
 	"app/adapter/tracing"
 	"app/adapter/validation"
 	"app/config"
+	"app/internal/appcontext"
 	"app/kv"
 	user "app/user/module"
 
@@ -21,6 +22,7 @@ import (
 
 func main() {
 	fx.New(
+		appcontext.Module,
 		config.Module,
 		logger.Module,
 		metrics.Module,

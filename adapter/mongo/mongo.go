@@ -38,7 +38,7 @@ func HookConnection(lc fx.Lifecycle, client *mongo.Client, logger *zap.Logger) {
 
 			logger.Info("successfully pinged mongo")
 
-			err = EnsureIndexes(client)
+			err = EnsureIndexes(ctx, client)
 			if err != nil {
 				logger.Error("failed to create index", zap.Error(err))
 			}
@@ -51,8 +51,8 @@ func HookConnection(lc fx.Lifecycle, client *mongo.Client, logger *zap.Logger) {
 	})
 }
 
-func EnsureIndexes(client *mongo.Client) error {
+func EnsureIndexes(ctx context.Context, client *mongo.Client) error {
 	indexView := client.Database("template").Collection("users").Indexes()
-	_, err := indexView.CreateOne(context.Background(), mongo.IndexModel{Keys: bson.M{"name": 1}})
+	_, err := indexView.CreateOne(ctx, mongo.IndexModel{Keys: bson.M{"name": 1}})
 	return err
 }
