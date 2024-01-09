@@ -14,7 +14,9 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-var Module = fx.Options(
+var Module = fx.Module(
+	"tracing",
+
 	fx.Provide(func() trace.Tracer {
 		return otel.Tracer("go-template")
 	}),
