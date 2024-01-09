@@ -23,8 +23,8 @@ func NewServer(c Config) *Server {
 	return &http.Server{Addr: c.Addr}
 }
 
-func HookMetricsHandler(lc fx.Lifecycle, server *Server, logger *zap.Logger) {
-	lc.Append(fx.Hook{
+func HookMetricsHandler(lifecycle fx.Lifecycle, server *Server, logger *zap.Logger) {
+	lifecycle.Append(fx.Hook{
 		OnStart: func(context.Context) error {
 			go func() {
 				err := server.ListenAndServe()

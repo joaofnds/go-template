@@ -52,8 +52,8 @@ func NewFiber(config Config, probe Probe) *fiber.App {
 	return app
 }
 
-func HookFiber(lc fx.Lifecycle, app *fiber.App, config Config) {
-	lc.Append(fx.Hook{
+func HookFiber(lifecycle fx.Lifecycle, app *fiber.App, config Config) {
+	lifecycle.Append(fx.Hook{
 		OnStart: func(context.Context) error {
 			go func() {
 				if err := app.Listen(fmt.Sprintf(":%d", config.Port)); err != nil {

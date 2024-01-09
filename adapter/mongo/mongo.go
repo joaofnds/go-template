@@ -27,8 +27,8 @@ func NewClient(ctx context.Context, config Config) (*mongo.Client, error) {
 	return mongo.Connect(ctx, clientOptions)
 }
 
-func HookConnection(lc fx.Lifecycle, client *mongo.Client, logger *zap.Logger) {
-	lc.Append(fx.Hook{
+func HookConnection(lifecycle fx.Lifecycle, client *mongo.Client, logger *zap.Logger) {
+	lifecycle.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error {
 			err := client.Ping(ctx, nil)
 			if err != nil {

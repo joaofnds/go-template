@@ -49,12 +49,19 @@ var Module = fx.Module(
 		return provider
 	}),
 
-	fx.Invoke(func(livecycle fx.Lifecycle, exporter *otlptrace.Exporter, provider *sdktrace.TracerProvider) {
-		livecycle.Append(fx.Hook{
+	fx.Invoke(func(
+		lifecycle fx.Lifecycle,
+		exporter *otlptrace.Exporter,
+		provider *sdktrace.TracerProvider,
+	) {
+		lifecycle.Append(fx.Hook{
 			OnStart: func(ctx context.Context) error {
 				return exporter.Start(ctx)
 			},
 			OnStop: func(ctx context.Context) error {
+				if err := exporter.Shutdown(ctx); err != nil {
+					return err
+				}
 				return provider.Shutdown(ctx)
 			},
 		})
