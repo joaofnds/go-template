@@ -21,8 +21,8 @@
 ```sh
 # set config path manually
 export CONFIG_PATH="$PWD/config/config.yaml"
-# or use direnv (recommended)
-direnv allow .
+# or use mise (recommended)
+mise allow .
 
 docker compose up -d
 
