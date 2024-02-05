@@ -1,6 +1,7 @@
 package driver
 
 import (
+	"app/test/matchers"
 	"app/test/req"
 	"app/user"
 
@@ -33,6 +34,10 @@ func (d *UserDriver) CreateUser(name string) (user.User, error) {
 	})
 }
 
+func (d *UserDriver) MustCreateUser(name string) user.User {
+	return matchers.Must2(d.CreateUser(name))
+}
+
 func (d *UserDriver) GetUser(name string) (user.User, error) {
 	var u user.User
 
@@ -46,6 +51,10 @@ func (d *UserDriver) GetUser(name string) (user.User, error) {
 			)
 		},
 	})
+}
+
+func (d *UserDriver) MustGetUser(name string) user.User {
+	return matchers.Must2(d.GetUser(name))
 }
 
 func (d *UserDriver) ListUsers() ([]user.User, error) {
@@ -62,6 +71,10 @@ func (d *UserDriver) ListUsers() ([]user.User, error) {
 	})
 }
 
+func (d *UserDriver) MustListUsers() []user.User {
+	return matchers.Must2(d.ListUsers())
+}
+
 func (d *UserDriver) DeleteUser(name string) error {
 	return makeJSONRequest(params{
 		status: http.StatusOK,
@@ -72,6 +85,10 @@ func (d *UserDriver) DeleteUser(name string) error {
 			)
 		},
 	})
+}
+
+func (d *UserDriver) MustDeleteUser(name string) {
+	matchers.Must(d.DeleteUser(name))
 }
 
 func (d *UserDriver) GetFeature(name string) (map[string]any, error) {
@@ -87,4 +104,8 @@ func (d *UserDriver) GetFeature(name string) (map[string]any, error) {
 			)
 		},
 	})
+}
+
+func (d *UserDriver) MustGetFeature(name string) map[string]any {
+	return matchers.Must2(d.GetFeature(name))
 }
