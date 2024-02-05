@@ -7,10 +7,7 @@ import (
 	"app/config"
 	"app/kv"
 	"app/test"
-	. "app/test/matchers"
-	"app/test/req"
-	"fmt"
-	"io"
+	"app/test/driver"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
@@ -21,13 +18,13 @@ import (
 )
 
 var _ = Describe("/kv", Ordered, func() {
-	var app *fxtest.App
-	var url string
+	var fxApp *fxtest.App
+	var app *driver.Driver
 
 	BeforeAll(func() {
 		var httpConfig apphttp.Config
 
-		app = fxtest.New(
+		fxApp = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			config.Module,
@@ -38,50 +35,46 @@ var _ = Describe("/kv", Ordered, func() {
 			fx.Invoke(func(app *fiber.App, controller *kv.Controller) {
 				controller.Register(app)
 			}),
-			fx.Populate(&httpConfig),
+			driver.Provider,
+			fx.Populate(&app, &httpConfig),
 		).RequireStart()
-
-		url = fmt.Sprintf("http://localhost:%d/kv", httpConfig.Port)
 	})
 
 	AfterAll(func() {
-		app.RequireStop()
+		fxApp.RequireStop()
 	})
 
 	Context("GET", func() {
 		It("returns the value under the key", func() {
-			Must2(req.Post(url+"/foo/bar", nil, nil))
-			res := Must2(req.Get(url+"/foo", nil))
+			app.KV.MustSet("foo", "bar")
 
-			b := Must2(io.ReadAll(res.Body))
-			Expect(string(b)).To(Equal("bar"))
+			val := app.KV.MustGet("foo")
+
+			Expect(val).To(Equal("bar"))
 		})
 	})
 
 	Context("POST", func() {
 		It("responds with status created", func() {
-			res := Must2(req.Post(url+"/foo/bar", nil, nil))
+			res, _ := app.KV.SetReq("foo", "bar")
 			Expect(res.StatusCode).To(Equal(http.StatusCreated))
 		})
 
 		It("sets the value to the key", func() {
-			Must2(req.Post(url+"/foo/bar", nil, nil))
+			app.KV.MustSet("foo", "bar")
 
-			res := Must2(req.Get(url+"/foo", nil))
-			b := Must2(io.ReadAll(res.Body))
-			Expect(string(b)).To(Equal("bar"))
+			val := app.KV.MustGet("foo")
+
+			Expect(val).To(Equal("bar"))
 		})
 	})
 
 	Context("DELETE", func() {
 		It("forgets the key", func() {
-			res := Must2(req.Post(url+"/bar/foo", nil, nil))
-			Expect(res.StatusCode).To(Equal(http.StatusCreated))
+			app.KV.MustSet("bar", "foo")
+			app.KV.MustDel("bar")
 
-			res = Must2(req.Delete(url+"/bar", nil))
-			Expect(res.StatusCode).To(Equal(http.StatusOK))
-
-			res = Must2(req.Get(url+"/bar", nil))
+			res, _ := app.KV.GetReq("bar")
 			Expect(res.StatusCode).To(Equal(http.StatusNotFound))
 		})
 	})

@@ -17,12 +17,14 @@ var Provider = fx.Provide(func(config apphttp.Config) *Driver {
 type Driver struct {
 	URL  string
 	User *UserDriver
+	KV   *KVDriver
 }
 
 func NewDriver(url string) *Driver {
 	return &Driver{
 		URL:  url,
 		User: NewUserDriver(url),
+		KV:   NewKVDriver(url),
 	}
 }
 
@@ -33,19 +35,9 @@ type params struct {
 }
 
 func makeJSONRequest(p params) error {
-	res, err := p.req()
+	b, err := makeRequest(p.status, p.req)
 	if err != nil {
 		return err
-	}
-	defer res.Body.Close()
-
-	b, err := io.ReadAll(res.Body)
-	if err != nil {
-		return err
-	}
-
-	if res.StatusCode != p.status {
-		return RequestFailure{Status: res.StatusCode, Body: string(b)}
 	}
 
 	if p.into == nil {
@@ -53,6 +45,25 @@ func makeJSONRequest(p params) error {
 	}
 
 	return json.Unmarshal(b, p.into)
+}
+
+func makeRequest(status int, req func() (*http.Response, error)) ([]byte, error) {
+	res, err := req()
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	b, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	if res.StatusCode != status {
+		return nil, RequestFailure{Status: res.StatusCode, Body: string(b)}
+	}
+
+	return b, nil
 }
 
 type RequestFailure struct {
