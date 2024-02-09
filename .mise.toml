@@ -1,3 +1,9 @@
+[tools]
+gitleaks = "8.18.2"
+go = "1.22.0"
+golangci-lint = "1.56.0"
+k6 = "0.49.0"
+
 [env]
 CONFIG_PATH = "{{config_root}}/config/config.yaml"
 
@@ -23,12 +29,7 @@ run = "go build -o migrate ./cmd/migrate"
 outputs = ["migrate"]
 
 [tasks.clean]
-run = [
-  "rm -f app",
-  "rm -f worker",
-  "rm -f migrate",
-  "go clean -cache -testcache -fuzzcache",
-]
+run = ["rm -f app worker migrate", "go clean -cache -testcache -fuzzcache"]
 
 [tasks.lint]
 run = "golangci-lint run"
@@ -40,7 +41,7 @@ run = "hadolint Dockerfile"
 run = "goimports -w ."
 
 [tasks.gitleaks]
-run  = "gitleaks detect ."
+run = "gitleaks detect ."
 
 [tasks.test-load]
 run = "k6 run test/k6/load-test.js"
