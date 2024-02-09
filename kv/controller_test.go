@@ -74,7 +74,7 @@ var _ = Describe("/kv", Ordered, func() {
 			app.KV.MustSet("bar", "foo")
 			app.KV.MustDel("bar")
 
-			res, _ := app.KV.GetReq("bar")
+			res := app.KV.MustGetReq("bar")
 			Expect(res.StatusCode).To(Equal(http.StatusNotFound))
 		})
 	})

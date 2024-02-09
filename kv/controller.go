@@ -1,11 +1,18 @@
 package kv
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 )
+
+type Store interface {
+	Get(context.Context, string) (string, error)
+	Set(context.Context, string, string) error
+	Del(context.Context, string) error
+}
 
 type Controller struct {
 	store Store
@@ -16,9 +23,10 @@ func NewController(store Store) *Controller {
 }
 
 func (controller *Controller) Register(app *fiber.App) {
-	app.Get("/kv/:key", controller.Get)
-	app.Post("/kv/:key/:val", controller.Set)
-	app.Delete("/kv/:key", controller.Delete)
+	app.Group("/kv").
+		Get("/:key", controller.Get).
+		Post("/:key/:val", controller.Set).
+		Delete("/:key", controller.Delete)
 }
 
 func (controller *Controller) Get(ctx *fiber.Ctx) error {

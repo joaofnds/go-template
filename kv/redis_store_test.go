@@ -19,7 +19,7 @@ func TestUser(t *testing.T) {
 	RunSpecs(t, "KV Test")
 }
 
-var _ = Describe("kv store", func() {
+var _ = Describe("Redis Store", func() {
 	var app *fxtest.App
 	var store *kv.RedisStore
 
@@ -39,7 +39,7 @@ var _ = Describe("kv store", func() {
 		app.RequireStop()
 	})
 
-	It("can retrieve values", func(ctx SpecContext) {
+	It("retrieves values", func(ctx SpecContext) {
 		Must(store.Set(ctx, "foo", "bar"))
 
 		val := Must2(store.Get(ctx, "foo"))

@@ -19,6 +19,10 @@ func (d *KVDriver) GetReq(key string) (*http.Response, error) {
 	return req.Get(d.url+"/"+key, nil)
 }
 
+func (d *KVDriver) MustGetReq(key string) *http.Response {
+	return matchers.Must2(d.GetReq(key))
+}
+
 func (d *KVDriver) Get(key string) (string, error) {
 	b, err := makeRequest(
 		http.StatusOK,
