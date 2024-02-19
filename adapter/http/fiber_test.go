@@ -38,7 +38,6 @@ var _ = Describe("fiber middlewares", func() {
 	)
 
 	BeforeEach(func() {
-
 		fxApp = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,

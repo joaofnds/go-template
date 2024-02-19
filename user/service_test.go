@@ -63,12 +63,12 @@ var _ = Describe("user service", func() {
 		Expect(found).To(Equal(user))
 	})
 
-	It("created users appear on users listing", func(ctx SpecContext) {
+	It("lists created users", func(ctx SpecContext) {
 		user := Must2(userService.CreateUser(ctx, "joao"))
 		Expect(userService.List(ctx)).To(ContainElement(user))
 	})
 
-	It("removed users do not appear on users listing", func(ctx SpecContext) {
+	It("removed users are not listed", func(ctx SpecContext) {
 		user := Must2(userService.CreateUser(ctx, "joao"))
 		Must(userService.Remove(ctx, user))
 

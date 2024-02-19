@@ -44,7 +44,7 @@ var _ = Describe("/", Ordered, func() {
 
 	It("returns how many requests were made", func() {
 		res := Must2(http.Get(url))
-		b := Must2(io.ReadAll(res.Body))
-		Expect(b).To(ContainSubstring(`promhttp_metric_handler_requests_total{code="200"} 1`))
+		bytes := Must2(io.ReadAll(res.Body))
+		Expect(bytes).To(ContainSubstring(`promhttp_metric_handler_requests_total{code="200"} 1`))
 	})
 })

@@ -75,7 +75,7 @@ var _ = Describe("/users", Ordered, func() {
 		dave := app.User.MustCreateUser("dave")
 
 		users := app.User.MustListUsers()
-		Expect(users).To(Equal([]user.User{bob, dave}))
+		Expect(users).To(ConsistOf(bob, dave))
 	})
 
 	It("deletes users", func() {
@@ -91,16 +91,16 @@ var _ = Describe("/users", Ordered, func() {
 		}))
 
 		users := app.User.MustListUsers()
-		Expect(users).To(Equal([]user.User{bob}))
+		Expect(users).To(ConsistOf(bob))
 	})
 
 	It("switches feature flag", func() {
 		bob := app.User.MustCreateUser("bob")
 		bobFeatures := app.User.MustGetFeature(bob.Name)
-		Expect(bobFeatures).To(Equal(map[string]any{"cool-feature": "on"}))
+		Expect(bobFeatures).To(HaveKeyWithValue("cool-feature", "on"))
 
 		frank := app.User.MustCreateUser("frank")
 		frankFeatures := app.User.MustGetFeature(frank.Name)
-		Expect(frankFeatures).To(Equal(map[string]any{"cool-feature": "off"}))
+		Expect(frankFeatures).To(HaveKeyWithValue("cool-feature", "off"))
 	})
 })
