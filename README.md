@@ -1,7 +1,7 @@
 ## Features
 
-- [Dependency Injection](cmd/app/app.go#L23) with [Fx](https://github.com/uber-go/fx)
-- [Configuration](config/config.go#L47) with [Viper](https://github.com/spf13/viper)
+- [Dependency Injection](cmd/app/app.go#L24) with [Fx](https://github.com/uber-go/fx)
+- [Configuration](config/config.go#L56) with [Viper](https://github.com/spf13/viper)
 - [Logging](adapter/logger/logger.go#L10) with [Zap](https://github.com/uber-go/zap)
 - [Metrics](adapter/metrics/metrics.go#L22) with [Prometheus](https://github.com/prometheus/client_golang)
 - [Tracing](adapter/tracing/tracing.go#L18) with [Open Telemetry](https://opentelemetry.io/)
