@@ -21,13 +21,14 @@ type Controller struct {
 }
 
 func (controller *Controller) Register(app *fiber.App) {
-	app.Post("/users", controller.Create)
-	app.Get("/users", controller.List)
+	app.Group("/users").
+		Post("/", controller.Create).
+		Get("/", controller.List)
 
-	userGroup := app.Group("/users/:name", controller.middlewareGetUser, featureflags.Middleware)
-	userGroup.Get("/", controller.Get)
-	userGroup.Delete("/", controller.Delete)
-	userGroup.Get("/feature", controller.GetFeature)
+	app.Group("/users/:name", controller.middlewareGetUser, featureflags.Middleware).
+		Get("/", controller.Get).
+		Delete("/", controller.Delete).
+		Get("/feature", controller.GetFeature)
 }
 
 func (controller *Controller) List(ctx *fiber.Ctx) error {
