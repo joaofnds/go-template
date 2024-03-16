@@ -71,9 +71,9 @@ func (controller *Controller) GetFeature(ctx *fiber.Ctx) error {
 }
 
 func (controller *Controller) Delete(ctx *fiber.Ctx) error {
-	userFound := ctx.Locals("user").(user.User)
+	foundUser := ctx.Locals("user").(user.User)
 
-	if err := controller.service.Remove(ctx.UserContext(), userFound); err != nil {
+	if err := controller.service.Remove(ctx.UserContext(), foundUser); err != nil {
 		return ctx.SendStatus(http.StatusInternalServerError)
 	}
 
