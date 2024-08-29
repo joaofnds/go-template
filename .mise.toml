@@ -1,8 +1,8 @@
 [tools]
 gitleaks = "8.18.4"
-go = "1.22.6"
-golangci-lint = "1.59.1"
-k6 = "0.52.0"
+go = "1.23.0"
+golangci-lint = "1.60.3"
+k6 = "0.53.0"
 
 [env]
 CONFIG_PATH = "{{config_root}}/config/config.yaml"
