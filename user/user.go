@@ -1,5 +1,9 @@
 package user
 
+import "time"
+
 type User struct {
-	Name string `json:"name"`
+	ID        string    `json:"id"`
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"created_at" gorm:"autoCreateTime:false"`
 }

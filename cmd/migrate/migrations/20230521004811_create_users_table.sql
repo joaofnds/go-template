@@ -1,7 +1,8 @@
 -- +goose Up
 CREATE TABLE users(
-  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name varchar NOT NULL
+  id uuid PRIMARY KEY,
+  name varchar NOT NULL,
+  created_at timestamp NOT NULL
 );
 
 -- +goose Down

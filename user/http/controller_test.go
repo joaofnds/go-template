@@ -9,6 +9,8 @@ import (
 	apphttp "app/adapter/http"
 	"app/adapter/logger"
 	"app/adapter/postgres"
+	"app/adapter/time"
+	"app/adapter/uuid"
 	"app/adapter/validation"
 	"app/config"
 	"app/test"
@@ -52,6 +54,8 @@ var _ = Describe("/users", Ordered, func() {
 			validation.Module,
 			postgres.Module,
 			usermodule.Module,
+			uuid.Module,
+			time.Module,
 			fx.Invoke(func(fiberapp *fiber.App, controller *userhttp.Controller) {
 				controller.Register(fiberapp)
 			}),

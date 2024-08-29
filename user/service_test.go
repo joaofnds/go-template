@@ -6,6 +6,8 @@ import (
 
 	"app/adapter/logger"
 	"app/adapter/postgres"
+	"app/adapter/time"
+	"app/adapter/uuid"
 	"app/config"
 	"app/test"
 	. "app/test/matchers"
@@ -36,6 +38,8 @@ var _ = Describe("user service", func() {
 			config.Module,
 			postgres.Module,
 			usermodule.Module,
+			uuid.Module,
+			time.Module,
 			fx.Populate(&userService),
 		)
 		app.RequireStart()

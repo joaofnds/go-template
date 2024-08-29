@@ -1,20 +1,40 @@
 package user
 
 import (
+	"app/adapter/time"
+	"app/adapter/uuid"
+	"app/internal/clock"
+	"app/internal/id"
 	"context"
 )
 
 type Service struct {
+	id      id.Generator
+	clock   clock.Clock
 	repo    Repository
 	emitter Emitter
 }
 
-func NewUserService(repo Repository, emitter Emitter) *Service {
-	return &Service{repo: repo, emitter: emitter}
+func NewUserService(
+	id *uuid.Generator,
+	clock *time.Clock,
+	repo Repository,
+	emitter Emitter,
+) *Service {
+	return &Service{
+		id:      id,
+		clock:   clock,
+		repo:    repo,
+		emitter: emitter,
+	}
 }
 
 func (service *Service) CreateUser(ctx context.Context, name string) (User, error) {
-	user := User{name}
+	user := User{
+		ID:        service.id.NewID(),
+		Name:      name,
+		CreatedAt: service.clock.Now(),
+	}
 
 	err := service.repo.CreateUser(ctx, user)
 	if err != nil {

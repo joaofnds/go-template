@@ -18,5 +18,5 @@ func NewClock() *Clock {
 }
 
 func (Clock) Now() time.Time {
-	return time.Now().UTC()
+	return time.Now().UTC().Truncate(time.Microsecond)
 }
