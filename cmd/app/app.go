@@ -11,6 +11,7 @@ import (
 	"app/adapter/queue"
 	"app/adapter/redis"
 	"app/adapter/tracing"
+	"app/adapter/uuid"
 	"app/adapter/validation"
 	"app/config"
 	"app/internal/appcontext"
@@ -30,6 +31,7 @@ func main() {
 		health.Module,
 		validation.Module,
 		featureflags.Module,
+		uuid.Module,
 
 		event.Module,
 		queue.ClientModule,
