@@ -10,6 +10,7 @@ import (
 	"app/adapter/postgres"
 	"app/adapter/queue"
 	"app/adapter/redis"
+	"app/adapter/time"
 	"app/adapter/tracing"
 	"app/adapter/uuid"
 	"app/adapter/validation"
@@ -32,6 +33,7 @@ func main() {
 		validation.Module,
 		featureflags.Module,
 		uuid.Module,
+		time.Module,
 
 		event.Module,
 		queue.ClientModule,
