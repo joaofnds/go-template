@@ -14,6 +14,7 @@ import (
 	"app/adapter/tracing"
 	"app/adapter/uuid"
 	"app/adapter/validation"
+	"app/authz"
 	"app/config"
 	"app/internal/appcontext"
 	"app/kv"
@@ -41,6 +42,7 @@ func main() {
 		postgres.Module,
 		redis.Module,
 
+		authz.Module,
 		user.Module,
 		kv.Module,
 	).Run()
