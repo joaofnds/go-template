@@ -1,61 +1,34 @@
 package authz
 
-import (
-	"app/internal/ref"
-
-	"github.com/casbin/casbin/v2"
-)
+import "app/internal/ref"
 
 const (
 	AppDomain = "app"
 )
 
-type Service struct {
-	enforcer *casbin.Enforcer
+type RoleManager interface {
+	Assign(user ref.Ref, role ref.Ref) error
+	Revoke(user ref.Ref, role ref.Ref) error
+	GetAll(user ref.Ref) []ref.Ref
 }
 
-func NewService(enforcer *casbin.Enforcer) *Service {
-	return &Service{enforcer: enforcer}
+type Enforcer interface {
+	Grant(req Request) error
+	Check(req Request) bool
 }
 
-func (authz *Service) GrantRole(user ref.Ref, role ref.Ref) error {
-	_, err := authz.enforcer.AddRoleForUserInDomain(user.String(), role.String(), AppDomain)
-	return err
+type Request struct {
+	Subject ref.Ref
+	Domain  string
+	Object  ref.Ref
+	Action  string
 }
 
-func (authz *Service) RevokeRole(user ref.Ref, role ref.Ref) error {
-	_, err := authz.enforcer.DeleteRoleForUserInDomain(user.String(), role.String(), AppDomain)
-	return err
-}
-
-func (authz *Service) GetRoles(user ref.Ref) []ref.Ref {
-	roleStrings := authz.enforcer.GetRolesForUserInDomain(user.String(), AppDomain)
-
-	roles := make([]ref.Ref, 0, len(roleStrings))
-	for _, role := range roleStrings {
-		roles = append(roles, ref.NewFromString(role))
+func NewAppRequest(subject ref.Ref, object ref.Ref, action string) Request {
+	return Request{
+		Subject: subject,
+		Domain:  AppDomain,
+		Object:  object,
+		Action:  action,
 	}
-	return roles
-}
-
-func (authz *Service) Check(req Request) bool {
-	hasPermission, err := authz.enforcer.Enforce(
-		req.Subject.String(),
-		req.Domain,
-		req.Object.String(),
-		req.Action,
-	)
-
-	return err == nil && hasPermission
-}
-
-func (authz *Service) Grant(req Request) error {
-	_, err := authz.enforcer.AddPolicy(
-		req.Subject.String(),
-		req.Domain,
-		req.Object.String(),
-		req.Action,
-	)
-
-	return err
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"app/adapter/authzcasbin"
 	"app/adapter/event"
 	"app/adapter/featureflags"
 	"app/adapter/health"
@@ -14,7 +15,6 @@ import (
 	"app/adapter/tracing"
 	"app/adapter/uuid"
 	"app/adapter/validation"
-	"app/authz"
 	"app/config"
 	"app/internal/appcontext"
 	"app/kv"
@@ -35,6 +35,7 @@ func main() {
 		featureflags.Module,
 		uuid.Module,
 		time.Module,
+		authzcasbin.Module,
 
 		event.Module,
 		queue.ClientModule,
@@ -42,7 +43,6 @@ func main() {
 		postgres.Module,
 		redis.Module,
 
-		authz.Module,
 		user.Module,
 		kv.Module,
 	).Run()

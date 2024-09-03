@@ -1,4 +1,4 @@
-package authz
+package authzcasbin
 
 import (
 	"context"
@@ -16,10 +16,12 @@ var (
 	Module = fx.Module("authz", Providers, Invokes)
 
 	Providers = fx.Options(
-		fx.Provide(newModel),
-		fx.Provide(newAdapter),
-		fx.Provide(newEnforcer),
-		fx.Provide(NewService),
+		fx.Provide(newCasbinModel),
+		fx.Provide(newCasbinPersistAdapter),
+		fx.Provide(newCasbinEnforcer),
+
+		fx.Provide(NewEnforcer),
+		fx.Provide(NewRoleManager),
 	)
 	Invokes = fx.Options(
 		fx.Invoke(loadPolicy),
@@ -29,15 +31,15 @@ var (
 	modelStr string
 )
 
-func newModel() (model.Model, error) {
+func newCasbinModel() (model.Model, error) {
 	return model.NewModelFromString(modelStr)
 }
 
-func newAdapter(db *gorm.DB) (persist.Adapter, error) {
+func newCasbinPersistAdapter(db *gorm.DB) (persist.Adapter, error) {
 	return gormadapter.NewAdapterByDBUseTableName(db, "casbin", "policies")
 }
 
-func newEnforcer(model model.Model, adapter persist.Adapter) (*casbin.Enforcer, error) {
+func newCasbinEnforcer(model model.Model, adapter persist.Adapter) (*casbin.Enforcer, error) {
 	return casbin.NewEnforcer(model, adapter)
 }
 

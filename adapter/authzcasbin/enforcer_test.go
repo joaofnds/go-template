@@ -1,8 +1,7 @@
-package authz_test
+package authzcasbin_test
 
 import (
-	"testing"
-
+	"app/adapter/authzcasbin"
 	"app/adapter/logger"
 	"app/adapter/postgres"
 	"app/authz"
@@ -17,12 +16,7 @@ import (
 	"go.uber.org/fx/fxtest"
 )
 
-func TestAuthz(t *testing.T) {
-	RegisterFailHandler(Fail)
-	RunSpecs(t, "authz suite")
-}
-
-var _ = Describe("authz service", func() {
+var _ = Describe("casbin enforcer", func() {
 	user := ref.New("111", "user")
 	post := ref.New("222", "post")
 	anyPost := ref.New("*", "post")
@@ -32,7 +26,8 @@ var _ = Describe("authz service", func() {
 	userPostDelete := authz.NewAppRequest(user, post, "delete")
 
 	var app *fxtest.App
-	var sut *authz.Service
+	var sut *authzcasbin.Enforcer
+	var roles *authzcasbin.RoleManager
 
 	BeforeEach(func() {
 		app = fxtest.New(
@@ -42,34 +37,14 @@ var _ = Describe("authz service", func() {
 			test.CasbinStringAdapter,
 			config.Module,
 			postgres.Module,
-			authz.Module,
-			fx.Populate(&sut),
+			authzcasbin.Module,
+			fx.Populate(&sut, &roles),
 		)
 		app.RequireStart()
 	})
 
 	AfterEach(func() {
 		app.RequireStop()
-	})
-
-	Describe("roles", func() {
-		It("grants roles", func() {
-			Must(sut.GrantRole(user, admin))
-		})
-
-		It("retrieves roles", func() {
-			Must(sut.GrantRole(user, admin))
-
-			Expect(sut.GetRoles(user)).To(ConsistOf(admin))
-		})
-
-		It("revokes roles", func() {
-			Must(sut.GrantRole(user, admin))
-
-			Must(sut.RevokeRole(user, admin))
-
-			Expect(sut.GetRoles(user)).To(BeEmpty())
-		})
 	})
 
 	It("has permission after direct grant", func(ctx SpecContext) {
@@ -84,7 +59,7 @@ var _ = Describe("authz service", func() {
 		Must(sut.Grant(adminAnyPostDelete))
 		Expect(sut.Check(userPostDelete)).To(BeFalse())
 
-		Must(sut.GrantRole(user, admin))
+		Must(roles.Assign(user, admin))
 
 		Expect(sut.Check(userPostDelete)).To(BeTrue())
 	})
