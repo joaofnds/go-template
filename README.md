@@ -1,6 +1,6 @@
 ## Features
 
-- [Dependency Injection](cmd/app/app.go#L24) with [Fx](https://github.com/uber-go/fx)
+- [Dependency Injection](cmd/app/app.go#L27) with [Fx](https://github.com/uber-go/fx)
 - [Configuration](config/config.go#L56) with [Viper](https://github.com/spf13/viper)
 - [Logging](adapter/logger/logger.go#L10) with [Zap](https://github.com/uber-go/zap)
 - [Metrics](adapter/metrics/metrics.go#L22) with [Prometheus](https://github.com/prometheus/client_golang)
@@ -8,13 +8,13 @@
 - [Health checks](adapter/health/controller.go#L18)
 - [Feature](adapter/featureflags/featureflags.go#L20) [flags](user/http/controller.go#L69) with [Go Feature Flag](https://github.com/thomaspoignant/go-feature-flag)
 - [Validation](user/http/dto.go#L4) with [Validator](https://github.com/go-playground/validator)
-- [Authorization](authz/authz.go#L21) with [Casbin](https://github.com/casbin/casbin)
+- [Authorization](adapter/authzcasbin/enforcer.go#L19) with [Casbin](https://github.com/casbin/casbin)
 - [HTTP](adapter/http/fiber.go#L34) with [Fiber](https://github.com/gofiber/fiber)
 - [Background](adapter/queue/client.go#L12) [tasks](user/queue/greeter.go#L33)/[workers](cmd/worker/worker.go#L14) with [Asynq](https://github.com/hibiken/asynq)
-- [Testing](user/service_test.go#L68) with [Ginkgo](https://github.com/onsi/ginkgo) and [Gomega](https://github.com/onsi/gomega)
+- [Testing](user/service_test.go#L72) with [Ginkgo](https://github.com/onsi/ginkgo) and [Gomega](https://github.com/onsi/gomega)
 - [Migrations](cmd/migrate/migrate.go#L22) with [Goose](https://github.com/pressly/goose)
 - [Sto](user/adapter/mongo_repository.go)[ra](kv/redis_store.go)[ge](user/adapter/postgres_repository.go) with [Mongo](https://github.com/mongodb/mongo-go-driver), [Redis](https://github.com/redis/go-redis), and [Gorm](https://github.com/go-gorm/gorm) ([Postgres](https://github.com/go-gorm/postgres))
-- [Version](.github/workflows/commit.yaml#L64) [management](.releaserc.yaml) with [Semantic Release](https://github.com/semantic-release/semantic-release)
+- [Version](.github/workflows/commit.yaml#L66) [management](.releaserc.yaml) with [Semantic Release](https://github.com/semantic-release/semantic-release)
 - [Image](Dockerfile) (using [distroless](https://github.com/GoogleContainerTools/distroless)) [publishing to GitHub Container Registry](.github/workflows/build.yaml)
 
 ## Setup
