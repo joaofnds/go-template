@@ -19,10 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: "^1.23"
-      - uses: golangci/golangci-lint-action@v4
+      - uses: golangci/golangci-lint-action@v6
+        with:
+          args: --timeout=2m
 
   lint-dockerfile:
     runs-on: ubuntu-latest
@@ -51,7 +53,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v4
+      - uses: actions/setup-go@v5
         with:
           go-version: "^1.22"
 
