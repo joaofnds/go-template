@@ -1,48 +1,20 @@
 package kv_test
 
 import (
-	apphttp "app/adapter/http"
-	"app/adapter/logger"
-	"app/adapter/redis"
-	"app/config"
-	"app/kv"
-	"app/test"
 	"app/test/driver"
 	"net/http"
 
-	"github.com/gofiber/fiber/v2"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"go.uber.org/fx"
-	"go.uber.org/fx/fxtest"
 )
 
 var _ = Describe("/kv", Ordered, func() {
-	var fxApp *fxtest.App
 	var app *driver.Driver
 
-	BeforeAll(func() {
-		var httpConfig apphttp.Config
-
-		fxApp = fxtest.New(
-			GinkgoT(),
-			logger.NopLoggerProvider,
-			config.Module,
-			test.AvailablePortProvider,
-			apphttp.FiberModule,
-			redis.Module,
-			kv.Module,
-			fx.Invoke(func(app *fiber.App, controller *kv.Controller) {
-				controller.Register(app)
-			}),
-			driver.Provider,
-			fx.Populate(&app, &httpConfig),
-		).RequireStart()
-	})
-
-	AfterAll(func() {
-		fxApp.RequireStop()
-	})
+	BeforeAll(func() { app = driver.Setup() })
+	BeforeEach(func() { app.BeginTx() })
+	AfterEach(func() { app.RollbackTx() })
+	AfterAll(func() { app.Teardown() })
 
 	Context("GET", func() {
 		It("returns the value under the key", func() {

@@ -33,7 +33,6 @@ var _ = Describe("casbin enforcer", func() {
 		app = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
-			test.Transaction,
 			test.CasbinStringAdapter,
 			config.Module,
 			postgres.Module,

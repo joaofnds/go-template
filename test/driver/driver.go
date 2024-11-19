@@ -1,76 +1,83 @@
 package driver
 
 import (
+	"app/adapter/featureflags"
+	"app/adapter/health"
 	apphttp "app/adapter/http"
-	"encoding/json"
+	"app/adapter/logger"
+	"app/adapter/postgres"
+	"app/adapter/redis"
+	"app/adapter/time"
+	"app/adapter/uuid"
+	"app/adapter/validation"
+	"app/config"
+	"app/kv"
+	"app/test"
+	"app/test/matchers"
+	usermodule "app/user/module"
 	"fmt"
-	"io"
-	"net/http"
 
+	"github.com/onsi/ginkgo/v2"
 	"go.uber.org/fx"
+	"go.uber.org/fx/fxtest"
+	"gorm.io/gorm"
 )
 
-var Provider = fx.Provide(func(config apphttp.Config) *Driver {
-	return NewDriver(fmt.Sprintf("http://localhost:%d", config.Port))
-})
+func Setup() *Driver {
+	var (
+		httpConfig apphttp.Config
+		db         *gorm.DB
+	)
+	app := fxtest.New(
+		ginkgo.GinkgoT(),
+		logger.NopLoggerProvider,
+		test.Queue,
+		test.AvailablePortProvider,
 
-type Driver struct {
-	URL  string
-	User *UserDriver
-	KV   *KVDriver
-}
+		uuid.Module,
+		time.Module,
+		config.Module,
+		featureflags.Module,
+		apphttp.Module,
+		validation.Module,
+		postgres.Module,
+		redis.Module,
 
-func NewDriver(url string) *Driver {
+		usermodule.Module,
+		kv.Module,
+		health.Module,
+
+		fx.Populate(&httpConfig, &db),
+	).RequireStart()
+
+	url := fmt.Sprintf("http://localhost:%d", httpConfig.Port)
 	return &Driver{
+		app: app,
+		db:  db,
+
 		URL:  url,
 		User: NewUserDriver(url),
 		KV:   NewKVDriver(url),
 	}
 }
 
-type params struct {
-	into   any
-	status int
-	req    func() (*http.Response, error)
+type Driver struct {
+	app *fxtest.App
+	db  *gorm.DB
+
+	URL  string
+	User *UserDriver
+	KV   *KVDriver
 }
 
-func makeJSONRequest(p params) error {
-	b, err := makeRequest(p.status, p.req)
-	if err != nil {
-		return err
-	}
-
-	if p.into == nil {
-		return nil
-	}
-
-	return json.Unmarshal(b, p.into)
+func (driver *Driver) BeginTx() {
+	matchers.Must(driver.db.Exec("BEGIN").Error)
 }
 
-func makeRequest(status int, req func() (*http.Response, error)) ([]byte, error) {
-	res, err := req()
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	b, err := io.ReadAll(res.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	if res.StatusCode != status {
-		return nil, RequestFailure{Status: res.StatusCode, Body: string(b)}
-	}
-
-	return b, nil
+func (driver *Driver) RollbackTx() {
+	matchers.Must(driver.db.Exec("ROLLBACK").Error)
 }
 
-type RequestFailure struct {
-	Status int
-	Body   string
-}
-
-func (e RequestFailure) Error() string {
-	return e.Body
+func (driver *Driver) Teardown() {
+	driver.app.RequireStop()
 }

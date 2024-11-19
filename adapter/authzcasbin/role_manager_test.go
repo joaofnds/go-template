@@ -26,7 +26,6 @@ var _ = Describe("casbin role manager", func() {
 		app = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
-			test.Transaction,
 			test.CasbinStringAdapter,
 			config.Module,
 			postgres.Module,

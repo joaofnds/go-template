@@ -18,7 +18,7 @@ func NewUserDriver(baseURL string) *UserDriver {
 	return &UserDriver{baseURL}
 }
 
-func (d *UserDriver) CreateUser(name string) (user.User, error) {
+func (d *UserDriver) Create(name string) (user.User, error) {
 	var u user.User
 
 	return u, makeJSONRequest(params{
@@ -34,11 +34,11 @@ func (d *UserDriver) CreateUser(name string) (user.User, error) {
 	})
 }
 
-func (d *UserDriver) MustCreateUser(name string) user.User {
-	return matchers.Must2(d.CreateUser(name))
+func (d *UserDriver) MustCreate(name string) user.User {
+	return matchers.Must2(d.Create(name))
 }
 
-func (d *UserDriver) GetUser(name string) (user.User, error) {
+func (d *UserDriver) Get(name string) (user.User, error) {
 	var u user.User
 
 	return u, makeJSONRequest(params{
@@ -53,11 +53,11 @@ func (d *UserDriver) GetUser(name string) (user.User, error) {
 	})
 }
 
-func (d *UserDriver) MustGetUser(name string) user.User {
-	return matchers.Must2(d.GetUser(name))
+func (d *UserDriver) MustGet(name string) user.User {
+	return matchers.Must2(d.Get(name))
 }
 
-func (d *UserDriver) ListUsers() ([]user.User, error) {
+func (d *UserDriver) List() ([]user.User, error) {
 	var users []user.User
 	return users, makeJSONRequest(params{
 		into:   &users,
@@ -71,11 +71,11 @@ func (d *UserDriver) ListUsers() ([]user.User, error) {
 	})
 }
 
-func (d *UserDriver) MustListUsers() []user.User {
-	return matchers.Must2(d.ListUsers())
+func (d *UserDriver) MustList() []user.User {
+	return matchers.Must2(d.List())
 }
 
-func (d *UserDriver) DeleteUser(name string) error {
+func (d *UserDriver) Delete(name string) error {
 	return makeJSONRequest(params{
 		status: http.StatusOK,
 		req: func() (*http.Response, error) {
@@ -87,8 +87,8 @@ func (d *UserDriver) DeleteUser(name string) error {
 	})
 }
 
-func (d *UserDriver) MustDeleteUser(name string) {
-	matchers.Must(d.DeleteUser(name))
+func (d *UserDriver) MustDelete(name string) {
+	matchers.Must(d.Delete(name))
 }
 
 func (d *UserDriver) GetFeature(name string) (map[string]any, error) {

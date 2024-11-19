@@ -1,7 +1,6 @@
 package user_test
 
 import (
-	"context"
 	"testing"
 
 	"app/adapter/logger"
@@ -18,6 +17,7 @@ import (
 	. "github.com/onsi/gomega"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
+	"gorm.io/gorm"
 )
 
 func TestUserService(t *testing.T) {
@@ -26,27 +26,31 @@ func TestUserService(t *testing.T) {
 }
 
 var _ = Describe("user service", func() {
-	var app *fxtest.App
-	var userService *user.Service
+	var (
+		app         *fxtest.App
+		userService *user.Service
+		db          *gorm.DB
+	)
 
 	BeforeEach(func() {
 		app = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			test.Queue,
-			test.Transaction,
 			config.Module,
 			postgres.Module,
 			usermodule.Module,
 			uuid.Module,
 			time.Module,
-			fx.Populate(&userService),
+			fx.Populate(&userService, &db),
 		)
 		app.RequireStart()
-		Must(userService.DeleteAll(context.Background()))
+
+		Must(db.Exec("BEGIN").Error)
 	})
 
 	AfterEach(func() {
+		Must(db.Exec("ROLLBACK").Error)
 		app.RequireStop()
 	})
 
