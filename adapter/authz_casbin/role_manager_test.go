@@ -1,7 +1,7 @@
-package authzcasbin_test
+package authz_casbin_test
 
 import (
-	"app/adapter/authzcasbin"
+	"app/adapter/authz_casbin"
 	"app/adapter/logger"
 	"app/adapter/postgres"
 	"app/config"
@@ -20,7 +20,7 @@ var _ = Describe("casbin role manager", func() {
 	admin := ref.New("admin", "role")
 
 	var app *fxtest.App
-	var sut *authzcasbin.RoleManager
+	var sut *authz_casbin.RoleManager
 
 	BeforeEach(func() {
 		app = fxtest.New(
@@ -29,7 +29,7 @@ var _ = Describe("casbin role manager", func() {
 			test.CasbinStringAdapter,
 			config.Module,
 			postgres.Module,
-			authzcasbin.Module,
+			authz_casbin.Module,
 			fx.Populate(&sut),
 		)
 		app.RequireStart()

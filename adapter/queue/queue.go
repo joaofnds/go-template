@@ -1,7 +1,7 @@
 package queue
 
 import (
-	userqueue "app/user/queue"
+	userqueue "app/user/user_queue"
 
 	"github.com/hibiken/asynq"
 	"go.uber.org/fx"

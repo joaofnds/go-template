@@ -1,4 +1,4 @@
-package adapter
+package user_adapter
 
 import (
 	"app/internal/event"

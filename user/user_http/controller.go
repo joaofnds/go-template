@@ -1,4 +1,4 @@
-package http
+package user_http
 
 import (
 	"errors"

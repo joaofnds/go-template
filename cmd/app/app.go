@@ -1,7 +1,7 @@
 package main
 
 import (
-	"app/adapter/authzcasbin"
+	"app/adapter/authz_casbin"
 	"app/adapter/event"
 	"app/adapter/featureflags"
 	"app/adapter/health"
@@ -18,7 +18,7 @@ import (
 	"app/config"
 	"app/internal/appcontext"
 	"app/kv"
-	user "app/user/module"
+	"app/user/user_module"
 
 	"go.uber.org/fx"
 )
@@ -35,7 +35,7 @@ func main() {
 		featureflags.Module,
 		uuid.Module,
 		time.Module,
-		authzcasbin.Module,
+		authz_casbin.Module,
 
 		event.Module,
 		queue.ClientModule,
@@ -43,7 +43,7 @@ func main() {
 		postgres.Module,
 		redis.Module,
 
-		user.Module,
+		user_module.Module,
 		kv.Module,
 	).Run()
 }

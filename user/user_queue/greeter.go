@@ -1,4 +1,4 @@
-package queue
+package user_queue
 
 import (
 	"app/internal/event"

@@ -14,7 +14,7 @@ import (
 	"app/kv"
 	"app/test"
 	"app/test/matchers"
-	usermodule "app/user/module"
+	usermodule "app/user/user_module"
 	"fmt"
 
 	"github.com/onsi/ginkgo/v2"

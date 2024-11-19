@@ -1,4 +1,4 @@
-package authzcasbin
+package authz_casbin
 
 import (
 	"context"

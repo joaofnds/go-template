@@ -21,5 +21,6 @@ func Middleware(ctx *fiber.Ctx) error {
 	for name, value := range flags {
 		ctx.Locals("flags."+name, value)
 	}
+
 	return ctx.Next()
 }

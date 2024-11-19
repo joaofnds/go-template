@@ -11,7 +11,7 @@ import (
 	"app/test"
 	. "app/test/matchers"
 	"app/user"
-	usermodule "app/user/module"
+	usermodule "app/user/user_module"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"

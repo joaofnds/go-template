@@ -5,7 +5,7 @@ import (
 	"app/adapter/postgres"
 	"app/adapter/queue"
 	"app/config"
-	user "app/user/module"
+	user "app/user/user_module"
 
 	"go.uber.org/fx"
 )

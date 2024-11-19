@@ -1,8 +1,8 @@
 package event
 
 import (
-	useradapters "app/user/adapter"
-	userqueue "app/user/queue"
+	useradapters "app/user/user_adapter"
+	userqueue "app/user/user_queue"
 
 	"go.uber.org/fx"
 )

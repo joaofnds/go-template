@@ -3,7 +3,7 @@ package http
 import (
 	"app/adapter/health"
 	"app/kv"
-	userhttp "app/user/http"
+	userhttp "app/user/user_http"
 
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/fx"
