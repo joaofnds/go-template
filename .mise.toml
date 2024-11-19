@@ -1,6 +1,6 @@
 [tools]
 gitleaks = "8.18.4"
-go = "1.23.0"
+go = "1.23.3"
 golangci-lint = "1.60.3"
 k6 = "0.53.0"
 
