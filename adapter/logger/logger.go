@@ -8,7 +8,9 @@ import (
 
 var Module = fx.Options(
 	fx.Provide(func() (*zap.Logger, error) {
-		return zap.NewProduction()
+		zapConfig := zap.NewProductionConfig()
+		zapConfig.Level = zap.NewAtomicLevelAt(zap.DebugLevel)
+		return zapConfig.Build()
 	}),
 	fx.Provide(func(logger *zap.Logger) *zap.SugaredLogger {
 		return logger.Sugar()
