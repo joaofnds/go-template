@@ -13,14 +13,14 @@ require (
 	github.com/gofiber/fiber/v2 v2.52.5
 	github.com/google/uuid v1.6.0
 	github.com/hibiken/asynq v0.25.0
-	github.com/onsi/ginkgo/v2 v2.21.0
+	github.com/onsi/ginkgo/v2 v2.22.0
 	github.com/onsi/gomega v1.35.1
-	github.com/pressly/goose/v3 v3.22.1
+	github.com/pressly/goose/v3 v3.23.0
 	github.com/prometheus/client_golang v1.20.5
 	github.com/redis/go-redis/extra/redisotel/v9 v9.7.0
 	github.com/redis/go-redis/v9 v9.7.0
 	github.com/spf13/viper v1.19.0
-	github.com/thomaspoignant/go-feature-flag v1.38.0
+	github.com/thomaspoignant/go-feature-flag v1.39.0
 	go.mongodb.org/mongo-driver v1.17.1
 	go.opentelemetry.io/otel v1.32.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.32.0
@@ -29,7 +29,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.32.0
 	go.uber.org/fx v1.23.0
 	go.uber.org/zap v1.27.0
-	gorm.io/driver/postgres v1.5.9
+	gorm.io/driver/postgres v1.5.10
 	gorm.io/gorm v1.25.12
 	gorm.io/plugin/opentelemetry v0.1.8
 )
@@ -51,7 +51,7 @@ require (
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.6 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.7 // indirect
 	github.com/glebarez/go-sqlite v1.22.0 // indirect
 	github.com/glebarez/sqlite v1.11.0 // indirect
 	github.com/go-logr/logr v1.4.2 // indirect
@@ -64,8 +64,8 @@ require (
 	github.com/golang-sql/sqlexp v0.1.0 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
-	github.com/google/pprof v0.0.0-20241101162523-b92577c0c142 // indirect
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.23.0 // indirect
+	github.com/google/pprof v0.0.0-20241122213907-cbe949e5a41b // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.24.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect

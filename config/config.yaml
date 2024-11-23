@@ -4,13 +4,16 @@ http:
   limiter:
     requests: 1000
     expiration: 1s
+
 metrics:
   addr: localhost:9091
+
 tracing:
   addr: localhost:4317
   secure: false
   timeout: 1s
   sample_rate: 1.0
+
 feature_flags:
   polling_interval: 15s
   flags:
@@ -22,9 +25,12 @@ feature_flags:
         percentage:
           on: 50
           off: 50
+
 postgres:
   uri: postgres://postgres:postgres@localhost:5432/template?sslmode=disable
+
 mongo:
   uri: mongodb://localhost:27017
+
 redis:
   addr: localhost:6379
