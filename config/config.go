@@ -17,9 +17,9 @@ import (
 )
 
 var (
-	Module = fx.Module("config", Providers)
+	Module = fx.Module(
+		"config",
 
-	Providers = fx.Options(
 		fx.Provide(NewAppConfig),
 		fx.Provide(func(config AppConfig) logger.Config { return config.Logger }),
 		fx.Provide(func(config AppConfig) http.Config { return config.HTTP }),
@@ -45,37 +45,22 @@ type AppConfig struct {
 }
 
 func NewAppConfig(validator *validator.Validate) (AppConfig, error) {
-	var config AppConfig
+	viperInstance := viper.New()
 
-	if loadErr := loadConfig(); loadErr != nil {
-		return config, loadErr
+	viperInstance.MustBindEnv("env", "ENV")
+	viperInstance.MustBindEnv("postgres.uri", "POSTGRES_URI")
+	viperInstance.MustBindEnv("redis.addr", "REDIS_ADDR")
+
+	viperInstance.SetConfigFile(os.Getenv("CONFIG_PATH"))
+
+	var config AppConfig
+	if err := viperInstance.ReadInConfig(); err != nil {
+		return config, err
 	}
 
-	if parseErr := viper.UnmarshalExact(&config); parseErr != nil {
-		return config, parseErr
+	if err := viperInstance.UnmarshalExact(&config); err != nil {
+		return config, err
 	}
 
 	return config, validator.Struct(config)
-}
-
-func loadConfig() error {
-	configFile := os.Getenv("CONFIG_PATH")
-	if configFile == "" {
-		bindEnvs()
-		return nil
-	}
-
-	viper.SetConfigFile(configFile)
-	return viper.ReadInConfig()
-}
-
-func bindEnvs() {
-	viper.MustBindEnv("env", "ENV")
-	viper.MustBindEnv("metrics.address", "METRICS_ADDRESS")
-	viper.MustBindEnv("http.port", "HTTP_PORT")
-	viper.MustBindEnv("http.limiter.requests", "HTTP_LIMITER_REQUESTS")
-	viper.MustBindEnv("http.limiter.expiration", "HTTP_LIMITER_EXPIRATION")
-	viper.MustBindEnv("postgres.uri", "POSTGRES_URI")
-	viper.MustBindEnv("mongo.uri", "MONGO_URI")
-	viper.MustBindEnv("redis.addr", "REDIS_ADDR")
 }
