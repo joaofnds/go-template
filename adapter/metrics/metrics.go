@@ -16,14 +16,12 @@ var Module = fx.Module(
 	fx.Invoke(HookMetricsHandler),
 )
 
-type Server = http.Server
-
-func NewServer(c Config) *Server {
+func NewServer(c Config) *http.Server {
 	http.Handle("/metrics", promhttp.Handler())
 	return &http.Server{Addr: c.Addr}
 }
 
-func HookMetricsHandler(lifecycle fx.Lifecycle, server *Server, logger *zap.Logger) {
+func HookMetricsHandler(lifecycle fx.Lifecycle, server *http.Server, logger *zap.Logger) {
 	lifecycle.Append(fx.Hook{
 		OnStart: func(context.Context) error {
 			go func() {
