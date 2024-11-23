@@ -7,6 +7,7 @@ import (
 	"app/adapter/postgres"
 	"app/adapter/time"
 	"app/adapter/uuid"
+	"app/adapter/validation"
 	"app/config"
 	"app/test"
 	. "app/test/matchers"
@@ -37,6 +38,7 @@ var _ = Describe("user service", func() {
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			test.Queue,
+			validation.Module,
 			config.Module,
 			postgres.Module,
 			usermodule.Module,

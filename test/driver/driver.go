@@ -36,10 +36,10 @@ func Setup() *Driver {
 
 		uuid.Module,
 		time.Module,
+		validation.Module,
 		config.Module,
 		featureflags.Module,
 		apphttp.Module,
-		validation.Module,
 		postgres.Module,
 		redis.Module,
 

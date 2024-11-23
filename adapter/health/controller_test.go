@@ -6,6 +6,7 @@ import (
 	"app/adapter/logger"
 	"app/adapter/postgres"
 	"app/adapter/redis"
+	"app/adapter/validation"
 	"app/config"
 	"app/test"
 	. "app/test/matchers"
@@ -39,6 +40,7 @@ var _ = Describe("/health", Ordered, func() {
 				logger.NopLoggerProvider,
 				apphttp.NopProbeProvider,
 				test.AvailablePortProvider,
+				validation.Module,
 				config.Module,
 				redis.Module,
 				postgres.Module,
@@ -81,6 +83,7 @@ var _ = Describe("/health", Ordered, func() {
 				logger.NopLoggerProvider,
 				apphttp.NopProbeProvider,
 				test.AvailablePortProvider,
+				validation.Module,
 				config.Module,
 				apphttp.FiberModule,
 				health.Module,

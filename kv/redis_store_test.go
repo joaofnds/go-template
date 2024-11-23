@@ -3,6 +3,7 @@ package kv_test
 import (
 	"app/adapter/logger"
 	"app/adapter/redis"
+	"app/adapter/validation"
 	"app/config"
 	"app/kv"
 	. "app/test/matchers"
@@ -27,6 +28,7 @@ var _ = Describe("Redis Store", func() {
 		app = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
+			validation.Module,
 			config.Module,
 			redis.Module,
 			kv.Module,

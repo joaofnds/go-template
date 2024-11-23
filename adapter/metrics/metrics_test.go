@@ -3,6 +3,7 @@ package metrics_test
 import (
 	"app/adapter/logger"
 	"app/adapter/metrics"
+	"app/adapter/validation"
 	"app/config"
 	. "app/test/matchers"
 	"fmt"
@@ -30,6 +31,7 @@ var _ = Describe("/", Ordered, func() {
 		fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
+			validation.Module,
 			config.Module,
 			metrics.Module,
 			fx.Populate(&cfg),

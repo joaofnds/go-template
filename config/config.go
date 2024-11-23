@@ -10,9 +10,9 @@ import (
 	"app/adapter/tracing"
 	"os"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/spf13/viper"
 	"go.uber.org/fx"
-	"go.uber.org/zap"
 )
 
 var (
@@ -30,30 +30,34 @@ var (
 	)
 	Invokes = fx.Options(
 		fx.Invoke(LoadConfig),
+		fx.Invoke(ValidateConfig),
 	)
 )
 
 type AppConfig struct {
-	Env          string              `mapstructure:"env"`
-	HTTP         http.Config         `mapstructure:"http"`
-	Metrics      metrics.Config      `mapstructure:"metrics"`
-	Postgres     postgres.Config     `mapstructure:"postgres"`
-	Mongo        mongo.Config        `mapstructure:"mongo"`
-	Redis        redis.Config        `mapstructure:"redis"`
-	FeatureFlags featureflags.Config `mapstructure:"feature_flags"`
-	Tracing      tracing.Config      `mapstructure:"tracing"`
+	Env          string              `mapstructure:"env" validate:"required,oneof=development staging production"`
+	HTTP         http.Config         `mapstructure:"http" validate:"required"`
+	Metrics      metrics.Config      `mapstructure:"metrics" validate:"required"`
+	Postgres     postgres.Config     `mapstructure:"postgres" validate:"required"`
+	Mongo        mongo.Config        `mapstructure:"mongo" validate:"required"`
+	Redis        redis.Config        `mapstructure:"redis" validate:"required"`
+	FeatureFlags featureflags.Config `mapstructure:"feature_flags" validate:"required"`
+	Tracing      tracing.Config      `mapstructure:"tracing" validate:"required"`
 }
 
-func LoadConfig(logger *zap.Logger) error {
+func LoadConfig() error {
 	configFile := os.Getenv("CONFIG_PATH")
 	if configFile == "" {
-		logger.Info("CONFIG_PATH not set, skipping config file load")
 		bindEnvs()
 		return nil
 	}
 
 	viper.SetConfigFile(configFile)
 	return viper.ReadInConfig()
+}
+
+func ValidateConfig(config AppConfig, validator *validator.Validate) error {
+	return validator.Struct(config)
 }
 
 func NewAppConfig() (AppConfig, error) {

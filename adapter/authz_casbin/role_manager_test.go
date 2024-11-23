@@ -4,6 +4,7 @@ import (
 	"app/adapter/authz_casbin"
 	"app/adapter/logger"
 	"app/adapter/postgres"
+	"app/adapter/validation"
 	"app/config"
 	"app/internal/ref"
 	"app/test"
@@ -27,6 +28,7 @@ var _ = Describe("casbin role manager", func() {
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			test.CasbinStringAdapter,
+			validation.Module,
 			config.Module,
 			postgres.Module,
 			authz_casbin.Module,

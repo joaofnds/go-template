@@ -3,6 +3,7 @@ package http_test
 import (
 	apphttp "app/adapter/http"
 	"app/adapter/logger"
+	"app/adapter/validation"
 	"app/config"
 	"fmt"
 	"net/http"
@@ -42,6 +43,7 @@ var _ = Describe("fiber middlewares", func() {
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			apphttp.NopProbeProvider,
+			validation.Module,
 			config.Module,
 			apphttp.FiberModule,
 			PanicHandler,

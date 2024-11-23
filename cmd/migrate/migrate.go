@@ -10,6 +10,7 @@ import (
 
 	"app/adapter/logger"
 	"app/adapter/postgres"
+	"app/adapter/validation"
 	"app/config"
 
 	"github.com/pressly/goose/v3"
@@ -54,6 +55,7 @@ func dbInstance(ctx context.Context) (*sql.DB, error) {
 
 	app := fx.New(
 		logger.NopLoggerProvider,
+		validation.Module,
 		config.Module,
 		postgres.Module,
 		fx.Populate(&db),
