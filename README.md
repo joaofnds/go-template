@@ -23,7 +23,7 @@
 # set config path manually
 export CONFIG_PATH="$PWD/config/config.yaml"
 # or use mise (recommended)
-mise allow .
+mise trust
 
 docker compose up -d
 
