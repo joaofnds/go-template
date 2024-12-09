@@ -1,3 +1,2 @@
-/app
-/worker
-/migrate
+.task
+/bin

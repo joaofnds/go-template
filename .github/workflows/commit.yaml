@@ -5,33 +5,6 @@ on:
     branches: [main]
 
 jobs:
-  gitleaks:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  lint-go:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: "^1.23"
-      - uses: golangci/golangci-lint-action@v6
-        with:
-          args: --timeout=2m
-
-  lint-dockerfile:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: hadolint/hadolint-action@v3.1.0
-
   test:
     runs-on: ubuntu-latest
     services:
@@ -48,27 +21,17 @@ jobs:
         ports:
           - 6379:6379
 
-    env:
-      CONFIG_PATH: "${{ github.workspace }}/config/config.yaml"
-
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: "^1.22"
-
-      - name: migrate
-        run: go run cmd/migrate/migrate.go up
-
-      - name: tests
-        run: go test -v ./...
+      - uses: jdx/mise-action@v2
+      - run: task ci
 
   release:
-    needs: [gitleaks, lint-go, lint-dockerfile, test]
+    needs: [test]
     runs-on: ubuntu-latest
     steps:
       - uses: joaofnds/semantic-release-action@v1.4.0
         with:
-          plugins: "conventional-changelog-conventionalcommits"
+          plugins: conventional-changelog-conventionalcommits
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

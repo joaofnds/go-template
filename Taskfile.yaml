@@ -1,0 +1,136 @@
+version: "3"
+
+tasks:
+  up:
+    desc: starts docker compose services
+    cmds:
+      - docker compose up -d
+
+  down:
+    desc: stops docker compose services
+    cmds:
+      - docker compose down
+
+  install-deps:
+    desc: install dependencies
+    run: once
+    cmds:
+      - go get ./...
+    sources:
+      - go.mod
+      - go.sum
+
+  build-app:
+    desc: builds app
+    deps:
+      - install-deps
+    cmds:
+      - go build -o bin/app cmd/app/app.go
+    sources:
+      - ./**/*.go
+    generates:
+      - bin/app
+
+  build-worker:
+    desc: builds worker
+    deps:
+      - install-deps
+    cmds:
+      - go build -o bin/worker cmd/worker/worker.go
+    sources:
+      - ./**/*.go
+    generates:
+      - bin/worker
+
+  build-migrate:
+    desc: builds migrate
+    deps:
+      - install-deps
+    cmds:
+      - go build -o bin/migrate cmd/migrate/migrate.go
+    sources:
+      - ./cmd/migrate/migrate.go
+      - ./cmd/migrate/migrations/*.sql
+    generates:
+      - bin/migrate
+
+  migrate-up:
+    desc: run migrations
+    deps:
+      - build-migrate
+    sources:
+      - /bin/migrate
+    cmds:
+      - bin/migrate up
+    status:
+      - bin/migrate status 2>&1 | grep -q "Pending" && exit 1 || exit 0
+
+  build:
+    desc: builds app, worker and migrate
+    cmds:
+      - task: build-app
+      - task: build-worker
+      - task: build-migrate
+
+  clean:
+    desc: cleans generated binaries and caches
+    cmds:
+      - rm -f bin/*
+      - go clean -cache -testcache -fuzzcache
+
+  format:
+    desc: formats code
+    cmds:
+      - gofmt -w .
+
+  format-check:
+    desc: checks code formatting
+    cmds:
+      - test -z "$(gofmt -l .)"
+
+  lint:
+    desc: lints code
+    deps:
+      - install-deps
+    cmds:
+      - golangci-lint run --timeout=5m
+
+  lint-dockerfile:
+    desc: lints Dockerfile
+    cmds:
+      - hadolint Dockerfile
+
+  test:
+    desc: runs tests
+    deps:
+      - install-deps
+    cmds:
+      - go test ./...
+
+  test-load:
+    desc: runs load tests
+    cmds:
+      - k6 run test/k6/load-test.js
+
+  gitleaks:
+    desc: runs gitleaks
+    cmds:
+      - gitleaks detect .
+
+  setup:
+    desc: sets up the project
+    cmds:
+      - task: up
+      - task: install-deps
+      - task: migrate-up
+
+  ci:
+    desc: runs standard checks
+    deps:
+      - format-check
+      - gitleaks
+      - lint
+      - lint-dockerfile
+      - migrate-up
+    cmds:
+      - task: test

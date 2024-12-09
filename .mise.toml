@@ -1,47 +1,10 @@
 [tools]
-gitleaks = "8.18.4"
+gitleaks = "8.21.2"
 go = "1.23.3"
-golangci-lint = "1.60.3"
-k6 = "0.53.0"
+golangci-lint = "1.62.0"
+hadolint = "2.12.0"
+k6 = "0.55.0"
+task = "3.40.1"
 
 [env]
 CONFIG_PATH = "{{config_root}}/config/config.yaml"
-
-[tasks.up]
-run = ["limactl start default", "lima nerdctl compose up -d"]
-
-[tasks.down]
-run = ["lima nerdctl compose down", "limactl stop default"]
-
-[tasks.build]
-depends = ["build-app", "build-worker", "build-migrate"]
-
-[tasks.build-app]
-run = "go build -o app ./cmd/app"
-outputs = ["app"]
-
-[tasks.build-worker]
-run = "go build -o worker ./cmd/worker"
-outputs = ["worker"]
-
-[tasks.build-migrate]
-run = "go build -o migrate ./cmd/migrate"
-outputs = ["migrate"]
-
-[tasks.clean]
-run = ["rm -f app worker migrate", "go clean -cache -testcache -fuzzcache"]
-
-[tasks.lint]
-run = "golangci-lint run"
-
-[tasks.lint-dockerfile]
-run = "hadolint Dockerfile"
-
-[tasks.format]
-run = "goimports -w ."
-
-[tasks.gitleaks]
-run = "gitleaks detect ."
-
-[tasks.test-load]
-run = "k6 run test/k6/load-test.js"
