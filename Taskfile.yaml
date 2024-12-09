@@ -83,7 +83,7 @@ tasks:
     deps:
       - install-deps
     cmds:
-      - golangci-lint run --timeout=5m
+      - golangci-lint run
 
   lint-dockerfile:
     desc: lints Dockerfile

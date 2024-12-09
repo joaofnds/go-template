@@ -1,3 +1,7 @@
 linters:
   enable:
     - goimports
+
+run:
+  timeout: 5m
+  allow-parallel-runners: true
