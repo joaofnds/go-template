@@ -78,16 +78,6 @@ tasks:
       - rm -f bin/*
       - go clean -cache -testcache -fuzzcache
 
-  format:
-    desc: formats code
-    cmds:
-      - gofmt -w .
-
-  format-check:
-    desc: checks code formatting
-    cmds:
-      - test -z "$(gofmt -l .)"
-
   lint:
     desc: lints code
     deps:
@@ -127,7 +117,6 @@ tasks:
   ci:
     desc: runs standard checks
     deps:
-      - format-check
       - gitleaks
       - lint
       - lint-dockerfile
