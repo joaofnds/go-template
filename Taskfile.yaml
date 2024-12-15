@@ -20,7 +20,7 @@ tasks:
       - go.mod
       - go.sum
 
-  build-app:
+  build:app:
     desc: builds app
     deps:
       - install-deps
@@ -31,7 +31,7 @@ tasks:
     generates:
       - bin/app
 
-  build-worker:
+  build:worker:
     desc: builds worker
     deps:
       - install-deps
@@ -42,7 +42,7 @@ tasks:
     generates:
       - bin/worker
 
-  build-migrate:
+  build:migrate:
     desc: builds migrate
     deps:
       - install-deps
@@ -57,7 +57,7 @@ tasks:
   migrate-up:
     desc: run migrations
     deps:
-      - build-migrate
+      - build:migrate
     sources:
       - /bin/migrate
     cmds:
@@ -68,9 +68,9 @@ tasks:
   build:
     desc: builds app, worker and migrate
     cmds:
-      - task: build-app
-      - task: build-worker
-      - task: build-migrate
+      - task: build:app
+      - task: build:worker
+      - task: build:migrate
 
   clean:
     desc: cleans generated binaries and caches
