@@ -43,8 +43,8 @@ services:
     ports:
       - 8000:8000
     volumes:
-      - ./adapter/casdoor/app.conf:/conf/app.conf:ro
-      - ./adapter/casdoor/init_data.json:/init_data.json:ro
+      - ./etc/casdoor.conf:/conf/app.conf:ro
+      - ./etc/casdoor_init_data.json:/init_data.json:ro
     depends_on:
       postgres:
         condition: service_healthy

@@ -7,7 +7,7 @@ services:
       - "--config.file=/etc/prometheus/prometheus.yaml"
     restart: unless-stopped
     volumes:
-      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
+      - ./etc/prometheus.yaml:/etc/prometheus/prometheus.yaml
     ports:
       - 9090:9090
     extra_hosts:
@@ -17,7 +17,7 @@ services:
     image: grafana/grafana
     restart: unless-stopped
     volumes:
-      - ./grafana.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
+      - ./etc/grafana.yaml:/etc/grafana/provisioning/datasources/datasource.yaml
     ports:
       - 9000:3000
 
