@@ -2,6 +2,7 @@ package main
 
 import (
 	"app/adapter/authz_casbin"
+	"app/adapter/casdoor"
 	"app/adapter/event"
 	"app/adapter/featureflags"
 	"app/adapter/health"
@@ -15,6 +16,7 @@ import (
 	"app/adapter/tracing"
 	"app/adapter/uuid"
 	"app/adapter/validation"
+	"app/authn/authn_http"
 	"app/config"
 	"app/internal/appcontext"
 	"app/kv"
@@ -36,13 +38,15 @@ func main() {
 		uuid.Module,
 		time.Module,
 		authz_casbin.Module,
+		casdoor.Module,
 
 		event.Module,
 		queue.ClientModule,
-		http.Module,
 		postgres.Module,
 		redis.Module,
+		http.Module,
 
+		authn_http.Module,
 		user_module.Module,
 		kv.Module,
 	).Run()

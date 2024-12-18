@@ -7,23 +7,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:alpine
-        ports:
-          - 5432:5432
-        env:
-          POSTGRES_DB: template
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-      redis:
-        image: redis
-        ports:
-          - 6379:6379
-
     steps:
       - uses: actions/checkout@v4
       - uses: jdx/mise-action@v2
+      - run: task up
       - run: task ci
 
   release:

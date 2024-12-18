@@ -1,6 +1,7 @@
 package config
 
 import (
+	"app/adapter/casdoor"
 	"app/adapter/featureflags"
 	"app/adapter/http"
 	"app/adapter/logger"
@@ -21,6 +22,7 @@ var (
 		"config",
 
 		fx.Provide(NewAppConfig),
+		fx.Provide(func(config AppConfig) casdoor.Config { return config.Casdoor }),
 		fx.Provide(func(config AppConfig) featureflags.Config { return config.FeatureFlags }),
 		fx.Provide(func(config AppConfig) http.Config { return config.HTTP }),
 		fx.Provide(func(config AppConfig) logger.Config { return config.Logger }),
@@ -33,6 +35,7 @@ var (
 )
 
 type AppConfig struct {
+	Casdoor      casdoor.Config      `mapstructure:"casdoor" validate:"required"`
 	Env          string              `mapstructure:"env" validate:"required,oneof=development staging production"`
 	FeatureFlags featureflags.Config `mapstructure:"feature_flags" validate:"required"`
 	HTTP         http.Config         `mapstructure:"http" validate:"required"`

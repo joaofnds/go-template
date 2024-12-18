@@ -1,6 +1,7 @@
 package driver
 
 import (
+	"app/adapter/casdoor"
 	"app/adapter/featureflags"
 	"app/adapter/health"
 	apphttp "app/adapter/http"
@@ -10,6 +11,7 @@ import (
 	"app/adapter/time"
 	"app/adapter/uuid"
 	"app/adapter/validation"
+	"app/authn/authn_http"
 	"app/config"
 	"app/kv"
 	"app/test"
@@ -34,6 +36,7 @@ func Setup() *Driver {
 		test.Queue,
 		test.AvailablePortProvider,
 
+		casdoor.Module,
 		uuid.Module,
 		time.Module,
 		validation.Module,
@@ -42,6 +45,7 @@ func Setup() *Driver {
 		apphttp.Module,
 		postgres.Module,
 		redis.Module,
+		authn_http.Module,
 
 		usermodule.Module,
 		kv.Module,
@@ -56,6 +60,7 @@ func Setup() *Driver {
 		db:  db,
 
 		URL:  url,
+		Auth: NewAuthDriver(url),
 		User: NewUserDriver(url),
 		KV:   NewKVDriver(url),
 	}
@@ -66,8 +71,9 @@ type Driver struct {
 	db  *gorm.DB
 
 	URL  string
-	User *UserDriver
+	Auth *AuthDriver
 	KV   *KVDriver
+	User *UserDriver
 }
 
 func (driver *Driver) BeginTx() {

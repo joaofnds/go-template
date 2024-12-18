@@ -8,6 +8,13 @@ services:
       - POSTGRES_DB=template
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: pg_isready --timeout 5 --username postgres
+      interval: 5s
+      timeout: 5s
+      start_period: 5s
+      start_interval: 100ms
+      retries: 5
 
   # mongo:
   #   image: mongo
@@ -29,3 +36,15 @@ services:
   #     - --enable-metrics-exporter
   #   ports:
   #     - 8080:8080
+
+  casdoor:
+    image: casbin/casdoor:v1.770.0
+    command: --createDatabase=true
+    ports:
+      - 8000:8000
+    volumes:
+      - ./adapter/casdoor/app.conf:/conf/app.conf:ro
+      - ./adapter/casdoor/init_data.json:/init_data.json:ro
+    depends_on:
+      postgres:
+        condition: service_healthy

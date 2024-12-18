@@ -11,6 +11,7 @@ require (
 	github.com/go-playground/validator/v10 v10.23.0
 	github.com/gofiber/contrib/otelfiber v1.0.10
 	github.com/gofiber/fiber/v2 v2.52.5
+	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/google/uuid v1.6.0
 	github.com/hibiken/asynq v0.25.1
 	github.com/onsi/ginkgo/v2 v2.22.0
@@ -29,6 +30,7 @@ require (
 	go.opentelemetry.io/otel/trace v1.32.0
 	go.uber.org/fx v1.23.0
 	go.uber.org/zap v1.27.0
+	golang.org/x/oauth2 v0.24.0
 	gorm.io/driver/postgres v1.5.11
 	gorm.io/gorm v1.25.12
 	gorm.io/plugin/opentelemetry v0.1.11
