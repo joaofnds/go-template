@@ -8,11 +8,12 @@ import (
 )
 
 type KVDriver struct {
-	url string
+	url     string
+	headers req.Headers
 }
 
-func NewKVDriver(baseURL string) *KVDriver {
-	return &KVDriver{baseURL + "/kv"}
+func NewKVDriver(baseURL string, headers req.Headers) *KVDriver {
+	return &KVDriver{url: baseURL + "/kv", headers: headers}
 }
 
 func (d *KVDriver) GetReq(key string) (*http.Response, error) {

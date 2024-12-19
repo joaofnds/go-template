@@ -12,21 +12,22 @@ import (
 )
 
 type AuthDriver struct {
-	url string
+	url     string
+	headers req.Headers
 }
 
-func NewAuthDriver(baseURL string) *AuthDriver {
-	return &AuthDriver{baseURL}
+func NewAuthDriver(baseURL string, headers req.Headers) *AuthDriver {
+	return &AuthDriver{url: baseURL, headers: headers}
 }
 
-func (d *AuthDriver) Login(username string, password string) (oauth2.Token, error) {
+func (driver *AuthDriver) Login(username string, password string) (oauth2.Token, error) {
 	var token oauth2.Token
 	return token, makeJSONRequest(params{
 		into:   &token,
 		status: http.StatusOK,
 		req: func() (*http.Response, error) {
 			return req.Post(
-				d.url+"/auth/login",
+				driver.url+"/auth/login",
 				map[string]string{"Content-Type": "application/json"},
 				strings.NewReader(fmt.Sprintf(`{"username":%q,"password":%q}`, username, password)),
 			)
@@ -34,6 +35,8 @@ func (d *AuthDriver) Login(username string, password string) (oauth2.Token, erro
 	})
 }
 
-func (d *AuthDriver) MustLogin(username string, password string) oauth2.Token {
-	return matchers.Must2(d.Login(username, password))
+func (driver *AuthDriver) MustLogin(username string, password string) oauth2.Token {
+	token := matchers.Must2(driver.Login(username, password))
+	driver.headers.Set("Authorization", fmt.Sprintf("%s %s", token.TokenType, token.AccessToken))
+	return token
 }

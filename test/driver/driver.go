@@ -16,6 +16,7 @@ import (
 	"app/kv"
 	"app/test"
 	"app/test/matchers"
+	"app/test/req"
 	usermodule "app/user/user_module"
 	"fmt"
 
@@ -55,25 +56,32 @@ func Setup() *Driver {
 	).RequireStart()
 
 	url := fmt.Sprintf("http://localhost:%d", httpConfig.Port)
+	headers := req.Headers{}
 	return &Driver{
-		app: app,
-		db:  db,
+		app:     app,
+		db:      db,
+		headers: headers,
 
 		URL:  url,
-		Auth: NewAuthDriver(url),
-		User: NewUserDriver(url),
-		KV:   NewKVDriver(url),
+		Auth: NewAuthDriver(url, headers),
+		User: NewUserDriver(url, headers),
+		KV:   NewKVDriver(url, headers),
 	}
 }
 
 type Driver struct {
-	app *fxtest.App
-	db  *gorm.DB
+	app     *fxtest.App
+	db      *gorm.DB
+	headers req.Headers
 
 	URL  string
 	Auth *AuthDriver
 	KV   *KVDriver
 	User *UserDriver
+}
+
+func (driver *Driver) SetHeader(key, value string) {
+	driver.headers[key] = value
 }
 
 func (driver *Driver) BeginTx() {
