@@ -18,7 +18,7 @@ func NewGreeter(client *asynq.Client) *Greeter {
 }
 
 func (greeter *Greeter) Listen() {
-	event.On(func(e user.UserCreated) { _ = greeter.Enqueue(e.User.Name) })
+	event.On(func(e user.UserCreated) { _ = greeter.Enqueue(e.User.Email) })
 }
 
 func (greeter *Greeter) Type() string {

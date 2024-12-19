@@ -18,6 +18,10 @@ func (emitter Emitter) FailedToDeleteAll(err error) {
 	event.Emit(FailedToDeleteAll{Err: err})
 }
 
+func (emitter Emitter) FailedToFindByID(err error) {
+	event.Emit(FailedToFindByID{Err: err})
+}
+
 func (emitter Emitter) FailedToFindByName(err error) {
 	event.Emit(FailedToFindByName{Err: err})
 }

@@ -47,13 +47,13 @@ func (controller *Controller) GetUserInfo(ctx *fiber.Ctx) error {
 }
 
 func (controller *Controller) Login(ctx *fiber.Ctx) error {
-	var body UsernamePasswordBody
+	var body EmailAndPasswordBody
 
 	if err := ctx.BodyParser(&body); err != nil {
 		return err
 	}
 
-	token, err := controller.tokens.Get(ctx.UserContext(), body.Username, body.Password)
+	token, err := controller.tokens.Get(ctx.UserContext(), body.Email, body.Password)
 	if err != nil {
 		return err
 	}
@@ -62,7 +62,7 @@ func (controller *Controller) Login(ctx *fiber.Ctx) error {
 }
 
 func (controller *Controller) RegisterUser(ctx *fiber.Ctx) error {
-	var body UsernamePasswordBody
+	var body EmailAndPasswordBody
 
 	if err := ctx.BodyParser(&body); err != nil {
 		return err
@@ -70,7 +70,7 @@ func (controller *Controller) RegisterUser(ctx *fiber.Ctx) error {
 
 	err := controller.users.Create(
 		ctx.UserContext(),
-		body.Username,
+		body.Email,
 		body.Password,
 	)
 	if err != nil {
@@ -94,7 +94,7 @@ func (controller *Controller) DeleteUser(ctx *fiber.Ctx) error {
 	return ctx.SendStatus(fiber.StatusNoContent)
 }
 
-type UsernamePasswordBody struct {
-	Username string `json:"username"`
+type EmailAndPasswordBody struct {
+	Email    string `json:"email"`
 	Password string `json:"password"`
 }

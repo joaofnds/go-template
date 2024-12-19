@@ -19,7 +19,7 @@ func NewUserDriver(baseURL string, headers req.Headers) *UserDriver {
 	return &UserDriver{url: baseURL}
 }
 
-func (driver *UserDriver) Create(name string) (user.User, error) {
+func (driver *UserDriver) Create(email string) (user.User, error) {
 	var u user.User
 
 	return u, makeJSONRequest(params{
@@ -29,17 +29,17 @@ func (driver *UserDriver) Create(name string) (user.User, error) {
 			return req.Post(
 				driver.url+"/users",
 				req.MergeHeaders(driver.headers, map[string]string{"Content-Type": "application/json"}),
-				strings.NewReader(fmt.Sprintf(`{"name":%q}`, name)),
+				strings.NewReader(fmt.Sprintf(`{"email":%q}`, email)),
 			)
 		},
 	})
 }
 
-func (driver *UserDriver) MustCreate(name string) user.User {
-	return matchers.Must2(driver.Create(name))
+func (driver *UserDriver) MustCreate(email string) user.User {
+	return matchers.Must2(driver.Create(email))
 }
 
-func (driver *UserDriver) Get(name string) (user.User, error) {
+func (driver *UserDriver) Get(userID string) (user.User, error) {
 	var u user.User
 
 	return u, makeJSONRequest(params{
@@ -47,15 +47,15 @@ func (driver *UserDriver) Get(name string) (user.User, error) {
 		status: http.StatusOK,
 		req: func() (*http.Response, error) {
 			return req.Get(
-				driver.url+"/users/"+name,
+				driver.url+"/users/"+userID,
 				req.MergeHeaders(driver.headers, map[string]string{"Content-Type": "application/json"}),
 			)
 		},
 	})
 }
 
-func (driver *UserDriver) MustGet(name string) user.User {
-	return matchers.Must2(driver.Get(name))
+func (driver *UserDriver) MustGet(userID string) user.User {
+	return matchers.Must2(driver.Get(userID))
 }
 
 func (driver *UserDriver) List() ([]user.User, error) {
@@ -76,23 +76,23 @@ func (driver *UserDriver) MustList() []user.User {
 	return matchers.Must2(driver.List())
 }
 
-func (driver *UserDriver) Delete(name string) error {
+func (driver *UserDriver) Delete(userID string) error {
 	return makeJSONRequest(params{
 		status: http.StatusOK,
 		req: func() (*http.Response, error) {
 			return req.Delete(
-				driver.url+"/users/"+name,
+				driver.url+"/users/"+userID,
 				req.MergeHeaders(driver.headers, map[string]string{"Content-Type": "application/json"}),
 			)
 		},
 	})
 }
 
-func (driver *UserDriver) MustDelete(name string) {
-	matchers.Must(driver.Delete(name))
+func (driver *UserDriver) MustDelete(userID string) {
+	matchers.Must(driver.Delete(userID))
 }
 
-func (driver *UserDriver) GetFeature(name string) (map[string]any, error) {
+func (driver *UserDriver) GetFeature(userID string) (map[string]any, error) {
 	var features map[string]any
 
 	return features, makeJSONRequest(params{
@@ -100,13 +100,13 @@ func (driver *UserDriver) GetFeature(name string) (map[string]any, error) {
 		status: http.StatusOK,
 		req: func() (*http.Response, error) {
 			return req.Get(
-				driver.url+"/users/"+name+"/feature",
+				driver.url+"/users/"+userID+"/feature",
 				req.MergeHeaders(driver.headers, map[string]string{"Content-Type": "application/json"}),
 			)
 		},
 	})
 }
 
-func (driver *UserDriver) MustGetFeature(name string) map[string]any {
-	return matchers.Must2(driver.GetFeature(name))
+func (driver *UserDriver) MustGetFeature(userID string) map[string]any {
+	return matchers.Must2(driver.GetFeature(userID))
 }

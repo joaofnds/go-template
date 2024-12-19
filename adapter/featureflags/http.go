@@ -12,7 +12,7 @@ func Middleware(ctx *fiber.Ctx) error {
 		return ctx.Next()
 	}
 
-	flags, err := forKey(u.Name)
+	flags, err := forKey(u.Email)
 	if err != nil {
 		return fiber.ErrInternalServerError
 	}

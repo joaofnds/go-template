@@ -13,6 +13,10 @@ type FailedToDeleteAll struct {
 	Err error
 }
 
+type FailedToFindByID struct {
+	Err error
+}
+
 type FailedToFindByName struct {
 	Err error
 }

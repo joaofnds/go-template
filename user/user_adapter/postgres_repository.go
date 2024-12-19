@@ -4,9 +4,12 @@ import (
 	"app/user"
 	"context"
 	"errors"
+	"fmt"
 
 	"gorm.io/gorm"
 )
+
+var _ user.Repository = &PostgresRepository{}
 
 type PostgresRepository struct {
 	db *gorm.DB
@@ -19,22 +22,26 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 func (repository *PostgresRepository) CreateUser(ctx context.Context, newUser user.User) error {
 	err := repository.db.
 		WithContext(ctx).
-		Exec("INSERT INTO users(id, name, created_at) VALUES(?, ?, ?)",
+		Exec("INSERT INTO users(id, email, created_at) VALUES(?, ?, ?)",
 			newUser.ID,
-			newUser.Name,
+			newUser.Email,
 			newUser.CreatedAt,
 		)
 
 	return gormErr(err)
 }
-
-func (repository *PostgresRepository) FindByName(ctx context.Context, name string) (user.User, error) {
+func (repository *PostgresRepository) FindByID(ctx context.Context, id string) (user.User, error) {
 	var userFound user.User
-	return userFound, gormErr(repository.db.WithContext(ctx).First(&userFound, "name = ?", name))
+	return userFound, gormErr(repository.db.WithContext(ctx).First(&userFound, "id = ?", id))
+}
+
+func (repository *PostgresRepository) FindByEmail(ctx context.Context, email string) (user.User, error) {
+	var userFound user.User
+	return userFound, gormErr(repository.db.WithContext(ctx).First(&userFound, "email = ?", email))
 }
 
 func (repository *PostgresRepository) Delete(ctx context.Context, userToDelete user.User) error {
-	return gormErr(repository.db.WithContext(ctx).Exec("DELETE FROM users WHERE name = ?", userToDelete.Name))
+	return gormErr(repository.db.WithContext(ctx).Exec("DELETE FROM users WHERE email = ?", userToDelete.Email))
 }
 
 func (repository *PostgresRepository) DeleteAll(ctx context.Context) error {
@@ -53,6 +60,7 @@ func gormErr(result *gorm.DB) error {
 	case errors.Is(result.Error, gorm.ErrRecordNotFound):
 		return user.ErrNotFound
 	default:
+		fmt.Printf("\n\n\n%#v\n\n\n", result.Error)
 		return user.ErrRepository
 	}
 }

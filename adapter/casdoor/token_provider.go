@@ -29,7 +29,7 @@ func NewTokenProvider(
 
 func (provider *TokenProvider) Get(
 	ctx context.Context,
-	username string,
+	email string,
 	password string,
 ) (*oauth2.Token, error) {
 	config := oauth2.Config{
@@ -43,7 +43,7 @@ func (provider *TokenProvider) Get(
 		Scopes: nil,
 	}
 
-	return config.PasswordCredentialsToken(ctx, username, password)
+	return config.PasswordCredentialsToken(ctx, email, password)
 }
 
 func (provider *TokenProvider) Parse(rawToken string) (authn.Claims, error) {

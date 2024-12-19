@@ -29,10 +29,10 @@ func NewUserService(
 	}
 }
 
-func (service *Service) CreateUser(ctx context.Context, name string) (User, error) {
+func (service *Service) CreateUser(ctx context.Context, email string) (User, error) {
 	user := User{
 		ID:        service.id.NewID(),
-		Name:      name,
+		Email:     email,
 		CreatedAt: service.clock.Now(),
 	}
 
@@ -60,8 +60,17 @@ func (service *Service) List(ctx context.Context) ([]User, error) {
 	return service.repo.All(ctx)
 }
 
-func (service *Service) FindByName(ctx context.Context, name string) (User, error) {
-	user, err := service.repo.FindByName(ctx, name)
+func (service *Service) FindByID(ctx context.Context, id string) (User, error) {
+	user, err := service.repo.FindByID(ctx, id)
+	if err != nil {
+		service.emitter.FailedToFindByID(err)
+	}
+
+	return user, err
+}
+
+func (service *Service) FindByEmail(ctx context.Context, email string) (User, error) {
+	user, err := service.repo.FindByEmail(ctx, email)
 	if err != nil {
 		service.emitter.FailedToFindByName(err)
 	}

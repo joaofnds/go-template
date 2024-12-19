@@ -49,5 +49,5 @@ func (probe *PromProbe) FailedToFindByName(err error) {
 }
 
 func (probe *PromProbe) FailedToRemoveUser(err error, failedUser user.User) {
-	probe.logger.Error("failed to remove user", zap.Error(err), zap.String("name", failedUser.Name))
+	probe.logger.Error("failed to remove user", zap.Error(err), zap.String("name", failedUser.Email))
 }

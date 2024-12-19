@@ -53,6 +53,6 @@ func HookConnection(lifecycle fx.Lifecycle, client *mongo.Client, logger *zap.Lo
 
 func EnsureIndexes(ctx context.Context, client *mongo.Client) error {
 	indexView := client.Database("template").Collection("users").Indexes()
-	_, err := indexView.CreateOne(ctx, mongo.IndexModel{Keys: bson.M{"name": 1}})
+	_, err := indexView.CreateOne(ctx, mongo.IndexModel{Keys: bson.M{"email": 1}})
 	return err
 }
