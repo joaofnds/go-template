@@ -22,6 +22,19 @@ var _ = Describe("/auth", Ordered, func() {
 	AfterEach(func() { app.RollbackTx() })
 	AfterAll(func() { app.Teardown() })
 
+	Describe("sign up", func() {
+		email := "me@template.com"
+
+		BeforeEach(func() { app.Auth.MustDelete(email) })
+		AfterEach(func() { app.Auth.MustDelete(email) })
+
+		It("returns status 201", func() {
+			err := app.Auth.Register(email, "p455w0rd")
+
+			Expect(err).NotTo(HaveOccurred())
+		})
+	})
+
 	Describe("login", func() {
 		It("returns token", func() {
 			token := app.Auth.MustLogin("admin", "123")
@@ -30,6 +43,15 @@ var _ = Describe("/auth", Ordered, func() {
 			Expect(token.AccessToken).NotTo(BeEmpty())
 			Expect(token.RefreshToken).NotTo(BeEmpty())
 			Expect(token.Expiry).To(BeTemporally("~", time.Now().Add(7*24*time.Hour), time.Second))
+		})
+	})
+
+	Describe("user info", func() {
+		It("returns user info", func() {
+			app.Auth.MustLogin("admin", "123")
+			userInfo := app.Auth.MustUserInfo()
+
+			Expect(userInfo).To(HaveKeyWithValue("email", "admin@example.com"))
 		})
 	})
 })
