@@ -23,8 +23,6 @@ func Delete(url string, headers Headers) (*http.Response, error) {
 	return Default.Delete(url, headers)
 }
 
-type Headers map[string]string
-
 type Req struct{ client *http.Client }
 
 func New(client *http.Client) *Req {
