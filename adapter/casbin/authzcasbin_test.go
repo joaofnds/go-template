@@ -1,4 +1,4 @@
-package authz_casbin_test
+package casbin_test
 
 import (
 	"testing"

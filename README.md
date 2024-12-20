@@ -8,7 +8,7 @@
 - [Health checks](adapter/health/controller.go#L18)
 - [Feature](adapter/featureflags/featureflags.go#L20) [flags](user/user_http/controller.go#L70) with [Go Feature Flag](https://github.com/thomaspoignant/go-feature-flag)
 - [Validation](user/user_http/dto.go#L4) with [Validator](https://github.com/go-playground/validator)
-- [Authorization](adapter/authz_casbin/enforcer.go#L20) with [Casbin](https://github.com/casbin/casbin)
+- [Authorization](adapter/casbin/enforcer.go#L20) with [Casbin](https://github.com/casbin/casbin)
 - [HTTP](adapter/http/fiber.go#L35) with [Fiber](https://github.com/gofiber/fiber)
 - [Background](adapter/queue/client.go#L12) [tasks](user/user_queue/greeter.go#L33)/[workers](cmd/worker/worker.go#L14) with [Asynq](https://github.com/hibiken/asynq)
 - [Testing](user/service_test.go#L78) with [Ginkgo](https://github.com/onsi/ginkgo) and [Gomega](https://github.com/onsi/gomega)

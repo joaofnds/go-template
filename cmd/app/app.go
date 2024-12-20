@@ -1,7 +1,7 @@
 package main
 
 import (
-	"app/adapter/authz_casbin"
+	"app/adapter/casbin"
 	"app/adapter/casdoor"
 	"app/adapter/event"
 	"app/adapter/featureflags"
@@ -37,7 +37,7 @@ func main() {
 		featureflags.Module,
 		uuid.Module,
 		time.Module,
-		authz_casbin.Module,
+		casbin.Module,
 		casdoor.Module,
 
 		event.Module,

@@ -1,7 +1,7 @@
-package authz_casbin_test
+package casbin_test
 
 import (
-	"app/adapter/authz_casbin"
+	"app/adapter/casbin"
 	"app/adapter/logger"
 	"app/adapter/postgres"
 	"app/adapter/validation"
@@ -27,8 +27,8 @@ var _ = Describe("casbin enforcer", func() {
 	userPostDelete := authz.NewAppRequest(user, post, "delete")
 
 	var app *fxtest.App
-	var sut *authz_casbin.Enforcer
-	var roles *authz_casbin.RoleManager
+	var sut *casbin.Enforcer
+	var roles *casbin.RoleManager
 
 	BeforeEach(func() {
 		app = fxtest.New(
@@ -38,7 +38,7 @@ var _ = Describe("casbin enforcer", func() {
 			validation.Module,
 			config.Module,
 			postgres.Module,
-			authz_casbin.Module,
+			casbin.Module,
 			fx.Populate(&sut, &roles),
 		)
 		app.RequireStart()
