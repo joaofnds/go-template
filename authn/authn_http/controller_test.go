@@ -22,16 +22,24 @@ var _ = Describe("/auth", Ordered, func() {
 	AfterEach(func() { app.RollbackTx() })
 	AfterAll(func() { app.Teardown() })
 
-	Describe("sign up", func() {
+	Describe("register", func() {
 		email := "me@template.com"
 
 		BeforeEach(func() { app.Auth.MustDelete(email) })
 		AfterEach(func() { app.Auth.MustDelete(email) })
 
-		It("returns status 201", func() {
-			err := app.Auth.Register(email, "p455w0rd")
+		It("creates the user", func() {
+			user := app.Auth.MustRegister(email, "p455w0rd")
 
-			Expect(err).NotTo(HaveOccurred())
+			Expect(app.User.Get(user.ID)).To(Equal(user))
+		})
+
+		It("logs in after registration", func() {
+			app.Auth.MustRegister(email, "p455w0rd")
+
+			token, err := app.Auth.Login(email, "p455w0rd")
+			Expect(err).To(BeNil())
+			Expect(token).NotTo(BeNil())
 		})
 	})
 

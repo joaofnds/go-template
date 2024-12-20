@@ -3,6 +3,7 @@ package driver
 import (
 	"app/test/matchers"
 	"app/test/req"
+	"app/user"
 
 	"fmt"
 	"net/http"
@@ -19,6 +20,10 @@ type AuthDriver struct {
 
 func NewAuthDriver(baseURL string, headers req.Headers) *AuthDriver {
 	return &AuthDriver{url: baseURL, headers: headers}
+}
+
+func (driver *AuthDriver) SetToken(token oauth2.Token) {
+	driver.headers.Set("Authorization", fmt.Sprintf("%s %s", token.TokenType, token.AccessToken))
 }
 
 func (driver *AuthDriver) Login(email string, password string) (oauth2.Token, error) {
@@ -38,27 +43,27 @@ func (driver *AuthDriver) Login(email string, password string) (oauth2.Token, er
 
 func (driver *AuthDriver) MustLogin(email string, password string) oauth2.Token {
 	token := matchers.Must2(driver.Login(email, password))
-	driver.headers.Set("Authorization", fmt.Sprintf("%s %s", token.TokenType, token.AccessToken))
+	driver.SetToken(token)
 	return token
 }
 
-func (driver *AuthDriver) Register(email string, password string) error {
-	_, err := makeRequest(
-		http.StatusCreated,
-		func() (*http.Response, error) {
+func (driver *AuthDriver) Register(email string, password string) (user.User, error) {
+	var user user.User
+	return user, makeJSONRequest(params{
+		into:   &user,
+		status: http.StatusCreated,
+		req: func() (*http.Response, error) {
 			return req.Post(
 				driver.url+"/auth/register",
 				req.MergeHeaders(driver.headers, req.Headers{"Content-Type": "application/json"}),
 				strings.NewReader(fmt.Sprintf(`{"email":%q,"password":%q}`, email, password)),
 			)
 		},
-	)
-
-	return err
+	})
 }
 
-func (driver *AuthDriver) MustRegister(email string, password string) {
-	matchers.Must(driver.Register(email, password))
+func (driver *AuthDriver) MustRegister(email string, password string) user.User {
+	return matchers.Must2(driver.Register(email, password))
 }
 
 func (driver *AuthDriver) UserInfo() (map[string]string, error) {

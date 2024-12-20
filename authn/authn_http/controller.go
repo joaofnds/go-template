@@ -2,24 +2,32 @@ package authn_http
 
 import (
 	"app/authn"
+	"app/user"
 	"net/http"
 	"strings"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
 type Controller struct {
-	users  authn.UserProvider
-	tokens authn.TokenProvider
+	validator *validator.Validate
+	authUsers authn.UserProvider
+	tokens    authn.TokenProvider
+	users     *user.Service
 }
 
 func NewController(
-	users authn.UserProvider,
+	validator *validator.Validate,
+	authUsers authn.UserProvider,
 	tokens authn.TokenProvider,
+	users *user.Service,
 ) *Controller {
 	return &Controller{
-		users:  users,
-		tokens: tokens,
+		validator: validator,
+		authUsers: authUsers,
+		tokens:    tokens,
+		users:     users,
 	}
 }
 
@@ -65,19 +73,28 @@ func (controller *Controller) RegisterUser(ctx *fiber.Ctx) error {
 	var body EmailAndPasswordBody
 
 	if err := ctx.BodyParser(&body); err != nil {
-		return err
+		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	err := controller.users.Create(
+	if err := controller.validator.Struct(body); err != nil {
+		return ctx.SendStatus(http.StatusBadRequest)
+	}
+
+	createdUser, createUserErr := controller.users.CreateUser(ctx.UserContext(), body.Email)
+	if createUserErr != nil {
+		return ctx.SendStatus(http.StatusInternalServerError)
+	}
+
+	createAuthUserErr := controller.authUsers.Create(
 		ctx.UserContext(),
 		body.Email,
 		body.Password,
 	)
-	if err != nil {
-		return err
+	if createAuthUserErr != nil {
+		return createAuthUserErr
 	}
 
-	return ctx.SendStatus(fiber.StatusCreated)
+	return ctx.Status(fiber.StatusCreated).JSON(createdUser)
 }
 
 func (controller *Controller) DeleteUser(ctx *fiber.Ctx) error {
@@ -86,7 +103,7 @@ func (controller *Controller) DeleteUser(ctx *fiber.Ctx) error {
 		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	err := controller.users.Delete(ctx.UserContext(), emailToDelete)
+	err := controller.authUsers.Delete(ctx.UserContext(), emailToDelete)
 	if err != nil {
 		return err
 	}
@@ -95,6 +112,6 @@ func (controller *Controller) DeleteUser(ctx *fiber.Ctx) error {
 }
 
 type EmailAndPasswordBody struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required"`
 }
