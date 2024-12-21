@@ -15,14 +15,17 @@ var _ authn.TokenProvider = &TokenProvider{}
 type TokenProvider struct {
 	config    Config
 	publicKey *rsa.PublicKey
+	oauth     oauth2.Config
 }
 
 func NewTokenProvider(
 	config Config,
+	oauth oauth2.Config,
 	publicKey *rsa.PublicKey,
 ) *TokenProvider {
 	return &TokenProvider{
 		config:    config,
+		oauth:     oauth,
 		publicKey: publicKey,
 	}
 }
@@ -32,18 +35,7 @@ func (provider *TokenProvider) Get(
 	email string,
 	password string,
 ) (*oauth2.Token, error) {
-	config := oauth2.Config{
-		ClientID:     provider.config.ClientID,
-		ClientSecret: provider.config.ClientSecret,
-		Endpoint: oauth2.Endpoint{
-			AuthURL:   provider.config.Endpoint + "/api/login/oauth/authorize",
-			TokenURL:  provider.config.Endpoint + "/api/login/oauth/access_token",
-			AuthStyle: oauth2.AuthStyleInParams,
-		},
-		Scopes: nil,
-	}
-
-	return config.PasswordCredentialsToken(ctx, email, password)
+	return provider.oauth.PasswordCredentialsToken(ctx, email, password)
 }
 
 func (provider *TokenProvider) Parse(rawToken string) (authn.Claims, error) {
