@@ -4,6 +4,7 @@ import (
 	"app/adapter/logger"
 	"app/adapter/postgres"
 	"app/adapter/queue"
+	"app/adapter/validation"
 	"app/config"
 	user "app/user/user_module"
 
@@ -14,6 +15,7 @@ func main() {
 	fx.New(
 		config.Module,
 		logger.Module,
+		validation.Module,
 
 		queue.WorkerModule,
 		postgres.Module,

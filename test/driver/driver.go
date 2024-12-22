@@ -17,7 +17,7 @@ import (
 	"app/test"
 	"app/test/matchers"
 	"app/test/req"
-	usermodule "app/user/user_module"
+	"app/user/user_http"
 	"fmt"
 
 	"github.com/onsi/ginkgo/v2"
@@ -48,7 +48,7 @@ func Setup() *Driver {
 		redis.Module,
 		authn_http.Module,
 
-		usermodule.Module,
+		user_http.Module,
 		kv.Module,
 		health.Module,
 
