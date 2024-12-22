@@ -11,8 +11,10 @@ import (
 	"app/adapter/time"
 	"app/adapter/uuid"
 	"app/adapter/validation"
+	"app/adapter/watermill"
 	"app/authn/authn_http"
 	"app/config"
+	"app/internal/appcontext"
 	"app/kv"
 	"app/test"
 	"app/test/matchers"
@@ -37,6 +39,8 @@ func Setup() *Driver {
 		test.Queue,
 		test.AvailablePortProvider,
 
+		appcontext.Module,
+		watermill.Module,
 		casdoor.Module,
 		uuid.Module,
 		time.Module,

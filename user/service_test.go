@@ -8,7 +8,9 @@ import (
 	"app/adapter/time"
 	"app/adapter/uuid"
 	"app/adapter/validation"
+	"app/adapter/watermill"
 	"app/config"
+	"app/internal/appcontext"
 	"app/test"
 	. "app/test/matchers"
 	"app/user"
@@ -26,18 +28,20 @@ func TestUserService(t *testing.T) {
 	RunSpecs(t, "user service suite")
 }
 
-var _ = Describe("user service", func() {
+var _ = Describe("user service", Ordered, func() {
 	var (
 		app         *fxtest.App
 		userService *user.Service
 		db          *gorm.DB
 	)
 
-	BeforeEach(func() {
+	BeforeAll(func() {
 		app = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			test.Queue,
+			appcontext.Module,
+			watermill.Module,
 			validation.Module,
 			config.Module,
 			postgres.Module,
@@ -47,12 +51,17 @@ var _ = Describe("user service", func() {
 			fx.Populate(&userService, &db),
 		)
 		app.RequireStart()
+	})
 
+	BeforeEach(func() {
 		Must(db.Exec("BEGIN").Error)
 	})
 
 	AfterEach(func() {
 		Must(db.Exec("ROLLBACK").Error)
+	})
+
+	AfterAll(func() {
 		app.RequireStop()
 	})
 

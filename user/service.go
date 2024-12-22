@@ -38,9 +38,9 @@ func (service *Service) CreateUser(ctx context.Context, email string) (User, err
 
 	err := service.repo.CreateUser(ctx, user)
 	if err != nil {
-		service.emitter.FailedToCreateUser(err)
+		_ = service.emitter.FailedToCreateUser(err)
 	} else {
-		service.emitter.UserCreated(user)
+		_ = service.emitter.UserCreated(user)
 	}
 
 	return user, err
@@ -50,7 +50,7 @@ func (service *Service) DeleteAll(ctx context.Context) error {
 	err := service.repo.DeleteAll(ctx)
 
 	if err != nil {
-		service.emitter.FailedToDeleteAll(err)
+		_ = service.emitter.FailedToDeleteAll(err)
 	}
 
 	return err
@@ -63,7 +63,7 @@ func (service *Service) List(ctx context.Context) ([]User, error) {
 func (service *Service) FindByID(ctx context.Context, id string) (User, error) {
 	user, err := service.repo.FindByID(ctx, id)
 	if err != nil {
-		service.emitter.FailedToFindByID(err)
+		_ = service.emitter.FailedToFindByID(err)
 	}
 
 	return user, err
@@ -72,7 +72,7 @@ func (service *Service) FindByID(ctx context.Context, id string) (User, error) {
 func (service *Service) FindByEmail(ctx context.Context, email string) (User, error) {
 	user, err := service.repo.FindByEmail(ctx, email)
 	if err != nil {
-		service.emitter.FailedToFindByName(err)
+		_ = service.emitter.FailedToFindByName(err)
 	}
 
 	return user, err
@@ -82,7 +82,7 @@ func (service *Service) Remove(ctx context.Context, user User) error {
 	err := service.repo.Delete(ctx, user)
 
 	if err != nil {
-		service.emitter.FailedToRemoveUser(err, user)
+		_ = service.emitter.FailedToRemoveUser(err, user)
 	}
 
 	return err

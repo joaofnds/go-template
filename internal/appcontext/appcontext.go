@@ -13,7 +13,7 @@ var (
 			ctx, cancel := context.WithCancel(context.Background())
 
 			lc.Append(fx.Hook{
-				OnStop: func(_ context.Context) error {
+				OnStop: func(context.Context) error {
 					cancel()
 					return nil
 				},

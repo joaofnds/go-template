@@ -3,7 +3,6 @@ package main
 import (
 	"app/adapter/casbin"
 	"app/adapter/casdoor"
-	"app/adapter/event"
 	"app/adapter/featureflags"
 	"app/adapter/health"
 	"app/adapter/http"
@@ -16,6 +15,7 @@ import (
 	"app/adapter/tracing"
 	"app/adapter/uuid"
 	"app/adapter/validation"
+	"app/adapter/watermill"
 	"app/authn/authn_http"
 	"app/config"
 	"app/internal/appcontext"
@@ -40,7 +40,7 @@ func main() {
 		casbin.Module,
 		casdoor.Module,
 
-		event.Module,
+		watermill.Module,
 		queue.ClientModule,
 		postgres.Module,
 		redis.Module,

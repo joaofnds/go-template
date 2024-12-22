@@ -5,7 +5,9 @@ import (
 	"app/adapter/postgres"
 	"app/adapter/queue"
 	"app/adapter/validation"
+	"app/adapter/watermill"
 	"app/config"
+	"app/internal/appcontext"
 	user "app/user/user_module"
 
 	"go.uber.org/fx"
@@ -13,9 +15,11 @@ import (
 
 func main() {
 	fx.New(
+		appcontext.Module,
 		config.Module,
 		logger.Module,
 		validation.Module,
+		watermill.Module,
 
 		queue.WorkerModule,
 		postgres.Module,

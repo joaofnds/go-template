@@ -1,31 +1,39 @@
 package user
 
-import "app/internal/event"
+import (
+	"context"
 
-type Emitter struct{}
+	"github.com/ThreeDotsLabs/watermill/components/cqrs"
+)
 
-func NewEventEmitter() Emitter { return Emitter{} }
-
-func (emitter Emitter) UserCreated(user User) {
-	event.Emit(UserCreated{User: user})
+type Emitter struct {
+	bus *cqrs.EventBus
 }
 
-func (emitter Emitter) FailedToCreateUser(err error) {
-	event.Emit(FailedToCreateUser{Err: err})
+func NewEventEmitter(bus *cqrs.EventBus) Emitter {
+	return Emitter{bus: bus}
 }
 
-func (emitter Emitter) FailedToDeleteAll(err error) {
-	event.Emit(FailedToDeleteAll{Err: err})
+func (emitter Emitter) UserCreated(user User) error {
+	return emitter.bus.Publish(context.Background(), UserCreated{User: user})
 }
 
-func (emitter Emitter) FailedToFindByID(err error) {
-	event.Emit(FailedToFindByID{Err: err})
+func (emitter Emitter) FailedToCreateUser(err error) error {
+	return emitter.bus.Publish(context.Background(), FailedToCreateUser{Err: err})
 }
 
-func (emitter Emitter) FailedToFindByName(err error) {
-	event.Emit(FailedToFindByName{Err: err})
+func (emitter Emitter) FailedToDeleteAll(err error) error {
+	return emitter.bus.Publish(context.Background(), FailedToDeleteAll{Err: err})
 }
 
-func (emitter Emitter) FailedToRemoveUser(err error, user User) {
-	event.Emit(FailedToRemoveUser{Err: err, User: user})
+func (emitter Emitter) FailedToFindByID(err error) error {
+	return emitter.bus.Publish(context.Background(), FailedToFindByID{Err: err})
+}
+
+func (emitter Emitter) FailedToFindByName(err error) error {
+	return emitter.bus.Publish(context.Background(), FailedToFindByName{Err: err})
+}
+
+func (emitter Emitter) FailedToRemoveUser(err error, user User) error {
+	return emitter.bus.Publish(context.Background(), FailedToRemoveUser{Err: err, User: user})
 }

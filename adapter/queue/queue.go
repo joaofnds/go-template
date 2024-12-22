@@ -31,5 +31,5 @@ func RegisterQueues(
 	mux *asynq.ServeMux,
 	greeter *userqueue.Greeter,
 ) {
-	greeter.Register(mux)
+	greeter.RegisterQueueHandler(mux)
 }

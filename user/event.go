@@ -5,8 +5,7 @@ type UserCreated struct {
 }
 
 type FailedToCreateUser struct {
-	User User
-	Err  error
+	Err error
 }
 
 type FailedToDeleteAll struct {
