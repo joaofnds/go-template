@@ -9,5 +9,6 @@ import (
 var Module = fx.Module(
 	"user http",
 	user_module.Module,
+	user_module.ListenerModule,
 	fx.Provide(NewController),
 )

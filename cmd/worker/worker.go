@@ -8,7 +8,7 @@ import (
 	"app/adapter/watermill"
 	"app/config"
 	"app/internal/appcontext"
-	user "app/user/user_module"
+	"app/user/user_queue"
 
 	"go.uber.org/fx"
 )
@@ -24,6 +24,6 @@ func main() {
 		queue.WorkerModule,
 		postgres.Module,
 
-		user.Module,
+		user_queue.Module,
 	).Run()
 }

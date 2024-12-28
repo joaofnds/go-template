@@ -20,7 +20,7 @@ var (
 
 	Providers = fx.Options(
 		fx.Provide(newLogger, fx.Private),
-		fx.Provide(NewSonicMarshaler, fx.Private),
+		fx.Provide(newSonicMarshaler, fx.Private),
 		fx.Provide(newRouter, fx.Private),
 		fx.Provide(newGoChannel, fx.Private),
 		fx.Provide(func(m SonicMarshaler) cqrs.CommandEventMarshaler { return m }, fx.Private),

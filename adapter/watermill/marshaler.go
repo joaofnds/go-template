@@ -11,7 +11,7 @@ var _ cqrs.CommandEventMarshaler = SonicMarshaler{}
 
 type SonicMarshaler struct{}
 
-func NewSonicMarshaler() SonicMarshaler {
+func newSonicMarshaler() SonicMarshaler {
 	return SonicMarshaler{}
 }
 

@@ -10,7 +10,7 @@ type Emitter struct {
 	bus *cqrs.EventBus
 }
 
-func NewEventEmitter(bus *cqrs.EventBus) Emitter {
+func NewEmitter(bus *cqrs.EventBus) Emitter {
 	return Emitter{bus: bus}
 }
 
