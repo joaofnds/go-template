@@ -16,7 +16,7 @@
 - [Testing](user/service_test.go#L85) with [Ginkgo](https://github.com/onsi/ginkgo) and [Gomega](https://github.com/onsi/gomega)
 - [Migrations](cmd/migrate/migrate.go#L23) with [Goose](https://github.com/pressly/goose)
 - [Sto](user/user_adapter/mongo_repository.go)[ra](kv/redis_store.go)[ge](user/user_adapter/postgres_repository.go) with [Mongo](https://github.com/mongodb/mongo-go-driver), [Redis](https://github.com/redis/go-redis), and [Gorm](https://github.com/go-gorm/gorm) ([Postgres](https://github.com/go-gorm/postgres))
-- [Version](.github/workflows/commit.yaml#L16) [management](.releaserc.yaml) with [Semantic Release](https://github.com/semantic-release/semantic-release)
+- [Version](.github/workflows/commit.yaml#L23) [management](.releaserc.yaml) with [Semantic Release](https://github.com/semantic-release/semantic-release)
 - [Image](Dockerfile) (using [distroless](https://github.com/GoogleContainerTools/distroless)) [publishing to GitHub Container Registry](.github/workflows/build.yaml)
 
 ## Setup
