@@ -20,9 +20,10 @@ var (
 
 	Providers = fx.Options(
 		fx.Provide(newLogger, fx.Private),
-		fx.Provide(newMarshaler, fx.Private),
+		fx.Provide(NewSonicMarshaler, fx.Private),
 		fx.Provide(newRouter, fx.Private),
 		fx.Provide(newGoChannel, fx.Private),
+		fx.Provide(func(m SonicMarshaler) cqrs.CommandEventMarshaler { return m }, fx.Private),
 		fx.Provide(func(c *gochannel.GoChannel) message.Publisher { return c }, fx.Private),
 		fx.Provide(func(c *gochannel.GoChannel) message.Subscriber { return c }, fx.Private),
 
@@ -35,10 +36,6 @@ var (
 		fx.Invoke(hookRouter),
 	)
 )
-
-func newMarshaler() cqrs.CommandEventMarshaler {
-	return cqrs.JSONMarshaler{}
-}
 
 func newGoChannel(logger watermill.LoggerAdapter) *gochannel.GoChannel {
 	return gochannel.NewGoChannel(gochannel.Config{}, logger)
