@@ -13,8 +13,16 @@ import (
 var Module = fx.Module(
 	"http",
 	FiberModule,
-	fx.Invoke(func(app *fiber.App, healthController *health.Controller) { healthController.Register(app) }),
-	fx.Invoke(func(app *fiber.App, userController *user_http.Controller) { userController.Register(app) }),
-	fx.Invoke(func(app *fiber.App, kvController *kv_http.Controller) { kvController.Register(app) }),
-	fx.Invoke(func(app *fiber.App, authnController *authn_http.Controller) { authnController.Register(app) }),
+	fx.Invoke(func(
+		app *fiber.App,
+		authnController *authn_http.Controller,
+		healthController *health.Controller,
+		kvController *kv_http.Controller,
+		userController *user_http.Controller,
+	) {
+		authnController.Register(app)
+		healthController.Register(app)
+		kvController.Register(app)
+		userController.Register(app)
+	}),
 )
