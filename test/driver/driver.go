@@ -15,7 +15,7 @@ import (
 	"app/authn/authn_http"
 	"app/config"
 	"app/internal/appcontext"
-	"app/kv"
+	"app/kv/kv_module"
 	"app/test"
 	"app/test/matchers"
 	"app/test/req"
@@ -53,7 +53,7 @@ func Setup() *Driver {
 		authn_http.Module,
 
 		user_http.Module,
-		kv.Module,
+		kv_module.Module,
 		health.Module,
 
 		fx.Populate(&httpConfig, &db),

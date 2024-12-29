@@ -19,7 +19,7 @@ import (
 	"app/authn/authn_http"
 	"app/config"
 	"app/internal/appcontext"
-	"app/kv"
+	"app/kv/kv_module"
 	"app/user/user_http"
 
 	"go.uber.org/fx"
@@ -48,6 +48,6 @@ func main() {
 
 		authn_http.Module,
 		user_http.Module,
-		kv.Module,
+		kv_module.Module,
 	).Run()
 }

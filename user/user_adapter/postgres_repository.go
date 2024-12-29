@@ -4,7 +4,6 @@ import (
 	"app/user"
 	"context"
 	"errors"
-	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -60,7 +59,6 @@ func gormErr(result *gorm.DB) error {
 	case errors.Is(result.Error, gorm.ErrRecordNotFound):
 		return user.ErrNotFound
 	default:
-		fmt.Printf("\n\n\n%#v\n\n\n", result.Error)
 		return user.ErrRepository
 	}
 }

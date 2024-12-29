@@ -1,24 +1,18 @@
-package kv
+package kv_http
 
 import (
-	"context"
+	"app/kv"
 	"errors"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-type Store interface {
-	Get(context.Context, string) (string, error)
-	Set(context.Context, string, string) error
-	Del(context.Context, string) error
-}
-
 type Controller struct {
-	store Store
+	store kv.Store
 }
 
-func NewController(store Store) *Controller {
+func NewController(store kv.Store) *Controller {
 	return &Controller{store}
 }
 
@@ -37,7 +31,7 @@ func (controller *Controller) Get(ctx *fiber.Ctx) error {
 
 	val, err := controller.store.Get(ctx.UserContext(), key)
 	if err != nil {
-		if errors.Is(err, ErrNotFound) {
+		if errors.Is(err, kv.ErrNotFound) {
 			return fiber.NewError(http.StatusNotFound, err.Error())
 		}
 		return fiber.NewError(http.StatusInternalServerError, err.Error())

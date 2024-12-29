@@ -1,12 +1,18 @@
-package kv_test
+package kv_http_test
 
 import (
 	"app/test/driver"
 	"net/http"
+	"testing"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
+
+func TestKVHTTP(t *testing.T) {
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "KV HTTP Suite")
+}
 
 var _ = Describe("/kv", Ordered, func() {
 	var app *driver.Driver

@@ -1,13 +1,11 @@
-package kv
+package kv_adapter
 
 import (
+	"app/kv"
 	"context"
-	"errors"
 
 	"github.com/redis/go-redis/v9"
 )
-
-var ErrNotFound = errors.New("not found")
 
 type RedisStore struct {
 	client *redis.Client
@@ -24,7 +22,7 @@ func (store *RedisStore) Set(ctx context.Context, key, value string) error {
 func (store *RedisStore) Get(ctx context.Context, key string) (string, error) {
 	cmd := store.client.Get(ctx, key)
 	if cmd.Err() != nil {
-		return "", ErrNotFound
+		return "", kv.ErrNotFound
 	}
 
 	return cmd.Val(), nil

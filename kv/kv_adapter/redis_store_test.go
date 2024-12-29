@@ -1,4 +1,4 @@
-package kv_test
+package kv_adapter_test
 
 import (
 	"app/adapter/logger"
@@ -6,6 +6,8 @@ import (
 	"app/adapter/validation"
 	"app/config"
 	"app/kv"
+	"app/kv/kv_adapter"
+	"app/kv/kv_module"
 	. "app/test/matchers"
 	"testing"
 
@@ -15,23 +17,23 @@ import (
 	"go.uber.org/fx/fxtest"
 )
 
-func TestUser(t *testing.T) {
+func TestKVRedisStore(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "KV Test")
+	RunSpecs(t, "KV Redis Store Suite")
 }
 
 var _ = Describe("Redis Store", func() {
 	var app *fxtest.App
-	var store *kv.RedisStore
+	var store *kv_adapter.RedisStore
 
 	BeforeEach(func() {
 		app = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
-			validation.Module,
 			config.Module,
+			validation.Module,
 			redis.Module,
-			kv.Module,
+			kv_module.Module,
 			fx.Populate(&store),
 		)
 		app.RequireStart()
