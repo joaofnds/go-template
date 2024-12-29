@@ -21,9 +21,9 @@ type PromProbe struct {
 
 type PromHabitProbe struct{}
 
-func NewPromProbe() *PromProbe {
+func NewPromProbe(prom promauto.Factory) *PromProbe {
 	return &PromProbe{
-		req: promauto.NewCounterVec(
+		req: prom.NewCounterVec(
 			prometheus.CounterOpts{Name: "app_request"},
 			[]string{lblIP, lblMethod, lblPath, lblStatus},
 		),

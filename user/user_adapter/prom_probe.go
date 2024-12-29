@@ -17,11 +17,11 @@ type PromProbe struct {
 	usersCreateFailed prometheus.Counter
 }
 
-func NewPromProbe(logger *zap.Logger) *PromProbe {
+func NewPromProbe(logger *zap.Logger, prom promauto.Factory) *PromProbe {
 	return &PromProbe{
 		logger:            logger,
-		usersCreated:      promauto.NewCounter(prometheus.CounterOpts{Name: "users_created"}),
-		usersCreateFailed: promauto.NewCounter(prometheus.CounterOpts{Name: "users_create_fail"}),
+		usersCreated:      prom.NewCounter(prometheus.CounterOpts{Name: "users_created"}),
+		usersCreateFailed: prom.NewCounter(prometheus.CounterOpts{Name: "users_create_fail"}),
 	}
 }
 

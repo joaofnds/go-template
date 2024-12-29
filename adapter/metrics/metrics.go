@@ -5,6 +5,8 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
@@ -12,9 +14,19 @@ import (
 
 var Module = fx.Module(
 	"metrics",
+	fx.Provide(NewRegistry),
+	fx.Provide(NewPromFactory),
 	fx.Provide(NewServer),
 	fx.Invoke(HookMetricsHandler),
 )
+
+func NewRegistry() *prometheus.Registry {
+	return prometheus.NewRegistry()
+}
+
+func NewPromFactory(registry *prometheus.Registry) promauto.Factory {
+	return promauto.With(registry)
+}
 
 func NewServer(c Config) *http.Server {
 	http.Handle("/metrics", promhttp.Handler())
