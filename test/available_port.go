@@ -2,43 +2,46 @@ package test
 
 import (
 	"app/adapter/http"
+	"app/adapter/metrics"
 	"net"
-	"strconv"
 
 	"go.uber.org/fx"
 )
 
 var (
-	i                     int
-	ports                 = FindPorts(10_000, 10)
-	AvailablePortProvider = fx.Decorate(func(httpConfig http.Config) http.Config {
-		httpConfig.Port = ports[i]
-		i++
-		return httpConfig
-	})
+	AvailablePortProvider = fx.Options(
+		fx.Decorate(func(httpConfig http.Config) (http.Config, error) {
+			addr, err := findAvailableAddr()
+			if err != nil {
+				return httpConfig, err
+			}
+
+			httpConfig.Port = addr.Port
+
+			return httpConfig, nil
+		}),
+		fx.Decorate(func(metricsConfig metrics.Config) (metrics.Config, error) {
+			addr, err := findAvailableAddr()
+			if err != nil {
+				return metricsConfig, err
+			}
+
+			metricsConfig.Addr = addr.String()
+
+			return metricsConfig, nil
+		}),
+	)
 )
 
-func FindPorts(start, amount int) []int {
-	ports := make([]int, 0, amount)
-
-	for port := start; len(ports) < amount; port++ {
-		if portIsAvailable(port) {
-			ports = append(ports, port)
-		}
+func findAvailableAddr() (*net.TCPAddr, error) {
+	listener, listenErr := net.Listen("tcp", ":0")
+	if listenErr != nil {
+		return nil, listenErr
 	}
 
-	return ports
-}
-
-func portIsAvailable(port int) bool {
-	l, err := net.Listen("tcp", ":"+strconv.Itoa(port))
-	if err != nil {
-		return false
+	if closeErr := listener.Close(); closeErr != nil {
+		return nil, closeErr
 	}
 
-	if err := l.Close(); err != nil {
-		return false
-	}
-
-	return true
+	return listener.Addr().(*net.TCPAddr), nil
 }
