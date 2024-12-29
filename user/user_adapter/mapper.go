@@ -35,10 +35,21 @@ func (mapper *UserMongoMapper) FromDocument(doc bson.M) (user.User, error) {
 		return user.User{}, fmt.Errorf("invalid created_at: %v", doc["created_at"])
 	}
 
+	updatedAtString, ok := doc["updated_at"].(string)
+	if !ok {
+		return user.User{}, fmt.Errorf("invalid updated_at: %v", doc["updated_at"])
+	}
+
+	updatedAt, err := time.Parse(time.RFC3339, updatedAtString)
+	if err != nil {
+		return user.User{}, fmt.Errorf("invalid updated_at: %v", doc["updated_at"])
+	}
+
 	return user.User{
 		ID:        id,
 		Email:     email,
 		CreatedAt: createdAt,
+		UpdatedAt: updatedAt,
 	}, nil
 }
 
@@ -47,5 +58,6 @@ func (mapper *UserMongoMapper) ToDocument(user user.User) bson.M {
 		"_id":        user.ID,
 		"email":      user.Email,
 		"created_at": user.CreatedAt.UTC().Format(time.RFC3339),
+		"updated_at": user.UpdatedAt.UTC().Format(time.RFC3339),
 	}
 }

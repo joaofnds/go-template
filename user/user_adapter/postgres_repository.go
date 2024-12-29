@@ -21,10 +21,11 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 func (repository *PostgresRepository) CreateUser(ctx context.Context, newUser user.User) error {
 	err := repository.db.
 		WithContext(ctx).
-		Exec("INSERT INTO users(id, email, created_at) VALUES(?, ?, ?)",
+		Exec("INSERT INTO users(id, email, created_at, updated_at) VALUES(?, ?, ?, ?)",
 			newUser.ID,
 			newUser.Email,
 			newUser.CreatedAt,
+			newUser.UpdatedAt,
 		)
 
 	return gormErr(err)

@@ -34,6 +34,7 @@ func (service *Service) CreateUser(ctx context.Context, email string) (User, err
 		ID:        service.id.NewID(),
 		Email:     email,
 		CreatedAt: service.clock.Now(),
+		UpdatedAt: service.clock.Now(),
 	}
 
 	err := service.repo.CreateUser(ctx, user)
