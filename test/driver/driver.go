@@ -68,7 +68,7 @@ func Setup() *Driver {
 
 		URL:  url,
 		Auth: NewAuthDriver(url, headers),
-		User: NewUserDriver(url, headers),
+		Users: NewUserDriver(url, headers),
 		KV:   NewKVDriver(url, headers),
 	}
 }
@@ -81,7 +81,7 @@ type Driver struct {
 	URL  string
 	Auth *AuthDriver
 	KV   *KVDriver
-	User *UserDriver
+	Users *UserDriver
 }
 
 func (driver *Driver) SetHeader(key, value string) {

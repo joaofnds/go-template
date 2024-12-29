@@ -31,7 +31,7 @@ var _ = Describe("/auth", Ordered, func() {
 		It("creates the user", func() {
 			user := app.Auth.MustRegister(email, "p455w0rd")
 
-			Expect(app.User.Get(user.ID)).To(Equal(user))
+			Expect(app.Users.Get(user.ID)).To(Equal(user))
 		})
 
 		It("logs in after registration", func() {
