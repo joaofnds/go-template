@@ -6,6 +6,7 @@ import (
 	"app/adapter/health"
 	apphttp "app/adapter/http"
 	"app/adapter/logger"
+	"app/adapter/metrics"
 	"app/adapter/postgres"
 	"app/adapter/redis"
 	"app/adapter/time"
@@ -28,60 +29,66 @@ import (
 	"gorm.io/gorm"
 )
 
-func Setup() *Driver {
+func Setup(opts ...fx.Option) *Driver {
 	var (
 		httpConfig apphttp.Config
 		db         *gorm.DB
 	)
-	app := fxtest.New(
-		ginkgo.GinkgoT(),
+	allOpts := []fx.Option{
 		logger.NopLoggerProvider,
 		test.Queue,
 		test.AvailablePortProvider,
 
 		appcontext.Module,
-		watermill.Module,
+		apphttp.Module,
+		authn_http.Module,
 		casdoor.Module,
-		uuid.Module,
-		time.Module,
-		validation.Module,
 		config.Module,
 		featureflags.Module,
-		apphttp.Module,
+		metrics.Module,
 		postgres.Module,
 		redis.Module,
-		authn_http.Module,
+		time.Module,
+		uuid.Module,
+		validation.Module,
+		watermill.Module,
 
 		user_http.Module,
 		kv_module.Module,
 		health.Module,
 
 		fx.Populate(&httpConfig, &db),
-	).RequireStart()
+	}
+
+	allOpts = append(allOpts, opts...)
+
+	app := fxtest.New(ginkgo.GinkgoT(), allOpts...).RequireStart()
 
 	url := fmt.Sprintf("http://localhost:%d", httpConfig.Port)
 	headers := req.Headers{}
 	return &Driver{
 		app:     app,
 		db:      db,
+		url:     url,
 		headers: headers,
 
-		URL:  url,
-		Auth: NewAuthDriver(url, headers),
-		Users: NewUserDriver(url, headers),
-		KV:   NewKVDriver(url, headers),
+		Auth:   NewAuthDriver(url, headers),
+		Health: NewHealthDriver(url, headers),
+		KV:     NewKVDriver(url, headers),
+		Users:  NewUserDriver(url, headers),
 	}
 }
 
 type Driver struct {
 	app     *fxtest.App
 	db      *gorm.DB
+	url     string
 	headers req.Headers
 
-	URL  string
-	Auth *AuthDriver
-	KV   *KVDriver
-	Users *UserDriver
+	Auth   *AuthDriver
+	Health *HealthDriver
+	KV     *KVDriver
+	Users  *UserDriver
 }
 
 func (driver *Driver) SetHeader(key, value string) {
