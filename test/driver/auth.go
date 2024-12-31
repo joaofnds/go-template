@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"strings"
 
 	"golang.org/x/oauth2"
 )
@@ -35,7 +34,7 @@ func (driver *AuthDriver) Login(email string, password string) (oauth2.Token, er
 			return req.Post(
 				driver.url+"/auth/login",
 				map[string]string{"Content-Type": "application/json"},
-				strings.NewReader(fmt.Sprintf(`{"email":%q,"password":%q}`, email, password)),
+				marshal(map[string]string{"email": email, "password": password}),
 			)
 		},
 	})
@@ -56,7 +55,7 @@ func (driver *AuthDriver) Register(email string, password string) (user.User, er
 			return req.Post(
 				driver.url+"/auth/register",
 				req.MergeHeaders(driver.headers, req.Headers{"Content-Type": "application/json"}),
-				strings.NewReader(fmt.Sprintf(`{"email":%q,"password":%q}`, email, password)),
+				marshal(map[string]string{"email": email, "password": password}),
 			)
 		},
 	})

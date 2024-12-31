@@ -5,9 +5,7 @@ import (
 	"app/test/req"
 	"app/user"
 
-	"fmt"
 	"net/http"
-	"strings"
 )
 
 type UserDriver struct {
@@ -29,7 +27,7 @@ func (driver *UserDriver) Create(email string) (user.User, error) {
 			return req.Post(
 				driver.url+"/users",
 				req.MergeHeaders(driver.headers, map[string]string{"Content-Type": "application/json"}),
-				strings.NewReader(fmt.Sprintf(`{"email":%q}`, email)),
+				marshal(map[string]string{"email": email}),
 			)
 		},
 	})

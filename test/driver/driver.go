@@ -21,7 +21,10 @@ import (
 	"app/test/matchers"
 	"app/test/req"
 	"app/user/user_http"
+	"bytes"
+	"encoding/json"
 	"fmt"
+	"io"
 
 	"github.com/onsi/ginkgo/v2"
 	"go.uber.org/fx"
@@ -105,4 +108,8 @@ func (driver *Driver) RollbackTx() {
 
 func (driver *Driver) Teardown() {
 	driver.app.RequireStop()
+}
+
+func marshal(v any) io.Reader {
+	return bytes.NewReader(matchers.Must2(json.Marshal(v)))
 }
