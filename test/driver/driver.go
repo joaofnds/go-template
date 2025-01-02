@@ -13,7 +13,7 @@ import (
 	"app/adapter/uuid"
 	"app/adapter/validation"
 	"app/adapter/watermill"
-	"app/authn/authn_http"
+	"app/authn/authn_module"
 	"app/config"
 	"app/internal/appcontext"
 	"app/kv/kv_module"
@@ -44,7 +44,7 @@ func Setup(opts ...fx.Option) *Driver {
 
 		appcontext.Module,
 		apphttp.Module,
-		authn_http.Module,
+		authn_module.HTTPModule,
 		casdoor.Module,
 		config.Module,
 		featureflags.Module,

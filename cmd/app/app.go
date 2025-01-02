@@ -16,7 +16,7 @@ import (
 	"app/adapter/uuid"
 	"app/adapter/validation"
 	"app/adapter/watermill"
-	"app/authn/authn_http"
+	"app/authn/authn_module"
 	"app/config"
 	"app/internal/appcontext"
 	"app/kv/kv_module"
@@ -46,7 +46,7 @@ func main() {
 		redis.Module,
 		http.Module,
 
-		authn_http.Module,
+		authn_module.HTTPModule,
 		user_module.AppModule,
 		kv_module.Module,
 	).Run()

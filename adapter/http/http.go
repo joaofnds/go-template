@@ -2,7 +2,6 @@ package http
 
 import (
 	"app/adapter/health"
-	"app/authn/authn_http"
 	"app/kv/kv_http"
 
 	"github.com/gofiber/fiber/v2"
@@ -14,11 +13,9 @@ var Module = fx.Module(
 	FiberModule,
 	fx.Invoke(func(
 		app *fiber.App,
-		authnController *authn_http.Controller,
 		healthController *health.Controller,
 		kvController *kv_http.Controller,
 	) {
-		authnController.Register(app)
 		healthController.Register(app)
 		kvController.Register(app)
 	}),
