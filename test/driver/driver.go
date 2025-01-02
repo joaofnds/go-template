@@ -57,7 +57,7 @@ func Setup(opts ...fx.Option) *Driver {
 		watermill.Module,
 
 		user_module.AppModule,
-		kv_module.Module,
+		kv_module.HTTPModule,
 		health_module.HTTPModule,
 
 		fx.Populate(&httpConfig, &db),
