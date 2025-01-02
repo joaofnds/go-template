@@ -3,7 +3,7 @@ package driver
 import (
 	"app/adapter/casdoor"
 	"app/adapter/featureflags"
-	"app/adapter/health"
+	"app/adapter/health/health_module"
 	apphttp "app/adapter/http"
 	"app/adapter/logger"
 	"app/adapter/metrics"
@@ -58,7 +58,7 @@ func Setup(opts ...fx.Option) *Driver {
 
 		user_module.AppModule,
 		kv_module.Module,
-		health.Module,
+		health_module.HTTPModule,
 
 		fx.Populate(&httpConfig, &db),
 	}

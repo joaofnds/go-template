@@ -1,16 +1,17 @@
-package health
+package health_http
 
 import (
+	"app/adapter/health"
 	"net/http"
 
 	"github.com/gofiber/fiber/v2"
 )
 
 type Controller struct {
-	service Checker
+	service health.Checker
 }
 
-func NewHealthController(service Checker) *Controller {
+func NewController(service health.Checker) *Controller {
 	return &Controller{service}
 }
 

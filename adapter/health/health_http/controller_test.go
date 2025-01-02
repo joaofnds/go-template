@@ -1,4 +1,4 @@
-package health_test
+package health_http_test
 
 import (
 	"app/adapter/health"

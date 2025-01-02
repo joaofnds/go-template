@@ -4,7 +4,7 @@ import (
 	"app/adapter/casbin"
 	"app/adapter/casdoor"
 	"app/adapter/featureflags"
-	"app/adapter/health"
+	"app/adapter/health/health_module"
 	"app/adapter/http"
 	"app/adapter/logger"
 	"app/adapter/metrics"
@@ -32,7 +32,6 @@ func main() {
 		logger.Module,
 		metrics.Module,
 		tracing.Module,
-		health.Module,
 		validation.Module,
 		featureflags.Module,
 		uuid.Module,
@@ -46,6 +45,7 @@ func main() {
 		redis.Module,
 		http.Module,
 
+		health_module.HTTPModule,
 		authn_module.HTTPModule,
 		user_module.AppModule,
 		kv_module.Module,
