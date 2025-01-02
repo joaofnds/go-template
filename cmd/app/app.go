@@ -20,7 +20,7 @@ import (
 	"app/config"
 	"app/internal/appcontext"
 	"app/kv/kv_module"
-	"app/user/user_http"
+	"app/user/user_module"
 
 	"go.uber.org/fx"
 )
@@ -47,7 +47,7 @@ func main() {
 		http.Module,
 
 		authn_http.Module,
-		user_http.Module,
+		user_module.AppModule,
 		kv_module.Module,
 	).Run()
 }

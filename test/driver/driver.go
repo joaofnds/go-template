@@ -20,7 +20,7 @@ import (
 	"app/test"
 	"app/test/matchers"
 	"app/test/req"
-	"app/user/user_http"
+	"app/user/user_module"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -56,7 +56,7 @@ func Setup(opts ...fx.Option) *Driver {
 		validation.Module,
 		watermill.Module,
 
-		user_http.Module,
+		user_module.AppModule,
 		kv_module.Module,
 		health.Module,
 

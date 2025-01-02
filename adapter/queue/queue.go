@@ -1,9 +1,6 @@
 package queue
 
 import (
-	userqueue "app/user/user_queue"
-
-	"github.com/hibiken/asynq"
 	"go.uber.org/fx"
 )
 
@@ -15,7 +12,6 @@ var (
 	)
 	ClientInvokes = fx.Options(
 		fx.Invoke(HookClient),
-		fx.Invoke(RegisterQueues),
 	)
 
 	WorkerModule    = fx.Module("queue-worker", ClientModule, WorkerProviders, WorkerInvokes)
@@ -26,10 +22,3 @@ var (
 		fx.Invoke(HookServer),
 	)
 )
-
-func RegisterQueues(
-	mux *asynq.ServeMux,
-	greeter *userqueue.Greeter,
-) {
-	greeter.RegisterQueueHandler(mux)
-}

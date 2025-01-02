@@ -14,7 +14,7 @@ import (
 	"app/test"
 	. "app/test/matchers"
 	"app/user"
-	usermodule "app/user/user_module"
+	"app/user/user_module"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -45,7 +45,7 @@ var _ = Describe("user service", Ordered, func() {
 			validation.Module,
 			config.Module,
 			postgres.Module,
-			usermodule.Module,
+			user_module.ServiceModule,
 			uuid.Module,
 			time.Module,
 			fx.Populate(&userService, &db),
