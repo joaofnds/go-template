@@ -15,14 +15,14 @@ import (
 )
 
 var (
-	FiberModule = fx.Module("fiber", FiberProviders, FiberInvokes)
+	Module = fx.Module("fiber", Providers, Invokes)
 
-	FiberProviders = fx.Options(
+	Providers = fx.Options(
 		fx.Provide(NewFiber),
 		fx.Provide(NewPromProbe),
 		fx.Provide(func(probe *PromProbe) Probe { return probe }),
 	)
-	FiberInvokes = fx.Options(
+	Invokes = fx.Options(
 		fx.Invoke(HookFiber),
 	)
 )

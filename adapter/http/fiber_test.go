@@ -45,7 +45,7 @@ var _ = Describe("fiber middlewares", func() {
 			apphttp.NopProbeProvider,
 			validation.Module,
 			config.Module,
-			apphttp.FiberModule,
+			apphttp.Module,
 			PanicHandler,
 			fx.Populate(&httpConfig),
 		).RequireStart()

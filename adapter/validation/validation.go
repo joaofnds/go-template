@@ -5,6 +5,4 @@ import (
 	"go.uber.org/fx"
 )
 
-var Module = fx.Provide(func() *validator.Validate {
-	return validator.New()
-})
+var Module = fx.Provide(validator.New)
