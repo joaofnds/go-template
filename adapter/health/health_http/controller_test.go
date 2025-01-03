@@ -23,10 +23,12 @@ var _ = Describe("/health", Ordered, func() {
 
 	BeforeAll(func() {
 		app = driver.Setup(
-			fx.Decorate(func(original health.Checker) health.Checker {
-				checker = health.NewFakeHealthService(original)
-				return checker
-			}),
+			driver.WithFxOptions(
+				fx.Decorate(func(original health.Checker) health.Checker {
+					checker = health.NewFakeHealthService(original)
+					return checker
+				}),
+			),
 		)
 	})
 	AfterAll(func() { app.Teardown() })

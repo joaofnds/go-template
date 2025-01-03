@@ -19,8 +19,8 @@ var _ = Describe("/users", Ordered, func() {
 	var app *driver.Driver
 
 	BeforeAll(func() { app = driver.Setup() })
-	BeforeEach(func() { app.BeginTx() })
-	AfterEach(func() { app.RollbackTx() })
+	BeforeEach(func() { app.BeforeEach() })
+	AfterEach(func() { app.AfterEach() })
 	AfterAll(func() { app.Teardown() })
 
 	It("creates and gets user", func() {

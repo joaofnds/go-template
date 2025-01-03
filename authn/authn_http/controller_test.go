@@ -18,8 +18,8 @@ var _ = Describe("/auth", Ordered, func() {
 	var app *driver.Driver
 
 	BeforeAll(func() { app = driver.Setup() })
-	BeforeEach(func() { app.BeginTx() })
-	AfterEach(func() { app.RollbackTx() })
+	BeforeEach(func() { app.BeforeEach() })
+	AfterEach(func() { app.AfterEach() })
 	AfterAll(func() { app.Teardown() })
 
 	Describe("register", func() {
