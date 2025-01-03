@@ -2,6 +2,7 @@ package authn_http_test
 
 import (
 	"app/test/driver"
+	"app/test/harness"
 	"testing"
 	"time"
 
@@ -15,9 +16,10 @@ func TestAuth(t *testing.T) {
 }
 
 var _ = Describe("/auth", Ordered, func() {
-	var app *driver.Driver
+	var app *harness.Harness
+	var api *driver.Driver
 
-	BeforeAll(func() { app = driver.Setup() })
+	BeforeAll(func() { app = harness.Setup(); api = app.NewDriver() })
 	BeforeEach(func() { app.BeforeEach() })
 	AfterEach(func() { app.AfterEach() })
 	AfterAll(func() { app.Teardown() })
@@ -25,19 +27,19 @@ var _ = Describe("/auth", Ordered, func() {
 	Describe("register", func() {
 		email := "me@template.com"
 
-		BeforeEach(func() { app.Auth.MustDelete(email) })
-		AfterEach(func() { app.Auth.MustDelete(email) })
+		BeforeEach(func() { api.Auth.MustDelete(email) })
+		AfterEach(func() { api.Auth.MustDelete(email) })
 
 		It("creates the user", func() {
-			user := app.Auth.MustRegister(email, "p455w0rd")
+			user := api.Auth.MustRegister(email, "p455w0rd")
 
-			Expect(app.Users.Get(user.ID)).To(Equal(user))
+			Expect(api.Users.Get(user.ID)).To(Equal(user))
 		})
 
 		It("logs in after registration", func() {
-			app.Auth.MustRegister(email, "p455w0rd")
+			api.Auth.MustRegister(email, "p455w0rd")
 
-			token, err := app.Auth.Login(email, "p455w0rd")
+			token, err := api.Auth.Login(email, "p455w0rd")
 			Expect(err).To(BeNil())
 			Expect(token).NotTo(BeNil())
 		})
@@ -45,7 +47,7 @@ var _ = Describe("/auth", Ordered, func() {
 
 	Describe("login", func() {
 		It("returns token", func() {
-			token := app.Auth.MustLogin("admin", "123")
+			token := api.Auth.MustLogin("admin", "123")
 
 			Expect(token.TokenType).To(Equal("Bearer"))
 			Expect(token.AccessToken).NotTo(BeEmpty())
@@ -56,8 +58,8 @@ var _ = Describe("/auth", Ordered, func() {
 
 	Describe("user info", func() {
 		It("returns user info", func() {
-			app.Auth.MustLogin("admin", "123")
-			userInfo := app.Auth.MustUserInfo()
+			userDriver := app.DriverFor("admin", "123")
+			userInfo := userDriver.Auth.MustUserInfo()
 
 			Expect(userInfo).To(HaveKeyWithValue("email", "admin@example.com"))
 		})

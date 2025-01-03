@@ -2,6 +2,7 @@ package kv_http_test
 
 import (
 	"app/test/driver"
+	"app/test/harness"
 	"net/http"
 	"testing"
 
@@ -15,18 +16,19 @@ func TestKVHTTP(t *testing.T) {
 }
 
 var _ = Describe("/kv", Ordered, func() {
-	var app *driver.Driver
+	var app *harness.Harness
+	var api *driver.Driver
 
-	BeforeAll(func() { app = driver.Setup() })
+	BeforeAll(func() { app = harness.Setup(); api = app.NewDriver() })
 	BeforeEach(func() { app.BeforeEach() })
 	AfterEach(func() { app.AfterEach() })
 	AfterAll(func() { app.Teardown() })
 
 	Context("GET", func() {
 		It("returns the value under the key", func() {
-			app.KV.MustSet("foo", "bar")
+			api.KV.MustSet("foo", "bar")
 
-			val := app.KV.MustGet("foo")
+			val := api.KV.MustGet("foo")
 
 			Expect(val).To(Equal("bar"))
 		})
@@ -34,14 +36,14 @@ var _ = Describe("/kv", Ordered, func() {
 
 	Context("POST", func() {
 		It("responds with status created", func() {
-			res, _ := app.KV.SetReq("foo", "bar")
+			res, _ := api.KV.SetReq("foo", "bar")
 			Expect(res.StatusCode).To(Equal(http.StatusCreated))
 		})
 
 		It("sets the value to the key", func() {
-			app.KV.MustSet("foo", "bar")
+			api.KV.MustSet("foo", "bar")
 
-			val := app.KV.MustGet("foo")
+			val := api.KV.MustGet("foo")
 
 			Expect(val).To(Equal("bar"))
 		})
@@ -49,10 +51,10 @@ var _ = Describe("/kv", Ordered, func() {
 
 	Context("DELETE", func() {
 		It("forgets the key", func() {
-			app.KV.MustSet("bar", "foo")
-			app.KV.MustDel("bar")
+			api.KV.MustSet("bar", "foo")
+			api.KV.MustDel("bar")
 
-			res := app.KV.MustGetReq("bar")
+			res := api.KV.MustGetReq("bar")
 			Expect(res.StatusCode).To(Equal(http.StatusNotFound))
 		})
 	})

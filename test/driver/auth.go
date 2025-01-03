@@ -41,9 +41,7 @@ func (driver *AuthDriver) Login(email string, password string) (oauth2.Token, er
 }
 
 func (driver *AuthDriver) MustLogin(email string, password string) oauth2.Token {
-	token := matchers.Must2(driver.Login(email, password))
-	driver.SetToken(token)
-	return token
+	return matchers.Must2(driver.Login(email, password))
 }
 
 func (driver *AuthDriver) Register(email string, password string) (user.User, error) {

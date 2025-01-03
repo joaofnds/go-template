@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"app/test/driver"
+	"app/test/harness"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -16,51 +17,52 @@ func TestUserHTTP(t *testing.T) {
 }
 
 var _ = Describe("/users", Ordered, func() {
-	var app *driver.Driver
+	var app *harness.Harness
+	var api *driver.Driver
 
-	BeforeAll(func() { app = driver.Setup() })
+	BeforeAll(func() { app = harness.Setup(); api = app.NewDriver() })
 	BeforeEach(func() { app.BeforeEach() })
 	AfterEach(func() { app.AfterEach() })
 	AfterAll(func() { app.Teardown() })
 
 	It("creates and gets user", func() {
-		bob := app.Users.MustCreate("bob@template.com")
-		found := app.Users.MustGet(bob.ID)
+		bob := api.Users.MustCreate("bob@template.com")
+		found := api.Users.MustGet(bob.ID)
 
 		Expect(found).To(Equal(bob))
 	})
 
 	It("lists users", func() {
-		bob := app.Users.MustCreate("bob@template.com")
-		dave := app.Users.MustCreate("dave@template.com")
+		bob := api.Users.MustCreate("bob@template.com")
+		dave := api.Users.MustCreate("dave@template.com")
 
-		users := app.Users.MustList()
+		users := api.Users.MustList()
 		Expect(users).To(ConsistOf(bob, dave))
 	})
 
 	It("deletes users", func() {
-		bob := app.Users.MustCreate("bob@template.com")
-		dave := app.Users.MustCreate("dave@template.com")
+		bob := api.Users.MustCreate("bob@template.com")
+		dave := api.Users.MustCreate("dave@template.com")
 
-		app.Users.MustDelete(dave.ID)
+		api.Users.MustDelete(dave.ID)
 
-		_, err := app.Users.Get(dave.ID)
+		_, err := api.Users.Get(dave.ID)
 		Expect(err).To(Equal(driver.RequestFailure{
 			Status: http.StatusNotFound,
 			Body:   "Not Found",
 		}))
 
-		users := app.Users.MustList()
+		users := api.Users.MustList()
 		Expect(users).To(ConsistOf(bob))
 	})
 
 	It("switches feature flag", func() {
-		bob := app.Users.MustCreate("bob@template.com")
-		bobFeatures := app.Users.MustGetFeature(bob.ID)
+		bob := api.Users.MustCreate("bob@template.com")
+		bobFeatures := api.Users.MustGetFeature(bob.ID)
 		Expect(bobFeatures).To(HaveKeyWithValue("cool-feature", "on"))
 
-		frank := app.Users.MustCreate("frank@template.com")
-		frankFeatures := app.Users.MustGetFeature(frank.ID)
+		frank := api.Users.MustCreate("frank@template.com")
+		frankFeatures := api.Users.MustGetFeature(frank.ID)
 		Expect(frankFeatures).To(HaveKeyWithValue("cool-feature", "off"))
 	})
 })
