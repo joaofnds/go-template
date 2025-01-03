@@ -5,6 +5,7 @@ golangci-lint = "1.62.0"
 hadolint = "2.12.0"
 k6 = "0.55.0"
 task = "3.40.1"
+"go:github.com/google/yamlfmt/cmd/yamlfmt" = "latest"
 
 [env]
 CONFIG_PATH = "{{config_root}}/config/config.yaml"
