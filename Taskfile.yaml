@@ -78,6 +78,42 @@ tasks:
       - rm -f bin/*
       - go clean -cache -testcache -fuzzcache
 
+  format:
+    desc: runs all formatters
+    deps:
+      - format:go
+      - format:mise
+      - format:taskfile
+      - format:sql
+
+  format:go:
+    desc: formats go files
+    cmds:
+      - goimports -w .
+    sources:
+      - ./**/*.go
+
+  format:mise:
+    desc: format mise config
+    cmds:
+      - mise fmt
+    sources:
+      - .mise.toml
+
+  format:taskfile:
+    desc: format taskfile
+    cmds:
+      - yamlfmt -formatter indent=2,retain_line_breaks=true ./**/*.yaml
+    sources:
+      - Taskfile.yaml
+
+  format:sql:
+    desc: formats sql files
+    cmds:
+      - sqruff fix
+    sources:
+      - ./cmd/migrate/migrations/*.sql
+
   lint:
     desc: runs all linters
     deps:
