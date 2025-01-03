@@ -58,10 +58,10 @@ tasks:
     desc: run migrations
     deps:
       - build:migrate
-    sources:
-      - /bin/migrate
     cmds:
       - bin/migrate up
+    sources:
+      - /bin/migrate
     status:
       - bin/migrate status 2>&1 | grep -q "Pending" && exit 1 || exit 0
 
@@ -79,16 +79,26 @@ tasks:
       - go clean -cache -testcache -fuzzcache
 
   lint:
-    desc: lints code
+    desc: runs all linters
+    deps:
+      - lint:go
+      - lint:dockerfile
+
+  lint:go:
+    desc: lints go code
     deps:
       - install-deps
     cmds:
       - golangci-lint run
+    sources:
+      - ./**/*.go
 
-  lint-dockerfile:
+  lint:dockerfile:
     desc: lints Dockerfile
     cmds:
       - hadolint Dockerfile
+    sources:
+      - Dockerfile
 
   test:
     desc: runs tests
@@ -119,7 +129,6 @@ tasks:
     deps:
       - gitleaks
       - lint
-      - lint-dockerfile
       - migrate-up
     cmds:
       - task: test
