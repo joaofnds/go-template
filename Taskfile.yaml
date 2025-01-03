@@ -136,6 +136,13 @@ tasks:
     sources:
       - Dockerfile
 
+  lint:sql:
+    desc: lints sql files
+    cmds:
+      - sqruff lint .
+    sources:
+      - ./cmd/migrate/migrations/*.sql
+
   test:
     desc: runs tests
     deps:
