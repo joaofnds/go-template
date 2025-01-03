@@ -103,7 +103,7 @@ tasks:
   format:taskfile:
     desc: format taskfile
     cmds:
-      - yamlfmt -formatter indent=2,retain_line_breaks=true ./**/*.yaml
+      - yamlfmt -formatter indent=2,retain_line_breaks=true ./**/*.yaml ./.github/workflows/*.yaml
     sources:
       - Taskfile.yaml
 
