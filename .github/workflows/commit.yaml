@@ -17,6 +17,8 @@ jobs:
           key: go-${{ hashFiles('**/go.sum') }}
           restore-keys: go-
       - uses: jdx/mise-action@v2
+        with:
+          experimental: true
       - run: task up
       - run: task ci
 
