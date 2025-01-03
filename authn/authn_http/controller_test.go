@@ -27,9 +27,6 @@ var _ = Describe("/auth", Ordered, func() {
 	Describe("register", func() {
 		email := "me@template.com"
 
-		BeforeEach(func() { api.Auth.MustDelete(email) })
-		AfterEach(func() { api.Auth.MustDelete(email) })
-
 		It("creates the user", func() {
 			user := api.Auth.MustRegister(email, "p455w0rd")
 

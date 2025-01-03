@@ -22,7 +22,6 @@ import (
 	"app/test/driver"
 	"app/test/matchers"
 	"app/test/req"
-	"app/user"
 	"app/user/user_module"
 	"context"
 	"strconv"
@@ -116,11 +115,12 @@ func (harness *Harness) NewDriver() *driver.Driver {
 }
 
 func (harness *Harness) DeleteAuthUsers() {
-	var emails = []string{}
-	matchers.Must(harness.db.Model(&user.User{}).Pluck("email", &emails).Error)
+	users := matchers.Must2(harness.authUsers.List(context.Background()))
 
-	for _, email := range emails {
-		matchers.Must(harness.authUsers.Delete(context.Background(), email))
+	for _, user := range users {
+		if user.Email != "admin@example.com" {
+			matchers.Must(harness.authUsers.Delete(context.Background(), user.Email))
+		}
 	}
 }
 

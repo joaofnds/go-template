@@ -4,6 +4,7 @@ import (
 	"app/authn"
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/casdoor/casdoor-go-sdk/casdoorsdk"
 )
@@ -47,24 +48,33 @@ func (provider *UserProvider) Create(
 	return nil
 }
 
-func (provider *UserProvider) Delete(ctx context.Context, email string) error {
-	casdoorUser, err := provider.casdoor.GetUserByEmail(email)
+func (provider *UserProvider) List(ctx context.Context) ([]authn.User, error) {
+	casdoorUsers, err := provider.casdoor.GetUsers()
 	if err != nil {
-		return err
+		return []authn.User{}, nil
+	}
+
+	users := make([]authn.User, len(casdoorUsers))
+	for i, casdoorUser := range casdoorUsers {
+		users[i] = authn.User{Email: casdoorUser.Email}
+	}
+	return users, nil
+}
+
+func (provider *UserProvider) Delete(ctx context.Context, email string) error {
+	casdoorUser, getErr := provider.casdoor.GetUserByEmail(email)
+	if getErr != nil {
+		if strings.Contains(getErr.Error(), "deoesn't exist") {
+			return nil
+		}
+
+		return getErr
 	}
 
 	if casdoorUser == nil {
 		return nil
 	}
 
-	ok, err := provider.casdoor.DeleteUser(casdoorUser)
-	if err != nil {
-		return err
-	}
-
-	if !ok {
-		return fmt.Errorf("failed to delete user")
-	}
-
-	return nil
+	_, deleteErr := provider.casdoor.DeleteUser(casdoorUser)
+	return deleteErr
 }
