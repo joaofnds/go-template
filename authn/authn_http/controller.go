@@ -4,7 +4,6 @@ import (
 	"app/authn"
 	"app/user"
 	"net/http"
-	"strings"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -12,46 +11,39 @@ import (
 
 type Controller struct {
 	validator *validator.Validate
+	users     *user.Service
 	authUsers authn.UserProvider
 	tokens    authn.TokenProvider
-	users     *user.Service
+	auth      *authn.AuthMiddleware
 }
 
 func NewController(
 	validator *validator.Validate,
+	users *user.Service,
 	authUsers authn.UserProvider,
 	tokens authn.TokenProvider,
-	users *user.Service,
+	authMiddleware *authn.AuthMiddleware,
 ) *Controller {
 	return &Controller{
 		validator: validator,
+		users:     users,
 		authUsers: authUsers,
 		tokens:    tokens,
-		users:     users,
+		auth:      authMiddleware,
 	}
 }
 
 func (controller *Controller) Register(app *fiber.App) {
 	auth := app.Group("/auth")
 	auth.
-		Get("/userinfo", controller.GetUserInfo).
+		Get("/userinfo", controller.auth.RequireUser, controller.GetUserInfo).
 		Post("/login", controller.Login).
 		Post("/register", controller.RegisterUser).
 		Delete("/delete", controller.DeleteUser)
 }
 
 func (controller *Controller) GetUserInfo(ctx *fiber.Ctx) error {
-	authorization := ctx.Get("Authorization")
-	if authorization == "" {
-		return ctx.SendStatus(http.StatusUnauthorized)
-	}
-
-	claims, err := controller.tokens.Parse(strings.TrimPrefix(authorization, "Bearer "))
-	if err != nil {
-		return ctx.SendStatus(http.StatusUnauthorized)
-	}
-
-	return ctx.JSON(claims)
+	return ctx.JSON(ctx.Locals(authn.UserKey))
 }
 
 func (controller *Controller) Login(ctx *fiber.Ctx) error {

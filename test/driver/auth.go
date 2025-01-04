@@ -63,21 +63,18 @@ func (driver *AuthDriver) MustRegister(email string, password string) user.User 
 	return matchers.Must2(driver.Register(email, password))
 }
 
-func (driver *AuthDriver) UserInfo() (map[string]string, error) {
-	var userInfo map[string]string
-	return userInfo, makeJSONRequest(params{
-		into:   &userInfo,
+func (driver *AuthDriver) UserInfo() (user.User, error) {
+	var u user.User
+	return u, makeJSONRequest(params{
+		into:   &u,
 		status: http.StatusOK,
 		req: func() (*http.Response, error) {
-			return req.Get(
-				driver.url+"/auth/userinfo",
-				req.MergeHeaders(driver.headers, req.Headers{"Content-Type": "application/json"}),
-			)
+			return req.Get(driver.url+"/auth/userinfo", driver.headers)
 		},
 	})
 }
 
-func (driver *AuthDriver) MustUserInfo() map[string]string {
+func (driver *AuthDriver) MustUserInfo() user.User {
 	return matchers.Must2(driver.UserInfo())
 }
 

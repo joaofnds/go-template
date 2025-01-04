@@ -19,6 +19,7 @@ var (
 		fx.Provide(func(casdoorTokenProvider *casdoor.TokenProvider) authn.TokenProvider {
 			return casdoorTokenProvider
 		}),
+		fx.Provide(authn.NewAuthMiddleware),
 	)
 
 	HTTPModule = fx.Module(
