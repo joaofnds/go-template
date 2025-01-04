@@ -6,34 +6,28 @@ type Option interface {
 	Apply(*Harness)
 }
 
-type WithoutTXOption struct{}
+type CallbackOption struct {
+	fn func(*Harness)
+}
 
-func (WithoutTXOption) Apply(harness *Harness) {
-	harness.useTX = false
+func (option CallbackOption) Apply(harness *Harness) {
+	option.fn(harness)
+}
+
+func WithCallback(fn func(*Harness)) Option {
+	return CallbackOption{fn: fn}
 }
 
 func WithoutTX() Option {
-	return WithoutTXOption{}
-}
-
-type WithoutDeleteAuthUsersOption struct{}
-
-func (WithoutDeleteAuthUsersOption) Apply(harness *Harness) {
-	harness.deleteAuthUsers = false
+	return WithCallback(func(harness *Harness) { harness.useTX = false })
 }
 
 func WithoutDeleteAuthUsers() Option {
-	return WithoutDeleteAuthUsersOption{}
-}
-
-type WithFxOptionsOption struct {
-	fxOptions []fx.Option
-}
-
-func (option WithFxOptionsOption) Apply(harness *Harness) {
-	harness.fxOptions = append(harness.fxOptions, option.fxOptions...)
+	return WithCallback(func(harness *Harness) { harness.deleteAuthUsers = false })
 }
 
 func WithFxOptions(fxOptions ...fx.Option) Option {
-	return WithFxOptionsOption{fxOptions: fxOptions}
+	return WithCallback(func(harness *Harness) {
+		harness.fxOptions = append(harness.fxOptions, fxOptions...)
+	})
 }
