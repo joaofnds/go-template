@@ -18,6 +18,8 @@ func TestAuth(t *testing.T) {
 var _ = Describe("/auth", Ordered, func() {
 	var app *harness.Harness
 	var api *driver.Driver
+	email := "user@template.com"
+	password := "p455w0rd"
 
 	BeforeAll(func() { app = harness.Setup(); api = app.NewDriver() })
 	BeforeEach(func() { app.BeforeEach() })
@@ -25,18 +27,16 @@ var _ = Describe("/auth", Ordered, func() {
 	AfterAll(func() { app.Teardown() })
 
 	Describe("register", func() {
-		email := "me@template.com"
-
 		It("creates the user", func() {
-			user := api.Auth.MustRegister(email, "p455w0rd")
+			user := api.Auth.MustRegister(email, password)
 
 			Expect(api.Users.Get(user.ID)).To(Equal(user))
 		})
 
 		It("logs in after registration", func() {
-			api.Auth.MustRegister(email, "p455w0rd")
+			api.Auth.MustRegister(email, password)
 
-			token, err := api.Auth.Login(email, "p455w0rd")
+			token, err := api.Auth.Login(email, password)
 			Expect(err).To(BeNil())
 			Expect(token).NotTo(BeNil())
 		})
@@ -44,7 +44,8 @@ var _ = Describe("/auth", Ordered, func() {
 
 	Describe("login", func() {
 		It("returns token", func() {
-			token := api.Auth.MustLogin("admin", "123")
+			api.Auth.MustRegister(email, password)
+			token := api.Auth.MustLogin(email, password)
 
 			Expect(token.TokenType).To(Equal("Bearer"))
 			Expect(token.AccessToken).NotTo(BeEmpty())
@@ -55,10 +56,11 @@ var _ = Describe("/auth", Ordered, func() {
 
 	Describe("user info", func() {
 		It("returns user info", func() {
-			userDriver := app.DriverFor("admin", "123")
+			api.Auth.MustRegister(email, password)
+			userDriver := app.DriverFor(email, password)
 			userInfo := userDriver.Auth.MustUserInfo()
 
-			Expect(userInfo).To(HaveKeyWithValue("email", "admin@example.com"))
+			Expect(userInfo).To(HaveKeyWithValue("email", "user@template.com"))
 		})
 	})
 })

@@ -13,7 +13,6 @@ import (
 	"app/adapter/uuid"
 	"app/adapter/validation"
 	"app/adapter/watermill"
-	"app/authn"
 	"app/authn/authn_module"
 	"app/config"
 	"app/internal/appcontext"
@@ -23,7 +22,6 @@ import (
 	"app/test/matchers"
 	"app/test/req"
 	"app/user/user_module"
-	"context"
 	"strconv"
 
 	"github.com/onsi/ginkgo/v2"
@@ -36,6 +34,7 @@ var defaultOptions = []fx.Option{
 	logger.NopLoggerProvider,
 	test.Queue,
 	test.AvailablePortProvider,
+	test.FakeAuthnProviders,
 
 	appcontext.Module,
 	apphttp.Module,
@@ -76,7 +75,7 @@ type Harness struct {
 	fxOptions []fx.Option
 	app       *fxtest.App
 	db        *gorm.DB
-	authUsers authn.UserProvider
+	authUsers *test.InMemoryUserProvider
 	port      int
 
 	useTX           bool
@@ -87,7 +86,7 @@ func (harness *Harness) Setup() {
 	var (
 		httpConfig apphttp.Config
 		db         *gorm.DB
-		authUsers  authn.UserProvider
+		authUsers  *test.InMemoryUserProvider
 	)
 
 	harness.fxOptions = append(
@@ -114,16 +113,6 @@ func (harness *Harness) NewDriver() *driver.Driver {
 	)
 }
 
-func (harness *Harness) DeleteAuthUsers() {
-	users := matchers.Must2(harness.authUsers.List(context.Background()))
-
-	for _, user := range users {
-		if user.Email != "admin@example.com" {
-			matchers.Must(harness.authUsers.Delete(context.Background(), user.Email))
-		}
-	}
-}
-
 func (harness *Harness) BeginTx() {
 	matchers.Must(harness.db.Exec("BEGIN").Error)
 }
@@ -138,7 +127,7 @@ func (harness *Harness) BeforeEach() {
 	}
 
 	if harness.deleteAuthUsers {
-		harness.DeleteAuthUsers()
+		harness.authUsers.Clear()
 	}
 }
 
