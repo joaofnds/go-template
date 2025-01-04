@@ -2,7 +2,6 @@ package authn_http
 
 import (
 	"app/authn"
-	"app/user"
 	"net/http"
 
 	"github.com/go-playground/validator/v10"
@@ -11,25 +10,19 @@ import (
 
 type Controller struct {
 	validator *validator.Validate
-	users     *user.Service
-	authUsers authn.UserProvider
-	tokens    authn.TokenProvider
 	auth      *authn.AuthMiddleware
+	service   *authn.Service
 }
 
 func NewController(
 	validator *validator.Validate,
-	users *user.Service,
-	authUsers authn.UserProvider,
-	tokens authn.TokenProvider,
 	authMiddleware *authn.AuthMiddleware,
+	service *authn.Service,
 ) *Controller {
 	return &Controller{
 		validator: validator,
-		users:     users,
-		authUsers: authUsers,
-		tokens:    tokens,
 		auth:      authMiddleware,
+		service:   service,
 	}
 }
 
@@ -53,7 +46,7 @@ func (controller *Controller) Login(ctx *fiber.Ctx) error {
 		return err
 	}
 
-	token, err := controller.tokens.Get(ctx.UserContext(), body.Email, body.Password)
+	token, err := controller.service.Login(ctx.UserContext(), body.Email, body.Password)
 	if err != nil {
 		return err
 	}
@@ -72,30 +65,25 @@ func (controller *Controller) RegisterUser(ctx *fiber.Ctx) error {
 		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	createdUser, createUserErr := controller.users.CreateUser(ctx.UserContext(), body.Email)
-	if createUserErr != nil {
-		return ctx.SendStatus(http.StatusInternalServerError)
-	}
-
-	createAuthUserErr := controller.authUsers.Create(
+	createdUser, createUserErr := controller.service.RegisterUser(
 		ctx.UserContext(),
 		body.Email,
 		body.Password,
 	)
-	if createAuthUserErr != nil {
-		return createAuthUserErr
+	if createUserErr != nil {
+		return createUserErr
 	}
 
 	return ctx.Status(fiber.StatusCreated).JSON(createdUser)
 }
 
 func (controller *Controller) DeleteUser(ctx *fiber.Ctx) error {
-	emailToDelete := ctx.Query("email", "")
-	if emailToDelete == "" {
+	email := ctx.Query("email", "")
+	if email == "" {
 		return ctx.SendStatus(http.StatusBadRequest)
 	}
 
-	err := controller.authUsers.Delete(ctx.UserContext(), emailToDelete)
+	err := controller.service.DeleteUser(ctx.UserContext(), email)
 	if err != nil {
 		return err
 	}
