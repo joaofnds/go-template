@@ -12,33 +12,33 @@ type params struct {
 	req    func() (*http.Response, error)
 }
 
-func makeJSONRequest(p params) error {
-	b, err := makeRequest(p.status, p.req)
+func makeJSONRequest(params params) error {
+	bytes, err := makeRequest(params.status, params.req)
 	if err != nil {
 		return err
 	}
 
-	if p.into == nil {
+	if params.into == nil {
 		return nil
 	}
 
-	return json.Unmarshal(b, p.into)
+	return json.Unmarshal(bytes, params.into)
 }
 
 func makeRequest(status int, req func() (*http.Response, error)) ([]byte, error) {
-	res, err := req()
+	resp, err := req()
 	if err != nil {
 		return nil, err
 	}
-	defer res.Body.Close()
+	defer resp.Body.Close()
 
-	b, err := io.ReadAll(res.Body)
+	b, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
 
-	if res.StatusCode != status {
-		return nil, RequestFailure{Status: res.StatusCode, Body: string(b)}
+	if resp.StatusCode != status {
+		return nil, RequestFailure{Status: resp.StatusCode, Body: string(b)}
 	}
 
 	return b, nil

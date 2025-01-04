@@ -33,8 +33,8 @@ func (driver *AuthDriver) Login(email string, password string) (oauth2.Token, er
 		req: func() (*http.Response, error) {
 			return req.Post(
 				driver.url+"/auth/login",
-				map[string]string{"Content-Type": "application/json"},
-				marshal(map[string]string{"email": email, "password": password}),
+				req.Headers{"Content-Type": "application/json"},
+				marshal(kv{"email": email, "password": password}),
 			)
 		},
 	})
@@ -53,7 +53,7 @@ func (driver *AuthDriver) Register(email string, password string) (user.User, er
 			return req.Post(
 				driver.url+"/auth/register",
 				req.MergeHeaders(driver.headers, req.Headers{"Content-Type": "application/json"}),
-				marshal(map[string]string{"email": email, "password": password}),
+				marshal(kv{"email": email, "password": password}),
 			)
 		},
 	})

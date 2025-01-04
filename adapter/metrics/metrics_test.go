@@ -40,13 +40,13 @@ var _ = Describe("/", Ordered, func() {
 	})
 
 	It("returns status OK", func() {
-		res := Must2(http.Get(url))
-		Expect(res.StatusCode).To(Equal(http.StatusOK))
+		resp := Must2(http.Get(url))
+		Expect(resp.StatusCode).To(Equal(http.StatusOK))
 	})
 
 	It("returns how many requests were made", func() {
-		res := Must2(http.Get(url))
-		bytes := Must2(io.ReadAll(res.Body))
+		resp := Must2(http.Get(url))
+		bytes := Must2(io.ReadAll(resp.Body))
 		Expect(bytes).To(ContainSubstring(`promhttp_metric_handler_requests_total{code="200"} 1`))
 	})
 })

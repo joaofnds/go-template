@@ -38,8 +38,8 @@ var _ = Describe("/health", Ordered, func() {
 
 	Context("healthy", func() {
 		It("returns status OK", func() {
-			res := api.Health.MustGetReq()
-			Expect(res.StatusCode).To(Equal(http.StatusOK))
+			resp := api.Health.MustGetReq()
+			Expect(resp.StatusCode).To(Equal(http.StatusOK))
 		})
 
 		It("checks postgres connection", func() {
@@ -55,8 +55,8 @@ var _ = Describe("/health", Ordered, func() {
 		BeforeAll(func() { checker.UseUnhealthy() })
 
 		It("returns status service unavailable", func() {
-			res := api.Health.MustGetReq()
-			Expect(res.StatusCode).To(Equal(http.StatusServiceUnavailable))
+			resp := api.Health.MustGetReq()
+			Expect(resp.StatusCode).To(Equal(http.StatusServiceUnavailable))
 		})
 
 		It("checks postgres connection", func() {

@@ -12,57 +12,57 @@ type KVDriver struct {
 	headers req.Headers
 }
 
-func NewKVDriver(baseURL string, headers req.Headers) *KVDriver {
-	return &KVDriver{url: baseURL + "/kv", headers: headers}
+func NewKVDriver(url string, headers req.Headers) *KVDriver {
+	return &KVDriver{url: url + "/kv", headers: headers}
 }
 
-func (d *KVDriver) GetReq(key string) (*http.Response, error) {
-	return req.Get(d.url+"/"+key, nil)
+func (driver *KVDriver) GetReq(key string) (*http.Response, error) {
+	return req.Get(driver.url+"/"+key, driver.headers)
 }
 
-func (d *KVDriver) MustGetReq(key string) *http.Response {
-	return matchers.Must2(d.GetReq(key))
+func (driver *KVDriver) MustGetReq(key string) *http.Response {
+	return matchers.Must2(driver.GetReq(key))
 }
 
-func (d *KVDriver) Get(key string) (string, error) {
-	b, err := makeRequest(
+func (driver *KVDriver) Get(key string) (string, error) {
+	bytes, err := makeRequest(
 		http.StatusOK,
-		func() (*http.Response, error) { return d.GetReq(key) },
+		func() (*http.Response, error) { return driver.GetReq(key) },
 	)
 
-	return string(b), err
+	return string(bytes), err
 }
 
-func (d *KVDriver) MustGet(key string) string {
-	return matchers.Must2(d.Get(key))
+func (driver *KVDriver) MustGet(key string) string {
+	return matchers.Must2(driver.Get(key))
 }
 
-func (d *KVDriver) SetReq(key, value string) (*http.Response, error) {
-	return req.Post(d.url+"/"+key+"/"+value, nil, nil)
+func (driver *KVDriver) SetReq(key, value string) (*http.Response, error) {
+	return req.Post(driver.url+"/"+key+"/"+value, driver.headers, nil)
 }
 
-func (d *KVDriver) Set(key, value string) error {
+func (driver *KVDriver) Set(key, value string) error {
 	return makeJSONRequest(params{
 		status: http.StatusCreated,
-		req:    func() (*http.Response, error) { return d.SetReq(key, value) },
+		req:    func() (*http.Response, error) { return driver.SetReq(key, value) },
 	})
 }
 
-func (d *KVDriver) MustSet(key, value string) *http.Response {
-	return matchers.Must2(d.SetReq(key, value))
+func (driver *KVDriver) MustSet(key, value string) *http.Response {
+	return matchers.Must2(driver.SetReq(key, value))
 }
 
-func (d *KVDriver) DelReq(key string) (*http.Response, error) {
-	return req.Delete(d.url+"/"+key, nil)
+func (driver *KVDriver) DelReq(key string) (*http.Response, error) {
+	return req.Delete(driver.url+"/"+key, driver.headers)
 }
 
-func (d *KVDriver) Del(key string) error {
+func (driver *KVDriver) Del(key string) error {
 	return makeJSONRequest(params{
 		status: http.StatusOK,
-		req:    func() (*http.Response, error) { return d.DelReq(key) },
+		req:    func() (*http.Response, error) { return driver.DelReq(key) },
 	})
 }
 
-func (d *KVDriver) MustDel(key string) {
-	matchers.Must(d.Del(key))
+func (driver *KVDriver) MustDel(key string) {
+	matchers.Must(driver.Del(key))
 }

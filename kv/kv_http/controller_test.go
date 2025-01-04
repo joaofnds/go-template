@@ -36,8 +36,8 @@ var _ = Describe("/kv", Ordered, func() {
 
 	Context("POST", func() {
 		It("responds with status created", func() {
-			res, _ := api.KV.SetReq("foo", "bar")
-			Expect(res.StatusCode).To(Equal(http.StatusCreated))
+			resp, _ := api.KV.SetReq("foo", "bar")
+			Expect(resp.StatusCode).To(Equal(http.StatusCreated))
 		})
 
 		It("sets the value to the key", func() {
@@ -54,8 +54,8 @@ var _ = Describe("/kv", Ordered, func() {
 			api.KV.MustSet("bar", "foo")
 			api.KV.MustDel("bar")
 
-			res := api.KV.MustGetReq("bar")
-			Expect(res.StatusCode).To(Equal(http.StatusNotFound))
+			resp := api.KV.MustGetReq("bar")
+			Expect(resp.StatusCode).To(Equal(http.StatusNotFound))
 		})
 	})
 })

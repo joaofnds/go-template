@@ -26,8 +26,8 @@ func (driver *UserDriver) Create(email string) (user.User, error) {
 		req: func() (*http.Response, error) {
 			return req.Post(
 				driver.url+"/users",
-				req.MergeHeaders(driver.headers, map[string]string{"Content-Type": "application/json"}),
-				marshal(map[string]string{"email": email}),
+				req.MergeHeaders(driver.headers, req.Headers{"Content-Type": "application/json"}),
+				marshal(kv{"email": email}),
 			)
 		},
 	})
@@ -46,7 +46,7 @@ func (driver *UserDriver) Get(userID string) (user.User, error) {
 		req: func() (*http.Response, error) {
 			return req.Get(
 				driver.url+"/users/"+userID,
-				req.MergeHeaders(driver.headers, map[string]string{"Content-Type": "application/json"}),
+				req.MergeHeaders(driver.headers, req.Headers{"Content-Type": "application/json"}),
 			)
 		},
 	})
@@ -64,7 +64,7 @@ func (driver *UserDriver) List() ([]user.User, error) {
 		req: func() (*http.Response, error) {
 			return req.Get(
 				driver.url+"/users",
-				req.MergeHeaders(driver.headers, map[string]string{"Content-Type": "application/json"}),
+				req.MergeHeaders(driver.headers, req.Headers{"Content-Type": "application/json"}),
 			)
 		},
 	})
@@ -80,7 +80,7 @@ func (driver *UserDriver) Delete(userID string) error {
 		req: func() (*http.Response, error) {
 			return req.Delete(
 				driver.url+"/users/"+userID,
-				req.MergeHeaders(driver.headers, map[string]string{"Content-Type": "application/json"}),
+				req.MergeHeaders(driver.headers, req.Headers{"Content-Type": "application/json"}),
 			)
 		},
 	})
@@ -99,7 +99,7 @@ func (driver *UserDriver) GetFeature(userID string) (map[string]any, error) {
 		req: func() (*http.Response, error) {
 			return req.Get(
 				driver.url+"/users/"+userID+"/feature",
-				req.MergeHeaders(driver.headers, map[string]string{"Content-Type": "application/json"}),
+				req.MergeHeaders(driver.headers, req.Headers{"Content-Type": "application/json"}),
 			)
 		},
 	})

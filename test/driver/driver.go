@@ -33,6 +33,8 @@ func (driver *Driver) SetHeader(key, value string) {
 	driver.headers[key] = value
 }
 
+type kv map[string]any
+
 func marshal(v any) io.Reader {
 	return bytes.NewReader(matchers.Must2(json.Marshal(v)))
 }
