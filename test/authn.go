@@ -53,7 +53,7 @@ func (userProvider *InMemoryUserProvider) Delete(ctx context.Context, email stri
 	defer userProvider.mu.Unlock()
 
 	if _, ok := userProvider.users[email]; !ok {
-		return fmt.Errorf("user with email %q not found", email)
+		return authn.ErrUserNotFound
 	}
 
 	delete(userProvider.users, email)
@@ -76,7 +76,7 @@ func (tokenProvider *JWTTokenProvider) Get(ctx context.Context, email string, pa
 
 	tokenString, err := token.SignedString([]byte(tokenProvider.secret))
 	if err != nil {
-		return nil, fmt.Errorf("failed to sign token: %w", err)
+		return nil, fmt.Errorf("%w: failed to sign token", authn.ErrToken)
 	}
 
 	return &oauth2.Token{
@@ -91,21 +91,26 @@ func (tokenProvider *JWTTokenProvider) Parse(tokenString string) (authn.Claims, 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("%w: unexpected signing method: %v", authn.ErrToken, token.Header["alg"])
 		}
 
 		return []byte(tokenProvider.secret), nil
 	})
 	if err != nil {
-		return authn.Claims{}, fmt.Errorf("failed to parse token: %w", err)
+		return authn.Claims{}, authn.ErrParseToken
 	}
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return authn.Claims{
-			Subject: claims["sub"].(string),
-			Email:   claims["email"].(string),
-		}, nil
+	if !token.Valid {
+		return authn.Claims{}, authn.ErrInvalidSignature
 	}
 
-	return authn.Claims{}, fmt.Errorf("invalid token")
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return authn.Claims{}, authn.ErrParseToken
+	}
+
+	return authn.Claims{
+		Subject: claims["sub"].(string),
+		Email:   claims["email"].(string),
+	}, nil
 }

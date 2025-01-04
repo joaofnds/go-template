@@ -38,23 +38,19 @@ func (provider *UserProvider) Create(
 		Password: password,
 	})
 	if err != nil {
-		return err
+		return fmt.Errorf("%w: %s", authn.ErrFailedToCreateUser, err)
 	}
 
 	if !ok {
-		return fmt.Errorf("failed to create user")
+		return fmt.Errorf("%w: %s", authn.ErrFailedToCreateUser, email)
 	}
 
 	return nil
 }
 
 func (provider *UserProvider) Delete(ctx context.Context, email string) error {
-	casdoorUser, getErr := provider.casdoor.GetUserByEmail(email)
+	casdoorUser, getErr := provider.getUser(email)
 	if getErr != nil {
-		if strings.Contains(getErr.Error(), "deoesn't exist") {
-			return nil
-		}
-
 		return getErr
 	}
 
@@ -62,6 +58,22 @@ func (provider *UserProvider) Delete(ctx context.Context, email string) error {
 		return nil
 	}
 
-	_, deleteErr := provider.casdoor.DeleteUser(casdoorUser)
-	return deleteErr
+	if _, deleteErr := provider.casdoor.DeleteUser(casdoorUser); deleteErr != nil {
+		return fmt.Errorf("%w: %s", authn.ErrFailedToDeleteUser, deleteErr)
+	}
+
+	return nil
+}
+
+func (provider *UserProvider) getUser(email string) (*casdoorsdk.User, error) {
+	casdoorUser, err := provider.casdoor.GetUserByEmail(email)
+
+	switch {
+	case err == nil:
+		return casdoorUser, nil
+	case strings.Contains(err.Error(), "doesn't exist"):
+		return casdoorUser, fmt.Errorf("%w: %s", authn.ErrUserNotFound, email)
+	default:
+		return casdoorUser, fmt.Errorf("%w: %s", authn.ErrFailedToGetUser, err)
+	}
 }

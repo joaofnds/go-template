@@ -4,6 +4,7 @@ import (
 	"app/adapter/casdoor"
 	"app/adapter/logger"
 	"app/adapter/validation"
+	"app/authn"
 	"app/config"
 	"time"
 
@@ -58,7 +59,7 @@ var _ = Describe("providers", func() {
 		Describe("delete", func() {
 			It("deletes a user", func() {
 				_, err := tokenProvider.Get(context.Background(), email, password)
-				Expect(err.Error()).To(ContainSubstring("the user does not exist"))
+				Expect(err).To(MatchError(authn.ErrUserNotFound))
 
 				Must(userProvider.Create(context.Background(), email, password))
 
@@ -84,7 +85,7 @@ var _ = Describe("providers", func() {
 			When("user does not exist", func() {
 				It("returns an error", func() {
 					_, err := tokenProvider.Get(context.Background(), email, password)
-					Expect(err.Error()).To(ContainSubstring("the user does not exist"))
+					Expect(err).To(MatchError(authn.ErrUserNotFound))
 				})
 			})
 
@@ -93,7 +94,7 @@ var _ = Describe("providers", func() {
 					Must(userProvider.Create(context.Background(), email, password))
 
 					_, err := tokenProvider.Get(context.Background(), email, "wrong-password")
-					Expect(err.Error()).To(ContainSubstring("invalid username or password"))
+					Expect(err).To(MatchError(authn.ErrWrongPassword))
 				})
 			})
 		})
@@ -117,7 +118,7 @@ var _ = Describe("providers", func() {
 					tokenString := Must2(token.SignedString([]byte("secret")))
 
 					_, err := tokenProvider.Parse(tokenString)
-					Expect(err.Error()).To(ContainSubstring("token signature is invalid"))
+					Expect(err).To(MatchError(authn.ErrParseToken))
 				})
 			})
 		})
