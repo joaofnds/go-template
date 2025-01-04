@@ -12,7 +12,6 @@ type User struct {
 
 type UserProvider interface {
 	Create(ctx context.Context, email string, password string) error
-	List(ctx context.Context) ([]User, error)
 	Delete(ctx context.Context, email string) error
 }
 

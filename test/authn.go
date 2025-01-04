@@ -48,17 +48,6 @@ func (userProvider *InMemoryUserProvider) Create(ctx context.Context, email stri
 	return nil
 }
 
-func (userProvider *InMemoryUserProvider) List(ctx context.Context) ([]authn.User, error) {
-	userProvider.mu.Lock()
-	defer userProvider.mu.Unlock()
-
-	var users []authn.User
-	for email := range userProvider.users {
-		users = append(users, authn.User{Email: email})
-	}
-	return users, nil
-}
-
 func (userProvider *InMemoryUserProvider) Delete(ctx context.Context, email string) error {
 	userProvider.mu.Lock()
 	defer userProvider.mu.Unlock()
