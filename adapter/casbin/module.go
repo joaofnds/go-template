@@ -1,6 +1,7 @@
 package casbin
 
 import (
+	"app/authz"
 	"context"
 	_ "embed"
 
@@ -21,7 +22,9 @@ var (
 		fx.Provide(newCasbinEnforcer),
 
 		fx.Provide(NewEnforcer),
+		fx.Provide(func(e *Enforcer) authz.Enforcer { return e }),
 		fx.Provide(NewRoleManager),
+		fx.Provide(func(r *RoleManager) authz.RoleManager { return r }),
 	)
 	Invokes = fx.Options(
 		fx.Invoke(loadPolicy),

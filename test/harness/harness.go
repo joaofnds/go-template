@@ -1,6 +1,7 @@
 package harness
 
 import (
+	"app/adapter/casbin"
 	"app/adapter/casdoor"
 	"app/adapter/featureflags"
 	"app/adapter/health/health_module"
@@ -14,6 +15,7 @@ import (
 	"app/adapter/validation"
 	"app/adapter/watermill"
 	"app/authn/authn_module"
+	"app/authz/authz_http"
 	"app/config"
 	"app/internal/appcontext"
 	"app/kv/kv_module"
@@ -38,7 +40,9 @@ var defaultOptions = []fx.Option{
 
 	appcontext.Module,
 	apphttp.Module,
+	authz_http.Module,
 	authn_module.HTTPModule,
+	casbin.Module,
 	casdoor.Module,
 	config.Module,
 	featureflags.Module,

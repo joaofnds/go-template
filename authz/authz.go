@@ -33,11 +33,11 @@ func NewAppRequest(subject ref.Ref, object ref.Ref, action string) Request {
 	}
 }
 
-func NewAppRequests(subject ref.Ref, object ref.Ref, action []string) []Request {
-	requests := make([]Request, len(action))
+func NewAppRequests(subject ref.Ref, object ref.Ref, actions []string) []Request {
+	requests := make([]Request, len(actions))
 
-	for i, act := range action {
-		requests[i] = NewAppRequest(subject, object, act)
+	for i, action := range actions {
+		requests[i] = NewAppRequest(subject, object, action)
 	}
 
 	return requests
