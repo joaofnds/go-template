@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"app/adapter/featureflags"
-	"app/authn"
+	"app/authn/authn_http"
 	"app/user"
 
 	"github.com/go-playground/validator/v10"
@@ -14,7 +14,7 @@ import (
 
 func NewController(
 	validator *validator.Validate,
-	authn *authn.AuthMiddleware,
+	authn *authn_http.AuthMiddleware,
 	service *user.Service,
 ) *Controller {
 	return &Controller{
@@ -26,7 +26,7 @@ func NewController(
 
 type Controller struct {
 	validator *validator.Validate
-	authn     *authn.AuthMiddleware
+	authn     *authn_http.AuthMiddleware
 	service   *user.Service
 }
 

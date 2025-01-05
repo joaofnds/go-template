@@ -10,13 +10,13 @@ import (
 
 type Controller struct {
 	validator *validator.Validate
-	auth      *authn.AuthMiddleware
+	auth      *AuthMiddleware
 	service   *authn.Service
 }
 
 func NewController(
 	validator *validator.Validate,
-	authMiddleware *authn.AuthMiddleware,
+	authMiddleware *AuthMiddleware,
 	service *authn.Service,
 ) *Controller {
 	return &Controller{
@@ -36,7 +36,7 @@ func (controller *Controller) Register(app *fiber.App) {
 }
 
 func (controller *Controller) GetUserInfo(ctx *fiber.Ctx) error {
-	return ctx.JSON(ctx.Locals(authn.UserKey))
+	return ctx.JSON(ctx.Locals(UserKey))
 }
 
 func (controller *Controller) Login(ctx *fiber.Ctx) error {

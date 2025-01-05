@@ -1,6 +1,7 @@
-package authn
+package authn_http
 
 import (
+	"app/authn"
 	"app/user"
 	"net/http"
 	"strings"
@@ -13,12 +14,12 @@ const (
 )
 
 type AuthMiddleware struct {
-	tokens TokenProvider
+	tokens authn.TokenProvider
 	users  *user.Service
 }
 
 func NewAuthMiddleware(
-	token TokenProvider,
+	token authn.TokenProvider,
 	users *user.Service,
 ) *AuthMiddleware {
 	return &AuthMiddleware{

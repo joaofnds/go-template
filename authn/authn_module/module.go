@@ -19,7 +19,6 @@ var (
 		fx.Provide(func(casdoorTokenProvider *casdoor.TokenProvider) authn.TokenProvider {
 			return casdoorTokenProvider
 		}),
-		fx.Provide(authn.NewAuthMiddleware),
 		fx.Provide(authn.NewService),
 	)
 
@@ -28,6 +27,7 @@ var (
 
 		AuthnProviderModule,
 
+		fx.Provide(authn_http.NewAuthMiddleware),
 		fx.Provide(authn_http.NewController, fx.Private),
 
 		fx.Invoke(func(app *fiber.App, authnController *authn_http.Controller) {
