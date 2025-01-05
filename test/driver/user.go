@@ -13,28 +13,8 @@ type UserDriver struct {
 	headers req.Headers
 }
 
-func NewUserDriver(baseURL string, headers req.Headers) *UserDriver {
-	return &UserDriver{url: baseURL}
-}
-
-func (driver *UserDriver) Create(email string) (user.User, error) {
-	var u user.User
-
-	return u, makeJSONRequest(params{
-		into:   &u,
-		status: http.StatusCreated,
-		req: func() (*http.Response, error) {
-			return req.Post(
-				driver.url+"/users",
-				req.MergeHeaders(driver.headers, req.Headers{"Content-Type": "application/json"}),
-				marshal(kv{"email": email}),
-			)
-		},
-	})
-}
-
-func (driver *UserDriver) MustCreate(email string) user.User {
-	return matchers.Must2(driver.Create(email))
+func NewUserDriver(url string, headers req.Headers) *UserDriver {
+	return &UserDriver{url: url, headers: headers}
 }
 
 func (driver *UserDriver) Get(userID string) (user.User, error) {

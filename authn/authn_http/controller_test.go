@@ -28,9 +28,10 @@ var _ = Describe("/auth", Ordered, func() {
 
 	Describe("register", func() {
 		It("creates the user", func() {
+			api = app.NewDriver()
 			user := api.Auth.MustRegister(email, password)
 
-			Expect(api.Users.Get(user.ID)).To(Equal(user))
+			Expect(api.Users.MustList()).To(ConsistOf(user))
 		})
 
 		It("logs in after registration", func() {
