@@ -107,6 +107,16 @@ func (harness *Harness) NewDriver() *driver.Driver {
 	)
 }
 
+func (harness *Harness) NewUser(email, password string) *driver.User {
+	userDriver := harness.NewDriver()
+	newUser := userDriver.Auth.MustRegister(email, password)
+	userDriver.Login(newUser.Email, password)
+	return &driver.User{
+		App:    userDriver,
+		Entity: newUser,
+	}
+}
+
 func (harness *Harness) BeginTx() {
 	matchers.Must(harness.db.Exec("BEGIN").Error)
 }

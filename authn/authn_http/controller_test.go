@@ -21,8 +21,8 @@ var _ = Describe("/auth", Ordered, func() {
 	email := "user@template.com"
 	password := "p455w0rd"
 
-	BeforeAll(func() { app = harness.Setup(); api = app.NewDriver() })
-	BeforeEach(func() { app.BeforeEach() })
+	BeforeAll(func() { app = harness.Setup() })
+	BeforeEach(func() { app.BeforeEach(); api = app.NewDriver() })
 	AfterEach(func() { app.AfterEach() })
 	AfterAll(func() { app.Teardown() })
 
