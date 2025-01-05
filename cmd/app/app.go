@@ -17,6 +17,7 @@ import (
 	"app/adapter/validation"
 	"app/adapter/watermill"
 	"app/authn/authn_module"
+	"app/authz/authz_http"
 	"app/config"
 	"app/internal/appcontext"
 	"app/kv/kv_module"
@@ -44,6 +45,7 @@ func main() {
 		postgres.Module,
 		redis.Module,
 		http.Module,
+		authz_http.Module,
 
 		health_module.HTTPModule,
 		authn_module.HTTPModule,

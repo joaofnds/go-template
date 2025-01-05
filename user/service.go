@@ -3,16 +3,19 @@ package user
 import (
 	"app/adapter/time"
 	"app/adapter/uuid"
+	"app/authz"
 	"app/internal/clock"
 	"app/internal/id"
+	"app/internal/ref"
 	"context"
 )
 
 type Service struct {
-	id      id.Generator
-	clock   clock.Clock
-	repo    Repository
-	emitter Emitter
+	id       id.Generator
+	clock    clock.Clock
+	repo     Repository
+	emitter  Emitter
+	enforcer authz.Enforcer
 }
 
 func NewUserService(
@@ -20,12 +23,14 @@ func NewUserService(
 	clock *time.Clock,
 	repo Repository,
 	emitter Emitter,
+	enforcer authz.Enforcer,
 ) *Service {
 	return &Service{
-		id:      id,
-		clock:   clock,
-		repo:    repo,
-		emitter: emitter,
+		id:       id,
+		clock:    clock,
+		repo:     repo,
+		emitter:  emitter,
+		enforcer: enforcer,
 	}
 }
 
@@ -43,6 +48,14 @@ func (service *Service) CreateUser(ctx context.Context, email string) (User, err
 	} else {
 		_ = service.emitter.UserCreated(user)
 	}
+
+	_ = service.enforcer.GrantAll(
+		authz.NewAppRequests(
+			ref.NewUser(user.ID),
+			ref.NewUser(user.ID),
+			[]string{"read", "delete", "get-features"},
+		),
+	)
 
 	return user, err
 }

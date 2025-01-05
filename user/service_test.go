@@ -3,6 +3,7 @@ package user_test
 import (
 	"testing"
 
+	"app/adapter/casbin"
 	"app/adapter/logger"
 	"app/adapter/postgres"
 	"app/adapter/time"
@@ -40,6 +41,7 @@ var _ = Describe("user service", Ordered, func() {
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			test.Queue,
+			casbin.Module,
 			appcontext.Module,
 			watermill.Module,
 			validation.Module,

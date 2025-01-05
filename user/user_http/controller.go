@@ -6,6 +6,7 @@ import (
 
 	"app/adapter/featureflags"
 	"app/authn/authn_http"
+	"app/authz/authz_http"
 	"app/user"
 
 	"github.com/go-playground/validator/v10"
@@ -15,11 +16,13 @@ import (
 func NewController(
 	validator *validator.Validate,
 	authn *authn_http.AuthMiddleware,
+	authnz *authz_http.Middleware,
 	service *user.Service,
 ) *Controller {
 	return &Controller{
 		validator: validator,
 		authn:     authn,
+		authz:     authnz,
 		service:   service,
 	}
 }
@@ -27,6 +30,7 @@ func NewController(
 type Controller struct {
 	validator *validator.Validate
 	authn     *authn_http.AuthMiddleware
+	authz     *authz_http.Middleware
 	service   *user.Service
 }
 
@@ -40,9 +44,21 @@ func (controller *Controller) Register(app *fiber.App) {
 		controller.middlewareGetUser,
 		featureflags.Middleware,
 	)
-	user.Get("/", controller.Get)
-	user.Delete("/", controller.Delete)
-	user.Get("/feature", controller.GetFeature)
+	user.Get(
+		"/",
+		controller.authz.RequireParamPermission("userID", "user", "read"),
+		controller.Get,
+	)
+	user.Delete(
+		"/",
+		controller.authz.RequireParamPermission("userID", "user", "delete"),
+		controller.Delete,
+	)
+	user.Get(
+		"/feature",
+		controller.authz.RequireParamPermission("userID", "user", "get-features"),
+		controller.GetFeature,
+	)
 }
 
 func (controller *Controller) List(ctx *fiber.Ctx) error {
