@@ -54,12 +54,12 @@ func (middleware *Middleware) RequirePermission(
 }
 
 func UserFromLocals(ctx *fiber.Ctx) ref.Ref {
-	user, ok := ctx.Locals(authn_http.UserKey).(user.User)
-	if !ok || user.ID == "" {
+	requestUser, ok := ctx.Locals(authn_http.UserKey).(user.User)
+	if !ok || requestUser.ID == "" {
 		return ref.Ref{}
 	}
 
-	return ref.NewUser(user.ID)
+	return user.NewRef(requestUser.ID)
 }
 
 func objectFromParams(key, objectType string) func(*fiber.Ctx) ref.Ref {

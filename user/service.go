@@ -6,7 +6,6 @@ import (
 	"app/authz"
 	"app/internal/clock"
 	"app/internal/id"
-	"app/internal/ref"
 	"context"
 )
 
@@ -50,7 +49,7 @@ func (service *Service) CreateUser(ctx context.Context, email string) (User, err
 	}
 
 	_ = service.enforcer.Grant(
-		authz.NewAppRequest(ref.NewUser(user.ID), ref.NewUser(user.ID), "*"),
+		authz.NewAppRequest(NewRef(user.ID), NewRef(user.ID), "*"),
 	)
 
 	return user, err

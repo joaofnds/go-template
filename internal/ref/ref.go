@@ -27,11 +27,3 @@ func (ref Ref) Equal(other Ref) bool {
 func (ref Ref) String() string {
 	return ref.Type + ":" + ref.ID
 }
-
-func NewUser(id string) Ref {
-	return New(id, "user")
-}
-
-func NewRole(id string) Ref {
-	return New(id, "role")
-}
