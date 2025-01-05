@@ -49,12 +49,8 @@ func (service *Service) CreateUser(ctx context.Context, email string) (User, err
 		_ = service.emitter.UserCreated(user)
 	}
 
-	_ = service.enforcer.GrantAll(
-		authz.NewAppRequests(
-			ref.NewUser(user.ID),
-			ref.NewUser(user.ID),
-			[]string{"read", "delete", "get-features"},
-		),
+	_ = service.enforcer.Grant(
+		authz.NewAppRequest(ref.NewUser(user.ID), ref.NewUser(user.ID), "*"),
 	)
 
 	return user, err
