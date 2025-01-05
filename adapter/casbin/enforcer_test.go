@@ -74,7 +74,7 @@ var _ = Describe("casbin enforcer", func() {
 		Expect(sut.Check(userPostDelete)).To(BeFalse())
 		Expect(sut.Check(adminAnyPostDelete)).To(BeFalse())
 
-		Must(sut.Grant(userPostDelete, adminAnyPostDelete))
+		Must(sut.GrantAll([]authz.Request{userPostDelete, adminAnyPostDelete}))
 
 		Expect(sut.Check(userPostDelete)).To(BeTrue())
 		Expect(sut.Check(adminAnyPostDelete)).To(BeTrue())

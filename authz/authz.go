@@ -13,7 +13,8 @@ type RoleManager interface {
 }
 
 type Enforcer interface {
-	Grant(reqs ...Request) error
+	Grant(req Request) error
+	GrantAll(reqs []Request) error
 	Check(req Request) bool
 }
 

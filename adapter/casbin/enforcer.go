@@ -27,18 +27,7 @@ func (enforcer *Enforcer) Check(req authz.Request) bool {
 	return err == nil && hasPermission
 }
 
-func (service *Enforcer) Grant(reqs ...authz.Request) error {
-	switch len(reqs) {
-	case 0:
-		return nil
-	case 1:
-		return service.grantOne(reqs[0])
-	default:
-		return service.grantMany(reqs)
-	}
-}
-
-func (service *Enforcer) grantOne(req authz.Request) error {
+func (service *Enforcer) Grant(req authz.Request) error {
 	_, err := service.enforcer.AddPolicy(
 		req.Subject.String(),
 		req.Domain,
@@ -49,7 +38,7 @@ func (service *Enforcer) grantOne(req authz.Request) error {
 	return err
 }
 
-func (service *Enforcer) grantMany(reqs []authz.Request) error {
+func (service *Enforcer) GrantAll(reqs []authz.Request) error {
 	casbinRequests := make([][]string, len(reqs))
 
 	for i, req := range reqs {
