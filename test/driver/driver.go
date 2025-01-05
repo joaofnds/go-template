@@ -5,6 +5,7 @@ import (
 	"app/test/req"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 )
 
@@ -31,6 +32,11 @@ func NewDriver(url string, headers req.Headers) *Driver {
 
 func (driver *Driver) SetHeader(key, value string) {
 	driver.headers[key] = value
+}
+
+func (driver *Driver) Login(email, password string) {
+	token := driver.Auth.MustLogin(email, password)
+	driver.headers.Set("Authorization", fmt.Sprintf("%s %s", token.TokenType, token.AccessToken))
 }
 
 type kv map[string]any

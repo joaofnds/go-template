@@ -22,7 +22,7 @@ import (
 	"app/test/matchers"
 	"app/test/req"
 	"app/user/user_module"
-	"strconv"
+	"fmt"
 
 	"github.com/onsi/ginkgo/v2"
 	"go.uber.org/fx"
@@ -100,15 +100,9 @@ func (harness *Harness) Setup() {
 	harness.port = httpConfig.Port
 }
 
-func (harness *Harness) DriverFor(email, password string) *driver.Driver {
-	userDriver := harness.NewDriver()
-	userDriver.Auth.SetToken(userDriver.Auth.MustLogin(email, password))
-	return userDriver
-}
-
 func (harness *Harness) NewDriver() *driver.Driver {
 	return driver.NewDriver(
-		"http://localhost:"+strconv.Itoa(harness.port),
+		fmt.Sprintf("http://localhost:%d", harness.port),
 		req.Headers{},
 	)
 }

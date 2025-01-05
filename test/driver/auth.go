@@ -5,7 +5,6 @@ import (
 	"app/test/req"
 	"app/user"
 
-	"fmt"
 	"net/http"
 	"net/url"
 
@@ -19,10 +18,6 @@ type AuthDriver struct {
 
 func NewAuthDriver(baseURL string, headers req.Headers) *AuthDriver {
 	return &AuthDriver{url: baseURL, headers: headers}
-}
-
-func (driver *AuthDriver) SetToken(token oauth2.Token) {
-	driver.headers.Set("Authorization", fmt.Sprintf("%s %s", token.TokenType, token.AccessToken))
 }
 
 func (driver *AuthDriver) Login(email string, password string) (oauth2.Token, error) {

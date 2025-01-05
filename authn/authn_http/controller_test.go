@@ -57,8 +57,9 @@ var _ = Describe("/auth", Ordered, func() {
 	Describe("user info", func() {
 		It("returns user info", func() {
 			createdUser := api.Auth.MustRegister(email, password)
-			userDriver := app.DriverFor(email, password)
 
+			userDriver := app.NewDriver()
+			userDriver.Login(email, password)
 			Expect(userDriver.Auth.MustUserInfo()).To(Equal(createdUser))
 		})
 	})
