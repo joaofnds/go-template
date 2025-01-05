@@ -8,13 +8,14 @@ import (
 	"app/authz"
 	"app/config"
 	"app/internal/ref"
-	"app/test"
+	"app/test/matchers"
 	. "app/test/matchers"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
+	"gorm.io/gorm"
 )
 
 var _ = Describe("casbin enforcer", func() {
@@ -26,25 +27,29 @@ var _ = Describe("casbin enforcer", func() {
 	adminAnyPostDelete := authz.NewAppRequest(admin, anyPost, "delete")
 	userPostDelete := authz.NewAppRequest(user, post, "delete")
 
-	var app *fxtest.App
-	var sut *casbin.Enforcer
-	var roles *casbin.RoleManager
+	var (
+		app   *fxtest.App
+		db    *gorm.DB
+		sut   *casbin.Enforcer
+		roles *casbin.RoleManager
+	)
 
 	BeforeEach(func() {
 		app = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
-			test.CasbinStringAdapter,
 			validation.Module,
 			config.Module,
 			postgres.Module,
 			casbin.Module,
-			fx.Populate(&sut, &roles),
+			fx.Populate(&db, &roles, &sut),
 		)
 		app.RequireStart()
+		matchers.Must(db.Exec("BEGIN").Error)
 	})
 
 	AfterEach(func() {
+		matchers.Must(db.Exec("ROLLBACK").Error)
 		app.RequireStop()
 	})
 
@@ -63,5 +68,15 @@ var _ = Describe("casbin enforcer", func() {
 		Must(roles.Assign(user, admin))
 
 		Expect(sut.Check(userPostDelete)).To(BeTrue())
+	})
+
+	It("grants multiple permissions", func(ctx SpecContext) {
+		Expect(sut.Check(userPostDelete)).To(BeFalse())
+		Expect(sut.Check(adminAnyPostDelete)).To(BeFalse())
+
+		Must(sut.Grant(userPostDelete, adminAnyPostDelete))
+
+		Expect(sut.Check(userPostDelete)).To(BeTrue())
+		Expect(sut.Check(adminAnyPostDelete)).To(BeTrue())
 	})
 })

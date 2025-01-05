@@ -13,7 +13,7 @@ type RoleManager interface {
 }
 
 type Enforcer interface {
-	Grant(req Request) error
+	Grant(reqs ...Request) error
 	Check(req Request) bool
 }
 
@@ -31,4 +31,14 @@ func NewAppRequest(subject ref.Ref, object ref.Ref, action string) Request {
 		Object:  object,
 		Action:  action,
 	}
+}
+
+func NewAppRequests(subject ref.Ref, object ref.Ref, action []string) []Request {
+	requests := make([]Request, len(action))
+
+	for i, act := range action {
+		requests[i] = NewAppRequest(subject, object, act)
+	}
+
+	return requests
 }

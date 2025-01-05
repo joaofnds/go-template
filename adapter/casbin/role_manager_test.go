@@ -7,7 +7,6 @@ import (
 	"app/adapter/validation"
 	"app/config"
 	"app/internal/ref"
-	"app/test"
 	. "app/test/matchers"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -27,7 +26,6 @@ var _ = Describe("casbin role manager", func() {
 		app = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
-			test.CasbinStringAdapter,
 			validation.Module,
 			config.Module,
 			postgres.Module,
