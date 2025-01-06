@@ -22,6 +22,7 @@ var (
 		fx.Provide(user.NewEmitter, fx.Private),
 
 		fx.Provide(user.NewUserService),
+		fx.Provide(user.NewPermissionService),
 	)
 
 	QueueWorkerModule = fx.Module(
