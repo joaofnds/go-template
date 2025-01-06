@@ -48,6 +48,14 @@ var _ = Describe("providers", func() {
 
 	AfterEach(func() { fxApp.RequireStop() })
 
+	It("logs in with admin user", func() {
+		token, err := tokenProvider.Get(context.Background(), "admin", "123")
+		Expect(err).To(BeNil())
+		Expect(token.TokenType).To(Equal("Bearer"))
+		Expect(token.AccessToken).NotTo(BeEmpty())
+		Expect(token.RefreshToken).NotTo(BeEmpty())
+	})
+
 	Describe("user provider", func() {
 		Describe("create", func() {
 			It("works", func() {
