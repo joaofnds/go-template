@@ -16,8 +16,8 @@ import (
 )
 
 var _ = Describe("casbin role manager", func() {
-	user := ref.New("111", "user")
-	admin := ref.New("admin", "role")
+	user := ref.New("user", "111")
+	admin := ref.New("role", "admin")
 
 	var app *fxtest.App
 	var sut *casbin.RoleManager

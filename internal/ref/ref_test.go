@@ -16,10 +16,10 @@ func TestRef(t *testing.T) {
 var _ = Describe("Ref", func() {
 	Describe("New", func() {
 		It("creates a new ref", func() {
-			userRef := ref.New("111", "user")
+			userRef := ref.New("user", "111")
 
-			Expect(userRef.ID).To(Equal("111"))
 			Expect(userRef.Type).To(Equal("user"))
+			Expect(userRef.ID).To(Equal("111"))
 		})
 	})
 
@@ -27,8 +27,32 @@ var _ = Describe("Ref", func() {
 		It("parses a ref string", func() {
 			userRef := ref.NewFromString("user:111")
 
-			Expect(userRef.ID).To(Equal("111"))
 			Expect(userRef.Type).To(Equal("user"))
+			Expect(userRef.ID).To(Equal("111"))
+		})
+
+		When("':' is missing", func() {
+			It("panics", func() {
+				Expect(func() {
+					ref.NewFromString("user111")
+				}).To(PanicWith("ref string must have len 2 after split"))
+			})
+		})
+
+		When("type is missing", func() {
+			It("panics", func() {
+				Expect(func() {
+					ref.NewFromString(":111")
+				}).To(PanicWith("ref string must have non-empty parts"))
+			})
+		})
+
+		When("id is missing", func() {
+			It("panics", func() {
+				Expect(func() {
+					ref.NewFromString("user:")
+				}).To(PanicWith("ref string must have non-empty parts"))
+			})
 		})
 	})
 })

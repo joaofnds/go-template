@@ -69,6 +69,6 @@ func objectFromParams(key, objectType string) func(*fiber.Ctx) ref.Ref {
 			return ref.Ref{}
 		}
 
-		return ref.New(objectID, objectType)
+		return ref.New(objectType, objectID)
 	}
 }

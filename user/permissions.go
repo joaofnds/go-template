@@ -6,7 +6,7 @@ import (
 )
 
 func NewRef(id string) ref.Ref {
-	return ref.New(id, "user")
+	return ref.New("user", id)
 }
 
 type PermissionService struct {

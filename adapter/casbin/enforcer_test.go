@@ -19,10 +19,10 @@ import (
 )
 
 var _ = Describe("casbin enforcer", func() {
-	user := ref.New("111", "user")
-	post := ref.New("222", "post")
-	anyPost := ref.New("*", "post")
-	admin := ref.New("admin", "role")
+	user := ref.New("user", "111")
+	post := ref.New("post", "222")
+	anyPost := ref.New("post", "*")
+	admin := ref.New("role", "admin")
 
 	adminAnyPostDelete := authz.NewAppRequest(admin, anyPost, "delete")
 	userPostDelete := authz.NewAppRequest(user, post, "delete")
