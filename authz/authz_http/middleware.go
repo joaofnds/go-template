@@ -17,21 +17,13 @@ func NewMiddleware(enforcer authz.Enforcer) *Middleware {
 	return &Middleware{enforcer: enforcer}
 }
 
-func (middleware *Middleware) RequireParamPermission(
-	key string,
-	objectType string,
-	action string,
-) fiber.Handler {
-	return middleware.RequirePermission(
-		UserFromLocals,
-		objectFromParams(key, objectType),
-		action,
-	)
+func (middleware *Middleware) RequireParamPermission(strRef string, action string) fiber.Handler {
+	return middleware.RequirePermission(UserFromLocals, objectFromParams(strRef), action)
 }
 
 func (middleware *Middleware) RequirePermission(
 	subjectFromContext func(*fiber.Ctx) ref.Ref,
-	objectRef func(*fiber.Ctx) ref.Ref,
+	objectFromContext func(*fiber.Ctx) ref.Ref,
 	action string,
 ) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
@@ -40,7 +32,7 @@ func (middleware *Middleware) RequirePermission(
 			return ctx.SendStatus(fiber.StatusUnauthorized)
 		}
 
-		object := objectRef(ctx)
+		object := objectFromContext(ctx)
 		if object.ID == "" {
 			return ctx.SendStatus(fiber.StatusBadRequest)
 		}
@@ -62,13 +54,13 @@ func UserFromLocals(ctx *fiber.Ctx) ref.Ref {
 	return user.NewRef(requestUser.ID)
 }
 
-func objectFromParams(key, objectType string) func(*fiber.Ctx) ref.Ref {
+func objectFromParams(strRef string) func(*fiber.Ctx) ref.Ref {
+	objRef := ref.NewFromString(strRef)
 	return func(ctx *fiber.Ctx) ref.Ref {
-		objectID := ctx.Params(key)
+		objectID := ctx.Params(objRef.ID)
 		if objectID == "" {
 			return ref.Ref{}
 		}
-
-		return ref.New(objectType, objectID)
+		return ref.New(objRef.Type, objectID)
 	}
 }

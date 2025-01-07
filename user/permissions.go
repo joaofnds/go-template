@@ -5,6 +5,12 @@ import (
 	"app/internal/ref"
 )
 
+const (
+	PermRead         = "user:read"
+	PermDelete       = "user:delete"
+	PermReadFeatures = "user:features:read"
+)
+
 func NewRef(id string) ref.Ref {
 	return ref.New("user", id)
 }

@@ -38,27 +38,27 @@ func (controller *Controller) Register(app *fiber.App) {
 	users := app.Group("/users")
 	users.Get("/", controller.List)
 
-	user := app.Group(
+	app.Group(
 		"/users/:userID",
 		controller.authn.RequireUser,
 		controller.middlewareGetUser,
 		featureflags.Middleware,
-	)
-	user.Get(
-		"/",
-		controller.authz.RequireParamPermission("userID", "user", "read"),
-		controller.Get,
-	)
-	user.Delete(
-		"/",
-		controller.authz.RequireParamPermission("userID", "user", "delete"),
-		controller.Delete,
-	)
-	user.Get(
-		"/feature",
-		controller.authz.RequireParamPermission("userID", "user", "get-features"),
-		controller.GetFeature,
-	)
+	).
+		Get(
+			"/",
+			controller.authz.RequireParamPermission("user:userID", user.PermRead),
+			controller.Get,
+		).
+		Delete(
+			"/",
+			controller.authz.RequireParamPermission("user:userID", user.PermDelete),
+			controller.Delete,
+		).
+		Get(
+			"/feature",
+			controller.authz.RequireParamPermission("user:userID", user.PermReadFeatures),
+			controller.GetFeature,
+		)
 }
 
 func (controller *Controller) List(ctx *fiber.Ctx) error {
