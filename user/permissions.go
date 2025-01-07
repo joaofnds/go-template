@@ -24,7 +24,7 @@ func NewPermissionService(enforcer authz.Enforcer) *PermissionService {
 }
 
 func (service *PermissionService) GrantNewUserPermission(user User) error {
-	return service.enforcer.Grant(
-		authz.NewAppRequest(NewRef(user.ID), NewRef(user.ID), "*"),
+	return service.enforcer.Add(
+		authz.NewAllowPolicy(NewRef(user.ID), NewRef(user.ID), "*"),
 	)
 }

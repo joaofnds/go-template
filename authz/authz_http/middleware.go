@@ -37,7 +37,7 @@ func (middleware *Middleware) RequirePermission(
 			return ctx.SendStatus(fiber.StatusBadRequest)
 		}
 
-		if !middleware.enforcer.Check(authz.NewAppRequest(subject, object, action)) {
+		if !middleware.enforcer.Check(authz.NewRequest(subject, object, action)) {
 			return ctx.SendStatus(fiber.StatusForbidden)
 		}
 

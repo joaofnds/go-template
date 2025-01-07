@@ -24,8 +24,13 @@ var _ = Describe("casbin enforcer", func() {
 	anyPost := ref.New("post", "*")
 	admin := ref.New("role", "admin")
 
-	adminAnyPostDelete := authz.NewAppRequest(admin, anyPost, "delete")
-	userPostDelete := authz.NewAppRequest(user, post, "delete")
+	adminAnyPostDelete := authz.NewRequest(admin, anyPost, "delete")
+	adminAnyPostDeletePolicy := authz.NewAllowPolicy(admin, anyPost, "delete")
+
+	userPostDelete := authz.NewRequest(user, post, "delete")
+	userPostDeletePolicy := authz.NewAllowPolicy(user, post, "delete")
+
+	denyUserPostDeletePolicy := authz.NewDenyPolicy(user, post, "delete")
 
 	var (
 		app   *fxtest.App
@@ -53,19 +58,10 @@ var _ = Describe("casbin enforcer", func() {
 		app.RequireStop()
 	})
 
-	It("has permission after direct grant", func(ctx SpecContext) {
+	It("grants permission", func(ctx SpecContext) {
 		Expect(sut.Check(userPostDelete)).To(BeFalse())
 
-		Must(sut.Grant(userPostDelete))
-
-		Expect(sut.Check(userPostDelete)).To(BeTrue())
-	})
-
-	It("has permission after role grant", func(ctx SpecContext) {
-		Must(sut.Grant(adminAnyPostDelete))
-		Expect(sut.Check(userPostDelete)).To(BeFalse())
-
-		Must(roles.Assign(user, admin))
+		Must(sut.Add(userPostDeletePolicy))
 
 		Expect(sut.Check(userPostDelete)).To(BeTrue())
 	})
@@ -74,9 +70,51 @@ var _ = Describe("casbin enforcer", func() {
 		Expect(sut.Check(userPostDelete)).To(BeFalse())
 		Expect(sut.Check(adminAnyPostDelete)).To(BeFalse())
 
-		Must(sut.GrantAll([]authz.Request{userPostDelete, adminAnyPostDelete}))
+		Must(sut.Add(userPostDeletePolicy, adminAnyPostDeletePolicy))
 
 		Expect(sut.Check(userPostDelete)).To(BeTrue())
 		Expect(sut.Check(adminAnyPostDelete)).To(BeTrue())
+	})
+
+	Describe("after direct grant", func() {
+		It("has permission", func(ctx SpecContext) {
+			Expect(sut.Check(userPostDelete)).To(BeFalse())
+
+			Must(sut.Add(userPostDeletePolicy))
+
+			Expect(sut.Check(userPostDelete)).To(BeTrue())
+		})
+	})
+
+	Describe("after role grant", func() {
+		It("has permission", func(ctx SpecContext) {
+			Must(sut.Add(adminAnyPostDeletePolicy))
+			Expect(sut.Check(userPostDelete)).To(BeFalse())
+
+			Must(roles.Assign(user, admin))
+
+			Expect(sut.Check(userPostDelete)).To(BeTrue())
+		})
+
+		When("deny override", func() {
+			It("does not have permission", func(ctx SpecContext) {
+				Must(sut.Add(adminAnyPostDeletePolicy))
+				Must(roles.Assign(user, admin))
+				Expect(sut.Check(userPostDelete)).To(BeTrue())
+
+				Must(sut.Add(denyUserPostDeletePolicy))
+				Expect(sut.Check(userPostDelete)).To(BeFalse())
+			})
+		})
+	})
+
+	Describe("after role revoke", func() {
+		It("looses access", func(ctx SpecContext) {
+			Must(sut.Add(userPostDeletePolicy))
+			Expect(sut.Check(userPostDelete)).To(BeTrue())
+
+			Must(sut.Remove(userPostDeletePolicy))
+			Expect(sut.Check(userPostDelete)).To(BeFalse())
+		})
 	})
 })

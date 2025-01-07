@@ -47,7 +47,6 @@ func newCasbinEnforcer(model model.Model, adapter persist.Adapter) (*casbin.Enfo
 }
 
 func loadPolicy(lifecycle fx.Lifecycle, enforcer *casbin.Enforcer) {
-	enforcer.EnableAutoSave(true)
 	lifecycle.Append(fx.Hook{
 		OnStart: func(ctx context.Context) error { return enforcer.LoadPolicy() },
 	})
