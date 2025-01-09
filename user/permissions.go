@@ -16,15 +16,15 @@ func NewRef(id string) ref.Ref {
 }
 
 type PermissionService struct {
-	enforcer authz.Enforcer
+	permissions authz.PermissionManager
 }
 
-func NewPermissionService(enforcer authz.Enforcer) *PermissionService {
-	return &PermissionService{enforcer: enforcer}
+func NewPermissionService(permissions authz.PermissionManager) *PermissionService {
+	return &PermissionService{permissions: permissions}
 }
 
 func (service *PermissionService) GrantNewUserPermission(user User) error {
-	return service.enforcer.Add(
+	return service.permissions.Add(
 		authz.NewAllowPolicy(NewRef(user.ID), NewRef(user.ID), "*"),
 	)
 }

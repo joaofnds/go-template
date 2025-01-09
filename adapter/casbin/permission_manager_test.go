@@ -35,7 +35,7 @@ var _ = Describe("casbin enforcer", func() {
 	var (
 		app   *fxtest.App
 		db    *gorm.DB
-		sut   *casbin.Enforcer
+		sut   *casbin.PermissionManager
 		roles *casbin.RoleManager
 	)
 

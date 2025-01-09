@@ -10,11 +10,11 @@ import (
 )
 
 type Middleware struct {
-	enforcer authz.Enforcer
+	permissions authz.PermissionManager
 }
 
-func NewMiddleware(enforcer authz.Enforcer) *Middleware {
-	return &Middleware{enforcer: enforcer}
+func NewMiddleware(permissions authz.PermissionManager) *Middleware {
+	return &Middleware{permissions: permissions}
 }
 
 func (middleware *Middleware) RequireParamPermission(strRef string, action string) fiber.Handler {
@@ -37,7 +37,7 @@ func (middleware *Middleware) RequirePermission(
 			return ctx.SendStatus(fiber.StatusBadRequest)
 		}
 
-		if !middleware.enforcer.Check(authz.NewRequest(subject, object, action)) {
+		if !middleware.permissions.Check(authz.NewRequest(subject, object, action)) {
 			return ctx.SendStatus(fiber.StatusForbidden)
 		}
 

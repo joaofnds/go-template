@@ -12,7 +12,7 @@ type RoleManager interface {
 	GetAll(user ref.Ref) []ref.Ref
 }
 
-type Enforcer interface {
+type PermissionManager interface {
 	Check(req Request) bool
 	Add(policies ...Policy) error
 	Remove(policies ...Policy) error

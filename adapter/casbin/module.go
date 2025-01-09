@@ -21,8 +21,8 @@ var (
 		fx.Provide(newCasbinPersistAdapter),
 		fx.Provide(newCasbinEnforcer),
 
-		fx.Provide(NewEnforcer),
-		fx.Provide(func(e *Enforcer) authz.Enforcer { return e }),
+		fx.Provide(NewPermissionManager),
+		fx.Provide(func(e *PermissionManager) authz.PermissionManager { return e }),
 		fx.Provide(NewRoleManager),
 		fx.Provide(func(r *RoleManager) authz.RoleManager { return r }),
 	)
