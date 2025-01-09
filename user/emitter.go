@@ -37,3 +37,7 @@ func (emitter Emitter) FailedToFindByName(err error) error {
 func (emitter Emitter) FailedToRemoveUser(err error, user User) error {
 	return emitter.bus.Publish(context.Background(), FailedToRemoveUser{Err: err, User: user})
 }
+
+func (emitter Emitter) UserRemoved(user User) any {
+	return emitter.bus.Publish(context.Background(), UserRemoved{User: user})
+}

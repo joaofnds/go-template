@@ -28,8 +28,15 @@ var (
 	QueueWorkerModule = fx.Module(
 		"user queue worker",
 		fx.Provide(user_queue.NewGreeterWorker, fx.Private),
-		fx.Invoke(func(mux *asynq.ServeMux, greeter *user_queue.GreeterWorker) {
+		fx.Provide(user_queue.NewPermissionsCleanupWorker, fx.Private),
+
+		fx.Invoke(func(
+			mux *asynq.ServeMux,
+			greeter *user_queue.GreeterWorker,
+			permissionsCleanup *user_queue.PermissionsCleanupWorker,
+		) {
 			greeter.RegisterQueueHandler(mux)
+			permissionsCleanup.RegisterQueueHandler(mux)
 		}),
 	)
 
@@ -37,14 +44,21 @@ var (
 		"user listener",
 
 		fx.Provide(user_queue.NewGreeterQueue, fx.Private),
+		fx.Provide(user_queue.NewPermissionsCleanupQueue, fx.Private),
 		fx.Provide(user_adapter.NewPromProbe, fx.Private),
 
 		fx.Invoke(func(
 			processor *cqrs.EventProcessor,
-			greeter *user_queue.GreeterQueue,
 			probe *user_adapter.PromProbe,
+			greeter *user_queue.GreeterQueue,
+			permissionsCleanup *user_queue.PermissionsCleanupQueue,
 		) error {
-			return mill.RegisterEventHandlers(processor, greeter, probe)
+			return mill.RegisterEventHandlers(
+				processor,
+				probe,
+				greeter,
+				permissionsCleanup,
+			)
 		}),
 	)
 

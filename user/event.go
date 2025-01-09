@@ -4,6 +4,10 @@ type UserCreated struct {
 	User User
 }
 
+type UserRemoved struct {
+	User User
+}
+
 type FailedToCreateUser struct {
 	Err error
 }

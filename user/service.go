@@ -87,6 +87,8 @@ func (service *Service) Remove(ctx context.Context, user User) error {
 
 	if err != nil {
 		_ = service.emitter.FailedToRemoveUser(err, user)
+	} else {
+		_ = service.emitter.UserRemoved(user)
 	}
 
 	return err
