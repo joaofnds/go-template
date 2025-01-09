@@ -10,6 +10,7 @@ type RoleManager interface {
 	Assign(user ref.Ref, role ref.Ref) error
 	Revoke(user ref.Ref, role ref.Ref) error
 	GetAll(user ref.Ref) []ref.Ref
+	RevokeAll(user ref.Ref) error
 }
 
 type PermissionManager interface {

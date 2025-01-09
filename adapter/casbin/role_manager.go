@@ -36,3 +36,8 @@ func (rolemanager *RoleManager) GetAll(user ref.Ref) []ref.Ref {
 	}
 	return roles
 }
+
+func (rolemanager *RoleManager) RevokeAll(user ref.Ref) error {
+	_, err := rolemanager.enforcer.DeleteRolesForUserInDomain(user.String(), authz.AppDomain)
+	return err
+}
