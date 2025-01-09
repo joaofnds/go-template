@@ -2,6 +2,7 @@ package casbin
 
 import (
 	"app/authz"
+	"app/internal/ref"
 
 	"github.com/casbin/casbin/v2"
 )
@@ -34,6 +35,11 @@ func (permissionManager *PermissionManager) Add(policies ...authz.Policy) error 
 
 func (permissionManager *PermissionManager) Remove(policies ...authz.Policy) error {
 	_, err := permissionManager.enforcer.RemovePolicies(toRules(policies))
+	return err
+}
+
+func (permissionManager *PermissionManager) RemoveBySubject(subject ref.Ref) error {
+	_, err := permissionManager.enforcer.RemoveFilteredPolicy(RequestSubjectIndex, subject.String())
 	return err
 }
 

@@ -8,7 +8,6 @@ import (
 	"app/authz"
 	"app/config"
 	"app/internal/ref"
-	"app/test/matchers"
 	. "app/test/matchers"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -29,6 +28,7 @@ var _ = Describe("casbin enforcer", func() {
 
 	userPostDelete := authz.NewRequest(user, post, "delete")
 	userPostDeletePolicy := authz.NewAllowPolicy(user, post, "delete")
+	userAnyPostDeletePolicy := authz.NewAllowPolicy(user, anyPost, "delete")
 
 	denyUserPostDeletePolicy := authz.NewDenyPolicy(user, post, "delete")
 
@@ -50,11 +50,11 @@ var _ = Describe("casbin enforcer", func() {
 			fx.Populate(&db, &roles, &sut),
 		)
 		app.RequireStart()
-		matchers.Must(db.Exec("BEGIN").Error)
+		Must(db.Exec("BEGIN").Error)
 	})
 
 	AfterEach(func() {
-		matchers.Must(db.Exec("ROLLBACK").Error)
+		Must(db.Exec("ROLLBACK").Error)
 		app.RequireStop()
 	})
 
@@ -114,6 +114,16 @@ var _ = Describe("casbin enforcer", func() {
 			Expect(sut.Check(userPostDelete)).To(BeTrue())
 
 			Must(sut.Remove(userPostDeletePolicy))
+			Expect(sut.Check(userPostDelete)).To(BeFalse())
+		})
+	})
+
+	Describe("after removing permissions for a subject", func() {
+		It("looses access", func(ctx SpecContext) {
+			Must(sut.Add(userPostDeletePolicy, userAnyPostDeletePolicy))
+			Expect(sut.Check(userPostDelete)).To(BeTrue())
+
+			Must(sut.RemoveBySubject(user))
 			Expect(sut.Check(userPostDelete)).To(BeFalse())
 		})
 	})

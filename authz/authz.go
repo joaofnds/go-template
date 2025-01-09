@@ -16,4 +16,5 @@ type PermissionManager interface {
 	Check(req Request) bool
 	Add(policies ...Policy) error
 	Remove(policies ...Policy) error
+	RemoveBySubject(subject ref.Ref) error
 }
