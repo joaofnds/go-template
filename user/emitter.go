@@ -14,30 +14,30 @@ func NewEmitter(bus *cqrs.EventBus) Emitter {
 	return Emitter{bus: bus}
 }
 
-func (emitter Emitter) UserCreated(user User) error {
-	return emitter.bus.Publish(context.Background(), UserCreated{User: user})
+func (emitter Emitter) UserCreated(ctx context.Context, user User) error {
+	return emitter.bus.Publish(ctx, UserCreated{User: user})
 }
 
-func (emitter Emitter) FailedToCreateUser(err error) error {
-	return emitter.bus.Publish(context.Background(), FailedToCreateUser{Err: err})
+func (emitter Emitter) FailedToCreateUser(ctx context.Context, err error) error {
+	return emitter.bus.Publish(ctx, FailedToCreateUser{Err: err})
 }
 
-func (emitter Emitter) FailedToDeleteAll(err error) error {
-	return emitter.bus.Publish(context.Background(), FailedToDeleteAll{Err: err})
+func (emitter Emitter) FailedToDeleteAll(ctx context.Context, err error) error {
+	return emitter.bus.Publish(ctx, FailedToDeleteAll{Err: err})
 }
 
-func (emitter Emitter) FailedToFindByID(err error) error {
-	return emitter.bus.Publish(context.Background(), FailedToFindByID{Err: err})
+func (emitter Emitter) FailedToFindByID(ctx context.Context, err error) error {
+	return emitter.bus.Publish(ctx, FailedToFindByID{Err: err})
 }
 
-func (emitter Emitter) FailedToFindByName(err error) error {
-	return emitter.bus.Publish(context.Background(), FailedToFindByName{Err: err})
+func (emitter Emitter) FailedToFindByName(ctx context.Context, err error) error {
+	return emitter.bus.Publish(ctx, FailedToFindByName{Err: err})
 }
 
-func (emitter Emitter) FailedToRemoveUser(err error, user User) error {
-	return emitter.bus.Publish(context.Background(), FailedToRemoveUser{Err: err, User: user})
+func (emitter Emitter) FailedToRemoveUser(ctx context.Context, err error, user User) error {
+	return emitter.bus.Publish(ctx, FailedToRemoveUser{Err: err, User: user})
 }
 
-func (emitter Emitter) UserRemoved(user User) any {
-	return emitter.bus.Publish(context.Background(), UserRemoved{User: user})
+func (emitter Emitter) UserRemoved(ctx context.Context, user User) any {
+	return emitter.bus.Publish(ctx, UserRemoved{User: user})
 }
