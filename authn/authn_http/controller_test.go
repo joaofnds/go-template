@@ -3,6 +3,7 @@ package authn_http_test
 import (
 	"app/test/driver"
 	"app/test/harness"
+	"net/http"
 	"testing"
 	"time"
 
@@ -62,6 +63,16 @@ var _ = Describe("/auth", Ordered, func() {
 			userDriver := app.NewDriver()
 			userDriver.Login(email, password)
 			Expect(userDriver.Auth.MustUserInfo()).To(Equal(createdUser))
+		})
+	})
+
+	When("email is invalid", func() {
+		It("returns 400", func() {
+			_, err := api.Auth.Register("bad_email.com", password)
+			Expect(err).To(Equal(driver.RequestFailure{
+				Status: http.StatusBadRequest,
+				Body:   `{"errors":["Field validation for 'Email' failed on the 'email' tag"]}`,
+			}))
 		})
 	})
 })

@@ -1,6 +1,7 @@
 package authn_http
 
 import (
+	"app/adapter/validation"
 	"app/authn"
 	"net/http"
 
@@ -62,7 +63,9 @@ func (controller *Controller) RegisterUser(ctx *fiber.Ctx) error {
 	}
 
 	if err := controller.validator.Struct(body); err != nil {
-		return ctx.SendStatus(http.StatusBadRequest)
+		return ctx.
+			Status(http.StatusBadRequest).
+			JSON(fiber.Map{"errors": validation.ErrorMessages(err)})
 	}
 
 	createdUser, createUserErr := controller.service.RegisterUser(
