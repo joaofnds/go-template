@@ -19,23 +19,23 @@ func (emitter Emitter) UserCreated(ctx context.Context, user User) error {
 }
 
 func (emitter Emitter) FailedToCreateUser(ctx context.Context, err error) error {
-	return emitter.bus.Publish(ctx, FailedToCreateUser{Error: err})
+	return emitter.bus.Publish(ctx, FailedToCreateUser{Error: err.Error()})
 }
 
 func (emitter Emitter) FailedToDeleteAll(ctx context.Context, err error) error {
-	return emitter.bus.Publish(ctx, FailedToDeleteAll{Error: err})
+	return emitter.bus.Publish(ctx, FailedToDeleteAll{Error: err.Error()})
 }
 
 func (emitter Emitter) FailedToFindByID(ctx context.Context, err error) error {
-	return emitter.bus.Publish(ctx, FailedToFindByID{Error: err})
+	return emitter.bus.Publish(ctx, FailedToFindByID{Error: err.Error()})
 }
 
 func (emitter Emitter) FailedToFindByName(ctx context.Context, err error) error {
-	return emitter.bus.Publish(ctx, FailedToFindByName{Error: err})
+	return emitter.bus.Publish(ctx, FailedToFindByName{Error: err.Error()})
 }
 
 func (emitter Emitter) FailedToRemoveUser(ctx context.Context, err error, user User) error {
-	return emitter.bus.Publish(ctx, FailedToRemoveUser{Error: err, User: user})
+	return emitter.bus.Publish(ctx, FailedToRemoveUser{Error: err.Error(), User: user})
 }
 
 func (emitter Emitter) UserRemoved(ctx context.Context, user User) any {

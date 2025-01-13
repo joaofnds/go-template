@@ -41,25 +41,25 @@ func (probe *PromProbe) UserCreated(context.Context, *user.UserCreated) error {
 }
 
 func (probe *PromProbe) FailedToCreateUser(_ context.Context, event *user.FailedToCreateUser) error {
-	probe.logger.Error("failed to create user", zap.Error(event.Error))
+	probe.logger.Error("failed to create user", zap.String("error", event.Error))
 	probe.usersCreateFailed.Inc()
 	return nil
 }
 
 func (probe *PromProbe) FailedToDeleteAll(_ context.Context, event *user.FailedToDeleteAll) error {
-	probe.logger.Error("failed to delete all", zap.Error(event.Error))
+	probe.logger.Error("failed to delete all", zap.String("error", event.Error))
 	return nil
 }
 
 func (probe *PromProbe) FailedToFindByName(_ context.Context, event *user.FailedToFindByName) error {
-	probe.logger.Error("failed to find user by name", zap.Error(event.Error))
+	probe.logger.Error("failed to find user by name", zap.String("error", event.Error))
 	return nil
 }
 
 func (probe *PromProbe) FailedToRemoveUser(ctx context.Context, event *user.FailedToRemoveUser) error {
 	probe.logger.Error(
 		"failed to remove user",
-		zap.Error(event.Error),
+		zap.String("error", event.Error),
 		zap.String("name", event.User.Email),
 	)
 	return nil
