@@ -9,22 +9,22 @@ type UserRemoved struct {
 }
 
 type FailedToCreateUser struct {
-	Err error
+	Error error
 }
 
 type FailedToDeleteAll struct {
-	Err error
+	Error error
 }
 
 type FailedToFindByID struct {
-	Err error
+	Error error
 }
 
 type FailedToFindByName struct {
-	Err error
+	Error error
 }
 
 type FailedToRemoveUser struct {
-	User User
-	Err  error
+	User  User
+	Error error
 }
