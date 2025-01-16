@@ -43,9 +43,9 @@ func (service *Service) CreateUser(ctx context.Context, email string) (User, err
 	err := service.repo.CreateUser(ctx, user)
 	if err != nil {
 		_ = service.emitter.FailedToCreateUser(ctx, err)
-	} else {
-		_ = service.emitter.UserCreated(ctx, user)
+		return User{}, err
 	}
+	_ = service.emitter.UserCreated(ctx, user)
 
 	return user, service.permissions.GrantNewUserPermission(user)
 }

@@ -19,7 +19,7 @@ func NewPostgresRepository(db *gorm.DB) *PostgresRepository {
 }
 
 func (repository *PostgresRepository) CreateUser(ctx context.Context, newUser user.User) error {
-	err := repository.db.
+	result := repository.db.
 		WithContext(ctx).
 		Exec("INSERT INTO users(id, email, created_at, updated_at) VALUES(?, ?, ?, ?)",
 			newUser.ID,
@@ -28,7 +28,7 @@ func (repository *PostgresRepository) CreateUser(ctx context.Context, newUser us
 			newUser.UpdatedAt,
 		)
 
-	return gormErr(err)
+	return gormErr(result)
 }
 func (repository *PostgresRepository) FindByID(ctx context.Context, id string) (user.User, error) {
 	var userFound user.User
