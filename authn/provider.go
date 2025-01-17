@@ -11,18 +11,18 @@ import (
 var (
 	ErrAuthn = errors.New("authn error")
 
-	ErrUser               = fmt.Errorf("%w: user error", ErrAuthn)
-	ErrUserNotFound       = fmt.Errorf("%w: user not found", ErrUser)
-	ErrFailedToCreateUser = fmt.Errorf("%w: failed to create user", ErrUser)
-	ErrFailedToGetUser    = fmt.Errorf("%w: failed to get user", ErrUser)
-	ErrFailedToDeleteUser = fmt.Errorf("%w: failed to delete user", ErrUser)
+	ErrUser               = fmt.Errorf("user error: %w", ErrAuthn)
+	ErrUserNotFound       = fmt.Errorf("user not found: %w", ErrUser)
+	ErrFailedToCreateUser = fmt.Errorf("failed to create user: %w", ErrUser)
+	ErrFailedToGetUser    = fmt.Errorf("failed to get user: %w", ErrUser)
+	ErrFailedToDeleteUser = fmt.Errorf("failed to delete user: %w", ErrUser)
 
-	ErrToken            = fmt.Errorf("%w: token error", ErrAuthn)
-	ErrParseToken       = fmt.Errorf("%w: failed to parse token", ErrToken)
-	ErrInvalidSignature = fmt.Errorf("%w: signature is invalid", ErrToken)
-	ErrParseClaims      = fmt.Errorf("%w: failed to parse claims", ErrToken)
-	ErrMissingClaims    = fmt.Errorf("%w: missing claims", ErrToken)
-	ErrWrongPassword    = fmt.Errorf("%w: wrong password", ErrToken)
+	ErrToken            = fmt.Errorf("token error: %w", ErrAuthn)
+	ErrParseToken       = fmt.Errorf("failed to parse token: %w", ErrToken)
+	ErrInvalidSignature = fmt.Errorf("signature is invalid: %w", ErrToken)
+	ErrParseClaims      = fmt.Errorf("failed to parse claims: %w", ErrToken)
+	ErrMissingClaims    = fmt.Errorf("missing claims: %w", ErrToken)
+	ErrWrongPassword    = fmt.Errorf("wrong password: %w", ErrToken)
 )
 
 type User struct {
