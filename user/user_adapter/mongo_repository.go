@@ -51,7 +51,7 @@ func (repository *MongoRepository) All(ctx context.Context) ([]user.User, error)
 	if err != nil {
 		return nil, translateErr(err)
 	}
-	defer cursor.Close(ctx)
+	defer func() { _ = cursor.Close(ctx) }()
 
 	var users []user.User
 	if err = cursor.All(ctx, &users); err != nil {

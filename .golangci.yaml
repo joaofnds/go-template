@@ -6,3 +6,11 @@ run:
 formatters:
   enable:
     - goimports
+
+linters:
+  exclusions:
+    rules:
+      - path: test
+        text: "ST1001: should not use dot imports"
+        linters:
+          - staticcheck
