@@ -83,7 +83,7 @@ tasks:
     deps:
       - format:go
       - format:mise
-      - format:taskfile
+      - format:yaml
       - format:sql
 
   format:go:
@@ -100,12 +100,13 @@ tasks:
     sources:
       - .mise.toml
 
-  format:taskfile:
-    desc: format taskfile
+  format:yaml:
+    desc: format yaml
     cmds:
       - yamlfmt -formatter indent=2,retain_line_breaks=true ./**/*.yaml ./.github/workflows/*.yaml
     sources:
-      - Taskfile.yaml
+      - ./**/*.yaml
+      - ./.github/workflows/*.yaml
 
   format:sql:
     desc: formats sql files
@@ -127,6 +128,7 @@ tasks:
     cmds:
       - golangci-lint run
     sources:
+      - .golangci.yaml
       - ./**/*.go
 
   lint:dockerfile:
