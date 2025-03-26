@@ -1,9 +1,9 @@
 [tools]
-gitleaks = "8.24.0"
-go = "1.24.1"
-golangci-lint = "1.64.8"
+gitleaks = "8.24.2"
+go = "1.24.2"
+golangci-lint = "2.0.2"
 hadolint = "2.12.0"
-k6 = "0.57.0"
+k6 = "0.58.0"
 task = "3.42.1"
 "go:github.com/google/yamlfmt/cmd/yamlfmt" = "latest"
 
