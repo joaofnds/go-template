@@ -1,7 +1,8 @@
-linters:
-  enable:
-    - goimports
+version: "2"
 
 run:
-  timeout: 5m
   allow-parallel-runners: true
+
+formatters:
+  enable:
+    - goimports
