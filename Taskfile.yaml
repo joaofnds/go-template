@@ -89,8 +89,9 @@ tasks:
   format:go:
     desc: formats go files
     cmds:
-      - goimports -w .
+      - golangci-lint fmt
     sources:
+      - .golangci.yaml
       - ./**/*.go
 
   format:mise:
