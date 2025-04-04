@@ -120,6 +120,7 @@ tasks:
     deps:
       - lint:go
       - lint:dockerfile
+      - lint:sql
 
   lint:go:
     desc: lints go code
@@ -173,6 +174,7 @@ tasks:
     desc: runs standard checks
     deps:
       - gitleaks
+      - format
       - lint
       - migrate-up
     cmds:
