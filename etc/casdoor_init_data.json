@@ -30,6 +30,7 @@
       "isProfilePublic": false,
       "useEmailAsUsername": true,
       "enableTour": false,
+      "hasPrivilegeConsent": true,
       "ipRestriction": "",
       "mfaItems": null,
       "accountItems": [
