@@ -1,11 +1,11 @@
 [tools]
-gitleaks = "8.28.0"
-go = "1.25.0"
-golangci-lint = "2.4.0"
-hadolint = "2.12.0"
-k6 = "1.2.3"
-task = "3.44.1"
-yamlfmt = "0.17.2"
+gitleaks = "8.30.0"
+go = "1.25.5"
+golangci-lint = "2.7.2"
+hadolint = "2.14.0"
+k6 = "1.4.2"
+task = "3.45.5"
+yamlfmt = "0.20.0"
 
 "aqua:quarylabs/sqruff" = "0.29.3"
 

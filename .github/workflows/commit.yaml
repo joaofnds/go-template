@@ -8,17 +8,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache@v4
+      - uses: actions/checkout@v6
+      - uses: actions/cache@v5
         with:
           path: |
             ~/.cache/go-build
             ~/go/pkg/mod
           key: go-${{ hashFiles('**/go.sum') }}
           restore-keys: go-
-      - uses: jdx/mise-action@v2
-        with:
-          experimental: true
+      - uses: jdx/mise-action@v3
       - run: task up
       - run: task ci
 
