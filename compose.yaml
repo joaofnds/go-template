@@ -1,6 +1,6 @@
 services:
   postgres:
-    image: postgres:alpine
+    image: postgres:18-alpine
     restart: unless-stopped
     ports:
       - 5432:5432
@@ -24,7 +24,7 @@ services:
   #     - 27017:27017
 
   redis:
-    image: redis:alpine
+    image: redis:8-alpine
     restart: unless-stopped
     ports:
       - 6379:6379
@@ -38,7 +38,7 @@ services:
   #     - 8080:8080
 
   casdoor:
-    image: casbin/casdoor:v2.45.0
+    image: casbin/casdoor:2.324.0
     command: --createDatabase=true
     ports:
       - 8000:8000

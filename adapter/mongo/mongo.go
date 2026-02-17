@@ -3,9 +3,9 @@ package mongo
 import (
 	"context"
 
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
@@ -22,9 +22,11 @@ var (
 	)
 )
 
-func NewClient(ctx context.Context, config Config) (*mongo.Client, error) {
-	clientOptions := options.Client().ApplyURI(config.URI)
-	return mongo.Connect(ctx, clientOptions)
+func NewClient(config Config) (*mongo.Client, error) {
+	clientOptions := options.Client()
+	clientOptions.ApplyURI(config.URI)
+
+	return mongo.Connect(clientOptions)
 }
 
 func HookConnection(lifecycle fx.Lifecycle, client *mongo.Client, logger *zap.Logger) {

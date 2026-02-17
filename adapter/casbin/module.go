@@ -5,9 +5,9 @@ import (
 	"context"
 	_ "embed"
 
-	"github.com/casbin/casbin/v2"
-	"github.com/casbin/casbin/v2/model"
-	"github.com/casbin/casbin/v2/persist"
+	"github.com/casbin/casbin/v3"
+	"github.com/casbin/casbin/v3/model"
+	"github.com/casbin/casbin/v3/persist"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"go.uber.org/fx"
 	"gorm.io/gorm"

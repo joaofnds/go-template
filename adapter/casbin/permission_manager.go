@@ -4,7 +4,7 @@ import (
 	"app/authz"
 	"app/internal/ref"
 
-	"github.com/casbin/casbin/v2"
+	"github.com/casbin/casbin/v3"
 )
 
 var _ authz.PermissionManager = (*PermissionManager)(nil)
