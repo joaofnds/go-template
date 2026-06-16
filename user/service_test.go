@@ -21,7 +21,6 @@ import (
 	. "github.com/onsi/gomega"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
-	"gorm.io/gorm"
 )
 
 func TestUserService(t *testing.T) {
@@ -33,7 +32,7 @@ var _ = Describe("user service", Ordered, func() {
 	var (
 		app         *fxtest.App
 		userService *user.Service
-		db          *gorm.DB
+		txPool      *test.TxPool
 	)
 
 	BeforeAll(func() {
@@ -41,6 +40,7 @@ var _ = Describe("user service", Ordered, func() {
 			GinkgoT(),
 			logger.NopLoggerProvider,
 			test.Queue,
+			test.TxIsolation,
 			casbin.Module,
 			appcontext.Module,
 			watermill.Module,
@@ -50,17 +50,17 @@ var _ = Describe("user service", Ordered, func() {
 			user_module.ServiceModule,
 			uuid.Module,
 			time.Module,
-			fx.Populate(&userService, &db),
+			fx.Populate(&userService, &txPool),
 		)
 		app.RequireStart()
 	})
 
 	BeforeEach(func() {
-		Must(db.Exec("BEGIN").Error)
+		Must(txPool.Begin())
 	})
 
 	AfterEach(func() {
-		Must(db.Exec("ROLLBACK").Error)
+		Must(txPool.Rollback())
 	})
 
 	AfterAll(func() {

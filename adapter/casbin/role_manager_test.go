@@ -7,13 +7,13 @@ import (
 	"app/adapter/validation"
 	"app/config"
 	"app/internal/ref"
+	"app/test"
 	. "app/test/matchers"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
-	"gorm.io/gorm"
 )
 
 var _ = Describe("casbin role manager", func() {
@@ -22,27 +22,28 @@ var _ = Describe("casbin role manager", func() {
 	customer := ref.New("role", "customer")
 
 	var (
-		app *fxtest.App
-		db  *gorm.DB
-		sut *casbin.RoleManager
+		app    *fxtest.App
+		txPool *test.TxPool
+		sut    *casbin.RoleManager
 	)
 
 	BeforeEach(func() {
 		app = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
+			test.TxIsolation,
 			validation.Module,
 			config.Module,
 			postgres.Module,
 			casbin.Module,
-			fx.Populate(&db, &sut),
+			fx.Populate(&txPool, &sut),
 		)
 		app.RequireStart()
-		Must(db.Exec("BEGIN").Error)
+		Must(txPool.Begin())
 	})
 
 	AfterEach(func() {
-		Must(db.Exec("ROLLBACK").Error)
+		Must(txPool.Rollback())
 		app.RequireStop()
 	})
 

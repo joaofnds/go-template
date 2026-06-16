@@ -29,7 +29,6 @@ import (
 	"github.com/onsi/ginkgo/v2"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
-	"gorm.io/gorm"
 )
 
 var defaultOptions = []fx.Option{
@@ -37,6 +36,7 @@ var defaultOptions = []fx.Option{
 	test.Queue,
 	test.AvailablePortProvider,
 	test.FakeAuthnProviders,
+	test.TxIsolation,
 
 	appcontext.Module,
 	apphttp.Module,
@@ -78,7 +78,7 @@ func Setup(options ...Option) *Harness {
 type Harness struct {
 	fxOptions []fx.Option
 	app       *fxtest.App
-	db        *gorm.DB
+	txPool    *test.TxPool
 	authUsers *test.InMemoryUserProvider
 	port      int
 
@@ -89,17 +89,17 @@ type Harness struct {
 func (harness *Harness) Setup() {
 	var (
 		httpConfig apphttp.Config
-		db         *gorm.DB
+		txPool     *test.TxPool
 		authUsers  *test.InMemoryUserProvider
 	)
 
 	harness.fxOptions = append(
 		harness.fxOptions,
-		fx.Populate(&httpConfig, &db, &authUsers),
+		fx.Populate(&httpConfig, &txPool, &authUsers),
 	)
 
 	harness.app = fxtest.New(ginkgo.GinkgoT(), harness.fxOptions...).RequireStart()
-	harness.db = db
+	harness.txPool = txPool
 	harness.authUsers = authUsers
 	harness.port = httpConfig.Port
 }
@@ -122,11 +122,11 @@ func (harness *Harness) NewUser(email, password string) *driver.User {
 }
 
 func (harness *Harness) BeginTx() {
-	matchers.Must(harness.db.Exec("BEGIN").Error)
+	matchers.Must(harness.txPool.Begin())
 }
 
 func (harness *Harness) RollbackTx() {
-	matchers.Must(harness.db.Exec("ROLLBACK").Error)
+	matchers.Must(harness.txPool.Rollback())
 }
 
 func (harness *Harness) BeforeEach() {

@@ -8,13 +8,13 @@ import (
 	"app/authz"
 	"app/config"
 	"app/internal/ref"
+	"app/test"
 	. "app/test/matchers"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
-	"gorm.io/gorm"
 )
 
 var _ = Describe("casbin enforcer", func() {
@@ -33,28 +33,29 @@ var _ = Describe("casbin enforcer", func() {
 	denyUserPostDeletePolicy := authz.NewDenyPolicy(user, post, "delete")
 
 	var (
-		app   *fxtest.App
-		db    *gorm.DB
-		sut   *casbin.PermissionManager
-		roles *casbin.RoleManager
+		app    *fxtest.App
+		txPool *test.TxPool
+		sut    *casbin.PermissionManager
+		roles  *casbin.RoleManager
 	)
 
 	BeforeEach(func() {
 		app = fxtest.New(
 			GinkgoT(),
 			logger.NopLoggerProvider,
+			test.TxIsolation,
 			validation.Module,
 			config.Module,
 			postgres.Module,
 			casbin.Module,
-			fx.Populate(&db, &roles, &sut),
+			fx.Populate(&txPool, &roles, &sut),
 		)
 		app.RequireStart()
-		Must(db.Exec("BEGIN").Error)
+		Must(txPool.Begin())
 	})
 
 	AfterEach(func() {
-		Must(db.Exec("ROLLBACK").Error)
+		Must(txPool.Rollback())
 		app.RequireStop()
 	})
 
