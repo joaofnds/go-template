@@ -29,8 +29,9 @@ func NewPromFactory(registry *prometheus.Registry) promauto.Factory {
 }
 
 func NewServer(c Config) *http.Server {
-	http.Handle("/metrics", promhttp.Handler())
-	return &http.Server{Addr: c.Addr}
+	mux := http.NewServeMux()
+	mux.Handle("/metrics", promhttp.Handler())
+	return &http.Server{Addr: c.Addr, Handler: mux}
 }
 
 func HookMetricsHandler(lifecycle fx.Lifecycle, server *http.Server, logger *zap.Logger) {

@@ -3,24 +3,12 @@ package user_test
 import (
 	"testing"
 
-	"app/adapter/casbin"
-	"app/adapter/logger"
-	"app/adapter/postgres"
-	"app/adapter/time"
-	"app/adapter/uuid"
-	"app/adapter/validation"
-	"app/adapter/watermill"
-	"app/config"
-	"app/internal/appcontext"
-	"app/test"
+	"app/test/harness"
 	. "app/test/matchers"
 	"app/user"
-	"app/user/user_module"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"go.uber.org/fx"
-	"go.uber.org/fx/fxtest"
 )
 
 func TestUserService(t *testing.T) {
@@ -30,42 +18,14 @@ func TestUserService(t *testing.T) {
 
 var _ = Describe("user service", Ordered, func() {
 	var (
-		app         *fxtest.App
+		app         *harness.Harness
 		userService *user.Service
-		txPool      *test.TxPool
 	)
 
-	BeforeAll(func() {
-		app = fxtest.New(
-			GinkgoT(),
-			logger.NopLoggerProvider,
-			test.Queue,
-			test.TxIsolation,
-			casbin.Module,
-			appcontext.Module,
-			watermill.Module,
-			validation.Module,
-			config.Module,
-			postgres.Module,
-			user_module.ServiceModule,
-			uuid.Module,
-			time.Module,
-			fx.Populate(&userService, &txPool),
-		)
-		app.RequireStart()
-	})
-
-	BeforeEach(func() {
-		Must(txPool.Begin())
-	})
-
-	AfterEach(func() {
-		Must(txPool.Rollback())
-	})
-
-	AfterAll(func() {
-		app.RequireStop()
-	})
+	BeforeAll(func() { app = harness.Setup(harness.Populate(&userService)) })
+	BeforeEach(func() { app.BeforeEach() })
+	AfterEach(func() { app.AfterEach() })
+	AfterAll(func() { app.Teardown() })
 
 	Describe("DeleteAll", func() {
 		It("removes all users", func(ctx SpecContext) {

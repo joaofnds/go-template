@@ -2,22 +2,16 @@ package casbin_test
 
 import (
 	"app/adapter/casbin"
-	"app/adapter/logger"
-	"app/adapter/postgres"
-	"app/adapter/validation"
 	"app/authz"
-	"app/config"
 	"app/internal/ref"
-	"app/test"
+	"app/test/harness"
 	. "app/test/matchers"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"go.uber.org/fx"
-	"go.uber.org/fx/fxtest"
 )
 
-var _ = Describe("casbin enforcer", func() {
+var _ = Describe("casbin enforcer", Ordered, func() {
 	user := ref.New("user", "111")
 	post := ref.New("post", "222")
 	anyPost := ref.New("post", "*")
@@ -33,31 +27,15 @@ var _ = Describe("casbin enforcer", func() {
 	denyUserPostDeletePolicy := authz.NewDenyPolicy(user, post, "delete")
 
 	var (
-		app    *fxtest.App
-		txPool *test.TxPool
-		sut    *casbin.PermissionManager
-		roles  *casbin.RoleManager
+		app   *harness.Harness
+		sut   *casbin.PermissionManager
+		roles *casbin.RoleManager
 	)
 
-	BeforeEach(func() {
-		app = fxtest.New(
-			GinkgoT(),
-			logger.NopLoggerProvider,
-			test.TxIsolation,
-			validation.Module,
-			config.Module,
-			postgres.Module,
-			casbin.Module,
-			fx.Populate(&txPool, &roles, &sut),
-		)
-		app.RequireStart()
-		Must(txPool.Begin())
-	})
-
-	AfterEach(func() {
-		Must(txPool.Rollback())
-		app.RequireStop()
-	})
+	BeforeAll(func() { app = harness.Setup(harness.Populate(&sut, &roles)) })
+	BeforeEach(func() { app.BeforeEach() })
+	AfterEach(func() { app.AfterEach() })
+	AfterAll(func() { app.Teardown() })
 
 	It("grants permission", func(ctx SpecContext) {
 		Expect(sut.Check(userPostDelete)).To(BeFalse())

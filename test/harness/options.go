@@ -31,3 +31,9 @@ func WithFxOptions(fxOptions ...fx.Option) Option {
 		harness.fxOptions = append(harness.fxOptions, fxOptions...)
 	})
 }
+
+// Populate fills the given pointers with components from the app, so a test can
+// reach any service it exercises without the harness exposing a method per type.
+func Populate(targets ...any) Option {
+	return WithFxOptions(fx.Populate(targets...))
+}

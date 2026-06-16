@@ -26,6 +26,7 @@ import (
 	"app/user/user_module"
 	"fmt"
 
+	gocasbin "github.com/casbin/casbin/v3"
 	"github.com/onsi/ginkgo/v2"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxtest"
@@ -80,6 +81,7 @@ type Harness struct {
 	app       *fxtest.App
 	txPool    *test.TxPool
 	authUsers *test.InMemoryUserProvider
+	enforcer  *gocasbin.Enforcer
 	port      int
 
 	useTX           bool
@@ -91,16 +93,18 @@ func (harness *Harness) Setup() {
 		httpConfig apphttp.Config
 		txPool     *test.TxPool
 		authUsers  *test.InMemoryUserProvider
+		enforcer   *gocasbin.Enforcer
 	)
 
 	harness.fxOptions = append(
 		harness.fxOptions,
-		fx.Populate(&httpConfig, &txPool, &authUsers),
+		fx.Populate(&httpConfig, &txPool, &authUsers, &enforcer),
 	)
 
 	harness.app = fxtest.New(ginkgo.GinkgoT(), harness.fxOptions...).RequireStart()
 	harness.txPool = txPool
 	harness.authUsers = authUsers
+	harness.enforcer = enforcer
 	harness.port = httpConfig.Port
 }
 
@@ -132,6 +136,9 @@ func (harness *Harness) RollbackTx() {
 func (harness *Harness) BeforeEach() {
 	if harness.useTX {
 		harness.BeginTx()
+		// The casbin enforcer caches policy in memory; the rolled-back DB does
+		// not clear it, so reload it to the clean committed state each test.
+		matchers.Must(harness.enforcer.LoadPolicy())
 	}
 
 	if harness.deleteAuthUsers {
