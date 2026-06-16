@@ -3,19 +3,16 @@ version: "3"
 tasks:
   up:
     desc: starts docker compose services
-    cmds:
-      - docker compose up -d
+    cmd: docker compose up -d
 
   down:
     desc: stops docker compose services
-    cmds:
-      - docker compose down
+    cmd: docker compose down
 
   install-deps:
     desc: install dependencies
     run: once
-    cmds:
-      - go get ./...
+    cmd: go get ./...
     sources:
       - go.mod
       - go.sum
@@ -24,8 +21,7 @@ tasks:
     desc: builds app
     deps:
       - install-deps
-    cmds:
-      - go build -o bin/app cmd/app/app.go
+    cmd: go build -o bin/app cmd/app/app.go
     sources:
       - ./**/*.go
     generates:
@@ -35,8 +31,7 @@ tasks:
     desc: builds worker
     deps:
       - install-deps
-    cmds:
-      - go build -o bin/worker cmd/worker/worker.go
+    cmd: go build -o bin/worker cmd/worker/worker.go
     sources:
       - ./**/*.go
     generates:
@@ -46,8 +41,7 @@ tasks:
     desc: builds migrate
     deps:
       - install-deps
-    cmds:
-      - go build -o bin/migrate cmd/migrate/migrate.go
+    cmd: go build -o bin/migrate cmd/migrate/migrate.go
     sources:
       - ./cmd/migrate/migrate.go
       - ./cmd/migrate/migrations/*.sql
@@ -58,8 +52,7 @@ tasks:
     desc: run migrations
     deps:
       - build:migrate
-    cmds:
-      - bin/migrate up
+    cmd: bin/migrate up
     sources:
       - /bin/migrate
     status:
@@ -88,31 +81,27 @@ tasks:
 
   format:go:
     desc: formats go files
-    cmds:
-      - golangci-lint fmt
+    cmd: golangci-lint fmt
     sources:
       - .golangci.yaml
       - ./**/*.go
 
   format:mise:
     desc: format mise config
-    cmds:
-      - mise fmt
+    cmd: mise fmt
     sources:
       - .mise.toml
 
   format:yaml:
     desc: format yaml
-    cmds:
-      - yamlfmt -formatter indent=2,retain_line_breaks=true ./**/*.yaml ./.github/workflows/*.yaml
+    cmd: yamlfmt -formatter indent=2,retain_line_breaks=true ./**/*.yaml ./.github/workflows/*.yaml
     sources:
       - ./**/*.yaml
       - ./.github/workflows/*.yaml
 
   format:sql:
     desc: formats sql files
-    cmds:
-      - sqruff fix
+    cmd: sqruff fix
     sources:
       - ./cmd/migrate/migrations/*.sql
 
@@ -127,23 +116,20 @@ tasks:
     desc: lints go code
     deps:
       - install-deps
-    cmds:
-      - golangci-lint run
+    cmd: golangci-lint run
     sources:
       - .golangci.yaml
       - ./**/*.go
 
   lint:dockerfile:
     desc: lints Dockerfile
-    cmds:
-      - hadolint Dockerfile
+    cmd: hadolint Dockerfile
     sources:
       - Dockerfile
 
   lint:sql:
     desc: lints sql files
-    cmds:
-      - sqruff lint .
+    cmd: sqruff lint .
     sources:
       - ./cmd/migrate/migrations/*.sql
 
@@ -151,18 +137,15 @@ tasks:
     desc: runs tests
     deps:
       - install-deps
-    cmds:
-      - go test ./...
+    cmd: go test ./...
 
   test-load:
     desc: runs load tests
-    cmds:
-      - k6 run test/k6/load-test.js
+    cmd: k6 run test/k6/load-test.js
 
   gitleaks:
     desc: runs gitleaks
-    cmds:
-      - gitleaks detect .
+    cmd: gitleaks detect .
 
   setup:
     desc: sets up the project
@@ -178,5 +161,5 @@ tasks:
       - format
       - lint
       - migrate-up
-    cmds:
-      - task: test
+    cmd:
+      task: test

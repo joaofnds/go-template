@@ -16,7 +16,7 @@ jobs:
             ~/go/pkg/mod
           key: go-${{ hashFiles('**/go.sum') }}
           restore-keys: go-
-      - uses: jdx/mise-action@v3
+      - uses: jdx/mise-action@v4
       - run: task up
       - run: task ci
 

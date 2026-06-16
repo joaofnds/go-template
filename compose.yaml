@@ -38,7 +38,7 @@ services:
   #     - 8080:8080
 
   casdoor:
-    image: casbin/casdoor:2.324.0
+    image: casbin/casdoor:3.95.0
     command: --createDatabase=true
     ports:
       - 8000:8000
