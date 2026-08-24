@@ -2,8 +2,7 @@ package uuid
 
 import (
 	"app/internal/id"
-
-	"github.com/google/uuid"
+	"uuid"
 )
 
 var _ id.Generator = (*Generator)(nil)
@@ -15,5 +14,5 @@ func NewGenerator() *Generator {
 }
 
 func (repo *Generator) NewID() string {
-	return uuid.NewString()
+	return uuid.New().String()
 }

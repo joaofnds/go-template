@@ -1,10 +1,11 @@
 package watermill
 
 import (
+	"uuid"
+
 	"github.com/ThreeDotsLabs/watermill/components/cqrs"
 	"github.com/ThreeDotsLabs/watermill/message"
 	"github.com/bytedance/sonic"
-	"github.com/google/uuid"
 )
 
 var _ cqrs.CommandEventMarshaler = SonicMarshaler{}
@@ -21,7 +22,7 @@ func (m SonicMarshaler) Marshal(v interface{}) (*message.Message, error) {
 		return nil, err
 	}
 
-	msg := message.NewMessage(uuid.NewString(), b)
+	msg := message.NewMessage(uuid.New().String(), b)
 	msg.Metadata.Set("name", m.Name(v))
 
 	return msg, nil
