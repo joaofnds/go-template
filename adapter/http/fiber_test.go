@@ -2,6 +2,7 @@ package http_test
 
 import (
 	apphttp "app/adapter/http"
+	"app/adapter/json"
 	"app/adapter/logger"
 	"app/adapter/validation"
 	"app/config"
@@ -45,6 +46,7 @@ var _ = Describe("fiber middlewares", func() {
 			apphttp.NopProbeProvider,
 			validation.Module,
 			config.Module,
+			json.Module,
 			apphttp.Module,
 			PanicHandler,
 			fx.Populate(&httpConfig),

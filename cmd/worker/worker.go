@@ -2,6 +2,7 @@ package main
 
 import (
 	"app/adapter/casbin"
+	"app/adapter/json"
 	"app/adapter/logger"
 	"app/adapter/postgres"
 	"app/adapter/queue"
@@ -21,6 +22,7 @@ func main() {
 		logger.Module,
 		validation.Module,
 		watermill.Module,
+		json.Module,
 
 		casbin.Module,
 		queue.WorkerModule,

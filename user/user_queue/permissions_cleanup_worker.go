@@ -2,9 +2,9 @@ package user_queue
 
 import (
 	"app/authz"
+	"app/internal/marshal"
 	"app/user"
 	"context"
-	"encoding/json/v2"
 	"fmt"
 
 	"github.com/hibiken/asynq"
@@ -13,15 +13,18 @@ import (
 type PermissionsCleanupWorker struct {
 	roles       authz.RoleManager
 	permissions authz.PermissionManager
+	codec       marshal.Codec
 }
 
 func NewPermissionsCleanupWorker(
 	roles authz.RoleManager,
 	permissions authz.PermissionManager,
+	codec marshal.Codec,
 ) *PermissionsCleanupWorker {
 	return &PermissionsCleanupWorker{
 		roles:       roles,
 		permissions: permissions,
+		codec:       codec,
 	}
 }
 
@@ -31,7 +34,7 @@ func (worker *PermissionsCleanupWorker) RegisterQueueHandler(mux *asynq.ServeMux
 
 func (worker *PermissionsCleanupWorker) ProcessTask(_ context.Context, task *asynq.Task) error {
 	var u user.User
-	if err := json.Unmarshal(task.Payload(), &u); err != nil {
+	if err := worker.codec.Unmarshal(task.Payload(), &u); err != nil {
 		return err
 	}
 

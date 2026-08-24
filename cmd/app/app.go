@@ -6,6 +6,7 @@ import (
 	"app/adapter/featureflags"
 	"app/adapter/health/health_module"
 	"app/adapter/http"
+	"app/adapter/json"
 	"app/adapter/logger"
 	"app/adapter/metrics"
 	"app/adapter/postgres"
@@ -35,6 +36,7 @@ func main() {
 		tracing.Module,
 		validation.Module,
 		featureflags.Module,
+		json.Module,
 		uuid.Module,
 		time.Module,
 		casbin.Module,

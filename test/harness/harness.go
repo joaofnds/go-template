@@ -6,6 +6,7 @@ import (
 	"app/adapter/featureflags"
 	"app/adapter/health/health_module"
 	apphttp "app/adapter/http"
+	"app/adapter/json"
 	"app/adapter/logger"
 	"app/adapter/metrics"
 	"app/adapter/postgres"
@@ -47,6 +48,7 @@ var defaultOptions = []fx.Option{
 	casdoor.Module,
 	config.Module,
 	featureflags.Module,
+	json.Module,
 	metrics.Module,
 	postgres.Module,
 	redis.Module,

@@ -1,23 +1,25 @@
 package watermill
 
 import (
-	"encoding/json/v2"
+	"app/internal/marshal"
 	"uuid"
 
 	"github.com/ThreeDotsLabs/watermill/components/cqrs"
 	"github.com/ThreeDotsLabs/watermill/message"
 )
 
-var _ cqrs.CommandEventMarshaler = SonicMarshaler{}
+var _ cqrs.CommandEventMarshaler = Marshaler{}
 
-type SonicMarshaler struct{}
-
-func newSonicMarshaler() SonicMarshaler {
-	return SonicMarshaler{}
+type Marshaler struct {
+	codec marshal.Codec
 }
 
-func (m SonicMarshaler) Marshal(v interface{}) (*message.Message, error) {
-	b, err := json.Marshal(v)
+func newMarshaler(codec marshal.Codec) Marshaler {
+	return Marshaler{codec: codec}
+}
+
+func (m Marshaler) Marshal(v interface{}) (*message.Message, error) {
+	b, err := m.codec.Marshal(v)
 	if err != nil {
 		return nil, err
 	}
@@ -28,14 +30,14 @@ func (m SonicMarshaler) Marshal(v interface{}) (*message.Message, error) {
 	return msg, nil
 }
 
-func (SonicMarshaler) Unmarshal(msg *message.Message, v interface{}) (err error) {
-	return json.Unmarshal(msg.Payload, v)
+func (m Marshaler) Unmarshal(msg *message.Message, v interface{}) (err error) {
+	return m.codec.Unmarshal(msg.Payload, v)
 }
 
-func (m SonicMarshaler) Name(cmdOrEvent interface{}) string {
+func (m Marshaler) Name(cmdOrEvent interface{}) string {
 	return cqrs.FullyQualifiedStructName(cmdOrEvent)
 }
 
-func (m SonicMarshaler) NameFromMessage(msg *message.Message) string {
+func (m Marshaler) NameFromMessage(msg *message.Message) string {
 	return msg.Metadata.Get("name")
 }

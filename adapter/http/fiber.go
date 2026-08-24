@@ -1,8 +1,8 @@
 package http
 
 import (
+	"app/internal/marshal"
 	"context"
-	"encoding/json/v2"
 	"fmt"
 
 	"github.com/gofiber/contrib/otelfiber"
@@ -31,11 +31,11 @@ type Probe interface {
 	Middleware(*fiber.Ctx) error
 }
 
-func NewFiber(config Config, probe Probe) *fiber.App {
+func NewFiber(config Config, probe Probe, codec marshal.Codec) *fiber.App {
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
-		JSONEncoder:           func(v interface{}) ([]byte, error) { return json.Marshal(v) },
-		JSONDecoder:           func(data []byte, v interface{}) error { return json.Unmarshal(data, v) },
+		JSONEncoder:           func(v interface{}) ([]byte, error) { return codec.Marshal(v) },
+		JSONDecoder:           func(data []byte, v interface{}) error { return codec.Unmarshal(data, v) },
 	})
 	app.Use(otelfiber.Middleware())
 	app.Use(recover.New())
