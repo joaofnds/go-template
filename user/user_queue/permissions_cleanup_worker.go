@@ -4,9 +4,9 @@ import (
 	"app/authz"
 	"app/user"
 	"context"
+	"encoding/json/v2"
 	"fmt"
 
-	"github.com/bytedance/sonic"
 	"github.com/hibiken/asynq"
 )
 
@@ -31,7 +31,7 @@ func (worker *PermissionsCleanupWorker) RegisterQueueHandler(mux *asynq.ServeMux
 
 func (worker *PermissionsCleanupWorker) ProcessTask(_ context.Context, task *asynq.Task) error {
 	var u user.User
-	if err := sonic.Unmarshal(task.Payload(), &u); err != nil {
+	if err := json.Unmarshal(task.Payload(), &u); err != nil {
 		return err
 	}
 

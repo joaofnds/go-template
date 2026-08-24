@@ -1,11 +1,11 @@
 package watermill
 
 import (
+	"encoding/json/v2"
 	"uuid"
 
 	"github.com/ThreeDotsLabs/watermill/components/cqrs"
 	"github.com/ThreeDotsLabs/watermill/message"
-	"github.com/bytedance/sonic"
 )
 
 var _ cqrs.CommandEventMarshaler = SonicMarshaler{}
@@ -17,7 +17,7 @@ func newSonicMarshaler() SonicMarshaler {
 }
 
 func (m SonicMarshaler) Marshal(v interface{}) (*message.Message, error) {
-	b, err := sonic.Marshal(v)
+	b, err := json.Marshal(v)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func (m SonicMarshaler) Marshal(v interface{}) (*message.Message, error) {
 }
 
 func (SonicMarshaler) Unmarshal(msg *message.Message, v interface{}) (err error) {
-	return sonic.Unmarshal(msg.Payload, v)
+	return json.Unmarshal(msg.Payload, v)
 }
 
 func (m SonicMarshaler) Name(cmdOrEvent interface{}) string {

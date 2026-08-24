@@ -2,9 +2,9 @@ package http
 
 import (
 	"context"
+	"encoding/json/v2"
 	"fmt"
 
-	"github.com/bytedance/sonic"
 	"github.com/gofiber/contrib/otelfiber"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
@@ -34,8 +34,8 @@ type Probe interface {
 func NewFiber(config Config, probe Probe) *fiber.App {
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
-		JSONEncoder:           sonic.Marshal,
-		JSONDecoder:           sonic.Unmarshal,
+		JSONEncoder:           func(v interface{}) ([]byte, error) { return json.Marshal(v) },
+		JSONDecoder:           func(data []byte, v interface{}) error { return json.Unmarshal(data, v) },
 	})
 	app.Use(otelfiber.Middleware())
 	app.Use(recover.New())

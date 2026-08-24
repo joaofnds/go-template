@@ -4,9 +4,9 @@ import (
 	"app/internal/mill"
 	"app/user"
 	"context"
+	"encoding/json/v2"
 
 	"github.com/ThreeDotsLabs/watermill/components/cqrs"
-	"github.com/bytedance/sonic"
 	"github.com/hibiken/asynq"
 )
 
@@ -19,7 +19,7 @@ func NewPermissionsCleanupQueue(client *asynq.Client) *PermissionsCleanupQueue {
 }
 
 func (queue *PermissionsCleanupQueue) Enqueue(user user.User) error {
-	b, marshalErr := sonic.Marshal(user)
+	b, marshalErr := json.Marshal(user)
 	if marshalErr != nil {
 		return marshalErr
 	}
