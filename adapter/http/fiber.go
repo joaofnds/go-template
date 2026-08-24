@@ -34,8 +34,8 @@ type Probe interface {
 func NewFiber(config Config, probe Probe, codec marshal.Codec) *fiber.App {
 	app := fiber.New(fiber.Config{
 		DisableStartupMessage: true,
-		JSONEncoder:           func(v interface{}) ([]byte, error) { return codec.Marshal(v) },
-		JSONDecoder:           func(data []byte, v interface{}) error { return codec.Unmarshal(data, v) },
+		JSONEncoder:           codec.Marshal,
+		JSONDecoder:           codec.Unmarshal,
 	})
 	app.Use(otelfiber.Middleware())
 	app.Use(recover.New())
