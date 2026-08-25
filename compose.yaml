@@ -39,6 +39,7 @@ services:
 
   casdoor:
     image: casbin/casdoor:3.158.0
+    restart: unless-stopped
     command: --createDatabase=true
     ports:
       - 8000:8000
