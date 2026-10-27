@@ -1,13 +1,13 @@
 [tools]
 gitleaks = "8.30.1"
-go = "1.27.0"
-golangci-lint = "2.13.1"
+go = "1.27.3"
+golangci-lint = "2.15.0"
 hadolint = "2.15.1"
-k6 = "2.2.0"
-task = "3.53.1"
+k6 = "2.3.0"
+task = "3.54.0"
 yamlfmt = "0.21.0"
 
-"aqua:quarylabs/sqruff" = "0.40.0"
+"aqua:quarylabs/sqruff" = "0.43.0"
 
 [env]
 CONFIG_PATH = "{{config_root}}/config/config.yaml"
